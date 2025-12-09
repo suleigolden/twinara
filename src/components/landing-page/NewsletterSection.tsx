@@ -3,7 +3,7 @@ import { ArrowRight, Mail, CheckCircle, AlertCircle, Sparkles, Zap } from 'lucid
 import { useTheme } from "../../contexts/ThemeContext";
 import { Box, Heading, Text, Input, Button, Flex } from "@chakra-ui/react";
 
-interface Particle {
+type Particle = {
   id: number;
   x: number;
   y: number;
@@ -101,28 +101,28 @@ const NewsletterSection: React.FC = () => {
       <Box className="relative max-w-6xl mx-auto">
         <Box className="text-center mb-16">
           <Flex className="items-center justify-center flex-col gap-6 mb-8">
-            <Box className="p-4 bg-gradient-to-r from-violet-500 to-purple-500 rounded-2xl shadow-lg">
+            <Box className="p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl shadow-lg">
               <Mail className="w-8 h-8 text-white" />
             </Box>
-            <Box className="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-full backdrop-blur-sm">
+            <Box className="px-6 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-full backdrop-blur-sm">
               <Flex className="items-center gap-2">
-                <Sparkles className={`w-5 h-5 ${isDarkMode ? 'text-purple-300' : 'text-purple-400'}`} />
-                <Text className={`text-lg font-medium ${isDarkMode ? 'text-purple-200' : 'text-purple-600'}`}>Newsletter</Text>
+                <Sparkles className={`w-5 h-5 ${isDarkMode ? 'text-blue-300' : 'text-blue-400'}`} />
+                <Text className={`text-lg font-medium ${isDarkMode ? 'text-blue-200' : 'text-blue-600'}`}>Newsletter</Text>
               </Flex>
             </Box>
           </Flex>
 
-          <Heading as="h2" className={`text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r ${isDarkMode ? 'from-white via-purple-200 to-pink-200' : 'from-gray-900 via-purple-600 to-pink-600'} bg-clip-text text-transparent leading-tight`}>
-            Stay in the Loop
+          <Heading as="h2" className={`text-4xl lg:text-6xl font-bold mb-8 bg-gradient-to-r ${isDarkMode ? 'from-white via-blue-200 to-purple-200' : 'from-gray-900 via-blue-600 to-purple-600'} bg-clip-text text-transparent leading-tight`}>
+            Stay Connected
           </Heading>
           
-          <Text className={`text-lg md:text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-10 leading-relaxed max-w-4xl mx-auto`}>
-            Get exclusive updates, premium recipes, and be the first to know about our 
-            <Text as="span" className={`text-transparent bg-gradient-to-r ${isDarkMode ? 'from-purple-400 to-pink-400' : 'from-purple-600 to-pink-600'} bg-clip-text font-semibold`}> delicious offerings</Text>
+          <Text className={`text-lg md:text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-10 leading-relaxed  mx-auto`}>
+            Get cognitive support tips, research updates, and be the first to know about new 
+            <Text as="span" className={`text-transparent bg-gradient-to-r ${isDarkMode ? 'from-blue-400 to-purple-400' : 'from-blue-600 to-purple-600'} bg-clip-text font-semibold`}> features and resources</Text>
           </Text>
 
           <Flex className="flex-wrap gap-4 justify-center mb-12">
-            {['🍕 Exclusive recipes', '⚡ Fast delivery', '🎯 Personalized offers'].map((feature, index) => (
+            {['🧠 Cognitive tips', '💙 Caregiver resources', '📚 Research updates'].map((feature, index) => (
               <Box key={index} className={`flex items-center gap-2 px-6 py-3 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-gray-100/80 border-gray-200/50'} backdrop-blur-sm border rounded-full`}>
                 <Text className={`text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} font-medium`}>{feature}</Text>
               </Box>
@@ -139,9 +139,6 @@ const NewsletterSection: React.FC = () => {
                 <Box className={`relative ${isDarkMode ? 'bg-white/10 border-white/20' : 'bg-white/90 border-gray-200/50'} backdrop-blur-xl border rounded-2xl p-3 shadow-2xl`}>
                   <Flex className="flex-col sm:items-center sm:flex-row gap-3">
                     <Box className="relative flex-1">
-                      <Box className="absolute left-6 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                        <Mail className={`w-5 h-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} opacity-60`} />
-                      </Box>
                       <Input
                         type="email"
                         aria-label="Email address"
@@ -166,12 +163,12 @@ const NewsletterSection: React.FC = () => {
                       onClick={handleSubmit}
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
-                      className={`h-[60px] px-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600
+                      className={`h-[60px] px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600
                         rounded-xl text-white text-lg font-semibold
                         flex items-center justify-center gap-3 whitespace-nowrap
                         transform transition-all duration-200 cursor-pointer 
                         ${isHovered ? 'scale-105 shadow-lg' : 'shadow-md'}
-                        hover:shadow-purple-500/25`}
+                        hover:shadow-blue-500/25`}
                     >
                       <Zap className="w-5 h-5" />
                       Subscribe Now
@@ -192,7 +189,7 @@ const NewsletterSection: React.FC = () => {
                 {showPopup && !error && (
                   <Flex className="absolute inset-x-0 items-center justify-center gap-3 bg-emerald-500/90 backdrop-blur-sm text-white px-6 py-4 rounded-xl shadow-lg border border-emerald-400/50">
                     <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                    <Text className="font-medium text-base">🎉 Welcome to our community!</Text>
+                    <Text className="font-medium text-base">💙 Thank you for joining our community!</Text>
                   </Flex>
                 )}
               </Box>
