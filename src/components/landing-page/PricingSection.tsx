@@ -1,50 +1,39 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { fadeIn } from "../../utils/motion";
-import { Box, Heading, Text, Button, Grid, List, ListItem, Container, Flex } from "@chakra-ui/react";
+import { Box, Heading, Text, List, Container, Flex } from "@chakra-ui/react";
 
 const PricingSection: React.FC = () => {
   const { isDarkMode } = useTheme();
-  const [productCount] = useState(1);
-  
-  const calculatePrice = (basePrice: number, productCount: number) =>
-    Math.round(basePrice * (productCount / 50));
-
-  const starterPrice = calculatePrice(4000, productCount);
-  const businessPrice = calculatePrice(7500, productCount);
 
   const plans = [
     {
-      name: "Starter",
-      price: starterPrice,
+      name: "Individual",
+      price: 0,
       features: [
-        "Up to 10 users",
+        "Personalized cognitive tasks",
+        "Daily memory exercises",
+        "Adaptive difficulty levels",
+        "Basic progress tracking",
         "Email support",
-        "Basic analytics dashboard",
-        "Access to community forum",
-        "Standard security features",
-        "Weekly performance reports",
+        "Privacy-first design",
       ],
     },
     {
-      name: "Business",
-      price: businessPrice,
+      name: "Family",
+      price: 29,
       features: [
-        "Unlimited users",
-        "Priority email & chat support",
-        "Advanced analytics & custom reports",
-        "Team collaboration tools",
-        "Multiple project workspaces",
-        "Daily performance insights",
+        "Everything in Individual",
+        "Multiple family member access",
+        "Caregiver insights & reports",
+        "Relationship-focused tasks",
+        "Priority support",
+        "Advanced progress analytics",
       ],
     },
   ];
 
-  const handleUpcomingFeature = () => {
-    console.log("⚒️ This feature is coming soon! Stay tuned for updates.");
-  };
 
   return (
     <motion.section
@@ -62,14 +51,14 @@ const PricingSection: React.FC = () => {
               isDarkMode ? "text-blue-300" : "text-blue-700"
             }`}
           >
-            Pricing Plans
+            Simple, Transparent Pricing
           </Heading>
           <Text
-            className={`text-lg max-w-xl mx-auto ${
+            className={`text-base md:text-lg  mx-auto ${
               isDarkMode ? "text-gray-300" : "text-gray-500"
             }`}
           >
-            Choose the perfect plan for your needs. Upgrade or downgrade at any time.
+            Start your cognitive journey today. Free for individuals, affordable for families.
           </Text>
         </Box>
 
@@ -103,26 +92,32 @@ const PricingSection: React.FC = () => {
 
               <Box className="mb-8">
                 <Flex className={`items-baseline gap-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                  <Text className={`text-4xl font-bold bg-gradient-to-r ${isDarkMode ? "from-blue-400 to-cyan-400" : "from-blue-600 to-cyan-600"} bg-clip-text text-transparent`}>
-                    ${plan.price}
-                  </Text>
-                  <Text className={`text-lg font-medium ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                    /month
-                  </Text>
+                  {plan.price === 0 ? (
+                    <Text className={`text-4xl font-bold bg-gradient-to-r ${isDarkMode ? "from-blue-400 to-cyan-400" : "from-blue-600 to-cyan-600"} bg-clip-text text-transparent`}>
+                      Free
+                    </Text>
+                  ) : (
+                    <>
+                      <Text className={`text-4xl font-bold bg-gradient-to-r ${isDarkMode ? "from-blue-400 to-cyan-400" : "from-blue-600 to-cyan-600"} bg-clip-text text-transparent`}>
+                        ${plan.price}
+                      </Text>
+                      <Text className={`text-lg font-medium ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        /month
+                      </Text>
+                    </>
+                  )}
                 </Flex>
-                <Text className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Billed monthly
-                </Text>
+                {plan.price > 0 && (
+                  <Text className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    Billed monthly
+                  </Text>
+                )}
               </Box>
 
               <Box className="mb-8 flex-grow">
-                <Heading as="h4" className={`text-sm font-semibold mb-4 uppercase tracking-wider ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-                  What's included
-                </Heading>
                 <List className="space-y-3">
                   {plan.features.map((feat, index) => (
-                    <ListItem
-                      as={motion.li}
+                    <motion.li
                       key={feat}
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -144,46 +139,15 @@ const PricingSection: React.FC = () => {
                       }`}>
                         {feat}
                       </Text>
-                    </ListItem>
+                    </motion.li>
                   ))}
                 </List>
               </Box>
 
-              <Button
-                onClick={handleUpcomingFeature}
-                className={`w-full py-3 px-6 rounded-xl font-semibold relative overflow-hidden transition-all duration-300 ease-out backdrop-blur-xl ${
-                  isDarkMode
-                    ? "bg-black/15 hover:bg-black/25 text-white border border-white/10 shadow-lg"
-                    : "bg-white/[0.20] hover:bg-white/[0.30] text-gray-800 border border-white/25 shadow-md"
-                } hover:scale-[1.02] hover:shadow-xl active:scale-98 transform cursor-pointer`}
-              >
-                <Text as="span" className="relative z-10 flex items-center justify-center gap-2">
-                  Choose Plan
-                  <Text as={motion.span}
-                    initial={{ x: 0 }}
-                    whileHover={{ x: 2 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    →
-                  </Text>
-                </Text>
-              </Button>
             </motion.div>
           ))}
         </motion.div>
 
-        <Box
-          as={motion.div}
-          variants={fadeIn("up", 0.6)}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          className="text-center mt-16"
-        >
-          <Text className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-            All plans include a 14-day free trial. No credit card required.
-          </Text>
-        </Box>
       </Container>
     </motion.section>
   );

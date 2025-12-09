@@ -6,7 +6,6 @@ import FeaturesSection from '../../../components/landing-page/FeaturesSection';
 import UseCasesSection from '../../../components/landing-page/UseCasesSection';
 import MonitorSection from '../../../components/landing-page/MonitorSection';
 import PricingSection from '../../../components/landing-page/PricingSection';
-import ServicesSection from '../../../components/landing-page/ServicesSection';
 import TestimonialsSection from '../../../components/landing-page/TestimonialsSection';
 import FAQ from '../../../components/landing-page/FAQ';
 import NewsletterSection from '../../../components/landing-page/NewsletterSection';
@@ -30,7 +29,6 @@ export const LandingPage = () => {
         <UseCasesSection />
         <MonitorSection />
         <PricingSection />
-        <ServicesSection />
       </section>
       <section id="testimonials">
         <TestimonialsSection />
