@@ -297,7 +297,7 @@ export const Navbar: React.FC = () => {
 
             {/* Enhanced Dropdown */}
             <Box ref={dropdownRef} className="relative">
-              <Button
+              {/* <Button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 onKeyDown={(e) => handleKeyDown(e, () => setIsDropdownOpen(!isDropdownOpen))}
                 variant="ghost"
@@ -338,7 +338,7 @@ export const Navbar: React.FC = () => {
                 <Box className={`absolute inset-0 rounded-lg border opacity-0 group-hover:opacity-30 transition-all duration-500 ${
                   isDarkMode ? "border-blue-400/30" : "border-blue-500/20"
                 }`} />
-              </Button>
+              </Button> */}
 
               {/* Enhanced Dropdown Menu */}
               {isDropdownOpen && (
@@ -479,7 +479,7 @@ export const Navbar: React.FC = () => {
       `}>
         {/* Mobile Menu Header */}
         <Flex className="items-center justify-between p-6 border-b border-opacity-50">
-          <Logo className="scale-90" />
+          <Logo size={{ base: 39, lg: 32 }} />
           <Button
             onClick={() => setIsMenuOpen(false)}
             variant="ghost"
@@ -518,7 +518,7 @@ export const Navbar: React.FC = () => {
           ))}
 
           {/* Mobile Community Section */}
-          <Box
+          {/* <Box
             className={`
               rounded-xl border transition-all duration-300 mt-6
               ${isDarkMode ? "border-gray-700/50 bg-gray-800/30" : "border-gray-200/50 bg-gray-50/30"}
@@ -557,7 +557,7 @@ export const Navbar: React.FC = () => {
                 </Flex>
               </Button>
             ))}
-          </Box>
+          </Box> */}
 
           {/* Mobile CTA Button */}
           {!user && signInButton && (
