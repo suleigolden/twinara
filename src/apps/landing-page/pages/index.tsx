@@ -3,7 +3,7 @@ import Hero from '../../../components/landing-page/Hero';
 import CompanyLogo from '../../../components/landing-page/CompanyLogo';
 import PurposeSection from '../../../components/landing-page/PurposeSection';
 import FeaturesSection from '../../../components/landing-page/FeaturesSection';
-import ScheduleSection from '../../../components/landing-page/ScheduleSection';
+import UseCasesSection from '../../../components/landing-page/UseCasesSection';
 import MonitorSection from '../../../components/landing-page/MonitorSection';
 import PricingSection from '../../../components/landing-page/PricingSection';
 import ServicesSection from '../../../components/landing-page/ServicesSection';
@@ -26,8 +26,8 @@ export const LandingPage = () => {
         <PurposeSection />
         <FeaturesSection />
       </section>
-      <section id="services">
-        <ScheduleSection />
+      <section id="use-cases">
+        <UseCasesSection />
         <MonitorSection />
         <PricingSection />
         <ServicesSection />

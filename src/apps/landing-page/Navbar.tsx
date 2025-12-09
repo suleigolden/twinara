@@ -159,7 +159,7 @@ export const Navbar: React.FC = () => {
   const navLinks = useMemo(() => [
     { href: "/#home", label: "Home", icon: <Sparkles className="w-4 h-4" /> },
     { href: "/about", label: "About", icon: <Users className="w-4 h-4" /> },
-    { href: "/#services", label: "Services", icon: <Zap className="w-4 h-4" /> },
+    { href: "/#use-cases", label: "Use Cases", icon: <Zap className="w-4 h-4" /> },
     { href: "/#testimonials", label: "Testimonials", icon: <BookOpen className="w-4 h-4" /> },
     { href: "/#faq", label: "FAQ", icon: <BookOpen className="w-4 h-4" /> },
   ], []);
