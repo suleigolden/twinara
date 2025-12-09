@@ -8,6 +8,7 @@ import {
   Text, 
   Image
 } from "@chakra-ui/react";
+import { ImageSlideShow } from "./ImageSlideShow";
 
 type TypingAnimationProps = {
   phrases: string[];
@@ -284,10 +285,16 @@ const Hero: React.FC = () => {
               as={motion.div}
               whileHover={{ scale: 1.02 }}
             >
-              <Image
+              {/* <Image
                 src={heroImage}
                 alt="Twinara Cognitive Companion"
                 className="rounded-2xl shadow-2xl border border-white/20 relative z-10 backdrop-blur-3xl"
+              /> */}
+              <ImageSlideShow
+                position="relative"
+                zIndex={1}
+                rounded="lg"
+                shadow="2xl"
               />
             </Box>
           </Box>
