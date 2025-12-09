@@ -2,14 +2,16 @@ import { Link } from "react-router-dom";
 import { useTheme } from "../../contexts/ThemeContext";
 import { motion } from "framer-motion";
 import { Box, Heading, Text, Flex, Grid } from "@chakra-ui/react";
-import { Rocket, Settings, Search } from "lucide-react";
 import {
+  Brain,
+  Heart,
   ShieldCheck,
   Users,
-  TrendingUp,
-  Globe2,
-  Zap,
-  HeartHandshake,
+  Clock,
+  CheckCircle,
+  BookOpen,
+  MessageCircle,
+  Cpu,
 } from "lucide-react";
 
 const FeaturesSection: React.FC = () => {
@@ -17,66 +19,66 @@ const FeaturesSection: React.FC = () => {
 
   const features = [
     {
-      icon: <Search size={32} />,
-      title: "Find out what you need",
+      icon: <Brain size={32} />,
+      title: "Personalized Memory Tasks",
       description:
-        "We analyze your needs and present tailored solutions to help you move faster.",
+        "Cognitive exercises generated from your own life stories, family relationships, and personal history—not generic puzzles.",
       bg: "from-indigo-500 to-purple-500",
     },
     {
-      icon: <Settings size={32} />,
-      title: "Work out the details",
+      icon: <Heart size={32} />,
+      title: "Person-Centered Approach",
       description:
-        "Seamless collaboration with transparent processes and flexible engagement models.",
+        "Reinforces memory using real-life context. Remembering your daughter's name matters more than random numbers.",
       bg: "from-pink-500 to-rose-500",
     },
     {
-      icon: <Rocket size={32} />,
-      title: "We get to work fast",
+      icon: <Cpu size={32} />,
+      title: "Adaptive Difficulty",
       description:
-        "Launch projects quickly with efficient workflows, pricing clarity, and timely delivery.",
+        "Automatically adjusts question type, difficulty level, and language simplicity based on your responses over time.",
       bg: "from-orange-500 to-amber-500",
     },
     {
       icon: <ShieldCheck size={32} />,
-      title: "Secure & Reliable",
+      title: "Dignity & Emotional Safety",
       description:
-        "Enterprise-grade security with compliance and built-in data protection at every step.",
+        "Never says 'wrong', never highlights failure. Always reassures and supports with gentle, encouraging interactions.",
       bg: "from-emerald-500 to-teal-500",
     },
     {
       icon: <Users size={32} />,
-      title: "Collaborative Approach",
+      title: "Family & Relationships",
       description:
-        "We work alongside your team to ensure clarity, trust, and stronger partnerships.",
+        "Reinforces bonds with loved ones through personalized questions about family members and social connections.",
       bg: "from-fuchsia-500 to-purple-600",
     },
     {
-      icon: <TrendingUp size={32} />,
-      title: "Drive Growth",
+      icon: <Clock size={32} />,
+      title: "Routine Awareness",
       description:
-        "Unlock new opportunities with strategies designed for scalability and impact.",
+        "Helps maintain awareness of daily activities and time, reducing confusion about schedules and plans.",
       bg: "from-sky-500 to-cyan-500",
     },
     {
-      icon: <Globe2 size={32} />,
-      title: "Global Reach",
+      icon: <CheckCircle size={32} />,
+      title: "Recognition-Based Tasks",
       description:
-        "Expand your business beyond borders with solutions tailored for international markets.",
+        "Low-stress interactions with multiple choice questions and yes/no confirmations to increase success rates.",
       bg: "from-violet-500 to-indigo-500",
     },
     {
-      icon: <Zap size={32} />,
-      title: "Lightning Fast",
+      icon: <BookOpen size={32} />,
+      title: "Story Reinforcement",
       description:
-        "Optimized workflows and technology that ensure speed without compromising quality.",
+        "Strengthens narrative memory by engaging with personal stories, hobbies, and meaningful life experiences.",
       bg: "from-yellow-500 to-orange-500",
     },
     {
-      icon: <HeartHandshake size={32} />,
-      title: "Customer First",
+      icon: <MessageCircle size={32} />,
+      title: "Gentle Behavioral Prompts",
       description:
-        "Dedicated to delivering value with transparency, empathy, and long-term commitment.",
+        "Encourages healthy habits with supportive reminders for walks, hydration, and other wellness activities.",
       bg: "from-red-500 to-rose-500",
     },
   ];
@@ -97,7 +99,7 @@ const FeaturesSection: React.FC = () => {
         viewport={{ once: true }}
       >
         <Heading as="h2" className="text-4xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-blue-400 to-indigo-600">
-          How can we help your business?
+          How Twinara Supports You
         </Heading>
 
         <Text
@@ -105,7 +107,7 @@ const FeaturesSection: React.FC = () => {
             isDarkMode ? "text-gray-300/80" : "text-gray-600"
           }`}
         >
-          "Empowering your growth with innovation, speed, and reliability."
+          "Supporting individuals with dementia through personalized cognitive care, dignity, and compassion."
         </Text>
       </motion.div>
 
@@ -155,7 +157,7 @@ const FeaturesSection: React.FC = () => {
         viewport={{ once: true }}
       >
         <Link
-          to="/partner"
+          to="/"
           className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-white 
              bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 
              shadow-lg hover:shadow-2xl hover:scale-105 
@@ -182,7 +184,7 @@ const FeaturesSection: React.FC = () => {
 
           {/* Text */}
           <Text as="span" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
-            Become a Partner
+            Get Started with Twinara
           </Text>
 
           {/* Shiny reflection */}

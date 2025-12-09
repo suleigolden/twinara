@@ -7,28 +7,28 @@ const PurposeSection: React.FC = () => {
 
   const features = [
     {
-      icon: "🟣",
-      title: "Built for impact",
+      icon: "🧠",
+      title: "Person-Centered Memory",
       description:
-        "We identify and nurture a truly diverse team of designers, developers and marketers",
+        "Reinforces memory using real-life context from your personal history, family, and daily routines—not abstract puzzles.",
     },
     {
-      icon: "🔴",
-      title: "In sync with you",
+      icon: "💙",
+      title: "Dignity & Emotional Safety",
       description:
-        "We work the way you do by adapting to your workflows and rhythm we aim to blend in for a seamless.",
+        "Never says 'wrong', never highlights failure. Always provides gentle, encouraging support that respects your dignity.",
     },
     {
-      icon: "🔴",
-      title: "Always evolving",
+      icon: "⚙️",
+      title: "Adaptive Cognition",
       description:
-        "We constantly learn,adapt,and innovate so your team stay ahead of the curve",
+        "Automatically adjusts question difficulty, language simplicity, and hint frequency based on your responses over time.",
     },
     {
-      icon: "🟣",
-      title: "Seamless delivery",
+      icon: "🔍",
+      title: "Transparency & Trust",
       description:
-        "From start to finish, we ensure projects are smooth,efficient,and stress-free for your team",
+        "Always clearly identified as an AI assistant. Honest, transparent communication that never pretends to be human.",
     },
   ];
 
@@ -54,20 +54,19 @@ const PurposeSection: React.FC = () => {
           {/* Left column */}
           <Box>
             <Text
-              className={`text-sm font-medium mb-3 tracking-wide ${
-                isDarkMode ? "text-blue-300/90" : "text-indigo-600"
-              }`}
+              size="xl"
+              className={`text-xl font-medium mb-3 tracking-wide ${isDarkMode ? "text-blue-300/90" : "text-indigo-600"
+                }`}
             >
-              ACHIEVE MORE
+              OUR PURPOSE
             </Text>
 
             <Heading
-              as="h2"
-              className={`text-3xl md:text-4xl font-bold leading-tight ${
-                isDarkMode ? "text-gray-100" : "text-gray-900"
-              } md:w-4/5`}
+              size="lg"
+              className={` ${isDarkMode ? "text-gray-100" : "text-gray-900"
+                } md:w-4/5`}
             >
-              Purpose of a convoy is to keep your team
+              Supporting memory loss through personalized cognitive care
             </Heading>
           </Box>
 
@@ -78,11 +77,10 @@ const PurposeSection: React.FC = () => {
                 key={index}
                 className={`relative items-start space-x-4 p-5 rounded-xl border
                             transition-all duration-300 ease-out hover:translate-y-[-2px]
-                            ${
-                              isDarkMode
-                                ? "bg-slate-800/60 border-slate-700"
-                                : "bg-white border-indigo-100"
-                            }
+                            ${isDarkMode
+                    ? "bg-slate-800/60 border-slate-700"
+                    : "bg-white border-indigo-100"
+                  }
                             shadow-sm hover:shadow-lg`}
               >
                 {!isDarkMode && (
@@ -100,11 +98,10 @@ const PurposeSection: React.FC = () => {
 
                 <Flex
                   className={`w-12 h-12 items-center justify-center rounded-lg text-xl shrink-0 z-[1] transition-transform duration-300 hover:scale-105
-                              ${
-                                isDarkMode
-                                  ? "bg-slate-700/70 text-gray-100"
-                                  : "bg-indigo-50 text-indigo-600"
-                              }`}
+                              ${isDarkMode
+                      ? "bg-slate-700/70 text-gray-100"
+                      : "bg-indigo-50 text-indigo-600"
+                    }`}
                   aria-hidden="true"
                 >
                   {feature.icon}
@@ -113,17 +110,16 @@ const PurposeSection: React.FC = () => {
                 <Box className="z-[1]">
                   <Heading
                     as="h3"
-                    className={`text-lg sm:text-xl font-semibold mb-1.5 ${
-                      isDarkMode ? "text-gray-100" : "text-gray-900"
-                    }`}
+                    size="md"
+                    className={`text-lg sm:text-xl font-semibold mb-1.5 ${isDarkMode ? "text-gray-100" : "text-gray-900"
+                      }`}
                   >
                     {feature.title}
                   </Heading>
 
                   <Text
-                    className={`${
-                      isDarkMode ? "text-gray-300" : "text-gray-700"
-                    }`}
+                    className={`${isDarkMode ? "text-gray-300" : "text-gray-700"
+                      }`}
                   >
                     {feature.description}
                   </Text>

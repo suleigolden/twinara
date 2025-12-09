@@ -4,7 +4,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Box, Text, Heading, Flex, Input, Button, Grid, Link, List, ListItem, FormControl } from "@chakra-ui/react";
 
-interface ToastProps {
+type ToastProps = {
   message: string;
   type?: "success" | "error";
   onClose: () => void;

@@ -56,10 +56,6 @@ const TypingAnimation = ({ phrases, className }: TypingAnimationProps) => {
 };
 
 const Hero: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [error, setError] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { isDarkMode } = useTheme();
   const emailSectionRef = useRef<HTMLDivElement>(null);
@@ -116,12 +112,12 @@ const Hero: React.FC = () => {
 
   const phrasesForTyping = useMemo(
     () => [
-      "Startups 🚀",
-      "Agencies 💼",
-      "Creators 🎨",
-      "Enterprises 🏢",
-      "Freelancers 🌍",
-      "Innovators 💡",
+      "Memory Support 🧠",
+      "Identity Recall 💭",
+      "Daily Routines 📅",
+      "Family Bonds 👨‍👩‍👧‍👦",
+      "Personal Stories 📖",
+      "Cognitive Care ❤️",
     ],
     []
   );
@@ -191,7 +187,7 @@ const Hero: React.FC = () => {
                   isDarkMode ? "text-gray-200" : "text-gray-700"
                 }`}
               >
-                Jump start your growth
+                Personalized Cognitive Companion
               </Text>
             </Box>
           </Box>
@@ -203,9 +199,9 @@ const Hero: React.FC = () => {
                 isDarkMode ? "text-white" : "text-gray-900"
               }`}
             >
-              We boost the{" "}
+              A Personalized{" "}
               <motion.span className="inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-                growth
+                Cognitive Companion
               </motion.span>{" "}
               for <br />
               <TypingAnimation
@@ -223,11 +219,11 @@ const Hero: React.FC = () => {
                 isDarkMode ? "text-gray-300" : "text-gray-600"
               }`}
             >
-              Get the most accurate leads,{" "}
+              Twinara gently supports individuals living with dementia through{" "}
               <Text as="span" className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                sales training
+                personalized memory exercises
               </Text>{" "}
-              and conversions, tools and more — all within the same billing.
+              and cognitive tasks based on their own life stories, family, and daily routines.
             </Text>
           </Box>
 
@@ -290,7 +286,7 @@ const Hero: React.FC = () => {
             >
               <Image
                 src={heroImage}
-                alt="Team meeting"
+                alt="Twinara Cognitive Companion"
                 className="rounded-2xl shadow-2xl border border-white/20 relative z-10 backdrop-blur-3xl"
               />
             </Box>
