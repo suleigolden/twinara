@@ -17,7 +17,7 @@ export const Logo: FC<LogoProps> = ({ size = 32 }) => {
       ml={{ base: 0, sm: 1 }}
       mb={{ base: 0, sm: 4 }}
     >
-      Homi
+      Twinara
       <Text
         as={'span'}
         color={colorMode === 'light' ? '#675dff' : 'white'}
@@ -27,7 +27,7 @@ export const Logo: FC<LogoProps> = ({ size = 32 }) => {
         fontWeight={700}
         p={'0 3px'}
       >
-        Share
+        ;
       </Text>
       
     </Text>
