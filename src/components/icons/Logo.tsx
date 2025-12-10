@@ -21,13 +21,13 @@ export const Logo: FC<LogoProps> = ({ size = 32 }) => {
       <Text
         as={'span'}
         color={colorMode === 'light' ? '#675dff' : 'white'}
-        borderTop={colorMode === 'light' ? '2px #675dff solid' : '2px white solid'}
-        borderBottom={colorMode === 'light' ? '2px #675dff solid' : '2px white solid'}
+        // borderTop={colorMode === 'light' ? '2px #675dff solid' : '2px white solid'}
+        // borderBottom={colorMode === 'light' ? '2px #675dff solid' : '2px white solid'}
         borderRadius={9}
         fontWeight={700}
         p={'0 3px'}
       >
-        ;
+        ...
       </Text>
       
     </Text>

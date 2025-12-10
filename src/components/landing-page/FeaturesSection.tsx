@@ -134,7 +134,7 @@ const FeaturesSection: React.FC = () => {
             </Flex>
 
             {/* Title */}
-            <Heading as="h3" className="text-2xl font-semibold mb-3">{feature.title}</Heading>
+            <Heading as="h3" size="md" className="text-2xl font-semibold mb-3">{feature.title}</Heading>
 
             {/* Description */}
             <Text
