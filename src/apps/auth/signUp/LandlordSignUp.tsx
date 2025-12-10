@@ -17,7 +17,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { LandlordSignUpSchema } from './schema';
 import { CountrySelect } from '../../../components/fields/CountrySelect';
-import { RegisterRequest, User } from '@suleigolden/co-renting-api-client';
+import { SignUpRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
 import { registerUser } from '../../../redux-action/slices/auth-slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-action/store';
@@ -48,7 +48,7 @@ export const LandlordSignUp = () => {
         role: 'landlord',
         permissions: 'administrator',
       };
-      const res = await dispatch(registerUser(payload as RegisterRequest));
+      const res = await dispatch(registerUser(payload as SignUpRequest));
 
       if (res.meta.requestStatus === 'fulfilled') {
         await navigateToDashboard(res.payload as User);

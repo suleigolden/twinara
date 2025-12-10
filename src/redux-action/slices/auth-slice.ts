@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { api, GoogleSignInRequest, RegisterRequest, User } from '@suleigolden/co-renting-api-client';
+import { api, SignInRequest, SignUpRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
 import { RootState } from '~/redux-action/store';
 
 type ApiError = {
@@ -47,9 +47,9 @@ export const authenticate = createAsyncThunk(
 );
 export const googleSignIn = createAsyncThunk(
   'auth/googleSignIn',
-  async (data: GoogleSignInRequest, { rejectWithValue }) => {
+  async (data: SignInRequest, { rejectWithValue }) => {
     try {
-      const response = await api.service('auth').googleSignIn(data);
+      const response = await api.service('auth').signIn(data);
       return response;
     } catch (error: unknown) {
       const apiError = error as ApiError;
@@ -59,7 +59,7 @@ export const googleSignIn = createAsyncThunk(
 );
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (credentials: RegisterRequest, { rejectWithValue }) => {
+  async (credentials: SignUpRequest, { rejectWithValue }) => {
     try {
       const response = await api.service('auth').register(credentials);
       return response;
@@ -133,7 +133,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         if (payload) {
-          state.user = payload as User;
+          state.user = payload as unknown as User;
         }
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -159,7 +159,7 @@ const authSlice = createSlice({
       })
       .addCase(googleSignIn.fulfilled, (state, { payload }) => {
         if (payload) {
-          state.user = payload as User;
+          state.user = payload as unknown as User;
         }
       })
       .addCase(googleSignIn.rejected, (state, action) => {

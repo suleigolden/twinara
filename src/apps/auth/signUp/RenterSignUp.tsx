@@ -18,7 +18,7 @@ import { RiEyeCloseLine } from 'react-icons/ri';
 import { RenterSignUpSchema } from './schema';
 import { CountrySelect } from '../../../components/fields/CountrySelect';
 import { registerUser } from '../../../redux-action/slices/auth-slice';
-import { RegisterRequest, User } from '@suleigolden/co-renting-api-client';
+import { SignUpRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
 import { useDispatch } from 'react-redux';
 import { useLogInNavigation } from '../../../hooks/use-login-navigation';
 import { AppDispatch } from '../../../redux-action/store';
@@ -55,7 +55,7 @@ export const RenterSignUp = () => {
         ...data,
         role: 'renter',
       };
-      const res = await dispatch(registerUser(payload as RegisterRequest));
+      const res = await dispatch(registerUser(payload as SignUpRequest));
 
       if (res.meta.requestStatus === 'fulfilled') {
         await navigateToDashboard(res.payload as User);

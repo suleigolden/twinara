@@ -2,7 +2,7 @@ import { Icon } from '@chakra-ui/react';
 import {
   MdHome,
 } from 'react-icons/md';
-import { Role, User } from '@suleigolden/co-renting-api-client';
+import { Roles, User } from '@suleigolden/the-last-spelling-bee-api-client';
 import { Dashboard } from './apps/dashboard/Dashboard';
 
 
@@ -28,10 +28,10 @@ export const userRoutes = (user: User) => [
 ];
 
 
-export const navBarRoutes = (role: Role, user: User) => {
+export const navBarRoutes = (role: Roles, user: User) => {
   
   switch (role) {
-    case 'super-admin':
+    case 'system-admin':
       return adminRoutes(user);
     default:
       return userRoutes(user);

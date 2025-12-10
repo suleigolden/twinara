@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { LandingPage } from "./apps/landing-page/pages";
 import { theme } from "./theme/theme";
-import { initAxios } from "@suleigolden/co-renting-api-client";
+import { initAxios } from "@suleigolden/the-last-spelling-bee-api-client";
 import { DashboardNavBar } from "./layouts/admin";
 import { useState } from "react";
 import About from "./apps/landing-page/pages/about";

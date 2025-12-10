@@ -1,4 +1,4 @@
-import { User } from "@suleigolden/co-renting-api-client";
+import { User } from "@suleigolden/the-last-spelling-bee-api-client";
 
 
 type NavItem = {

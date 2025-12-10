@@ -1,5 +1,5 @@
 import { Box, useDisclosure, Spinner } from "@chakra-ui/react";
-import { User } from "@suleigolden/co-renting-api-client";
+import { User } from "@suleigolden/the-last-spelling-bee-api-client";
 import Footer from "../../components/footer/FooterAdmin";
 import { AdminNavbar } from "../../components/navbar/NavbarAdmin";
 import { useUser } from "~/hooks/use-user";
