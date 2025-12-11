@@ -10,14 +10,15 @@ import {
   Icon,
   Button,
   Text,
+  Select,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
-import { LandlordSignUpSchema } from './schema';
+import { SignUpSchema } from './schema';
 import { CountrySelect } from '../../../components/fields/CountrySelect';
-import { SignUpRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
+import { SignUpRequest, User, AccountTypes } from '@suleigolden/the-last-spelling-bee-api-client';
 import { registerUser } from '../../../redux-action/slices/auth-slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-action/store';
@@ -25,7 +26,16 @@ import { useLogInNavigation } from '../../../hooks/use-login-navigation';
 import { CustomToast } from '../../../hooks/CustomToast';
 import { TermsCheckbox } from '../../../components/fields/TermsCheckbox';
 
-export const LandlordSignUp = () => {
+const accountTypeLabels: Record<typeof AccountTypes[number], string> = {
+  'individual': 'Individual',
+  'organization': 'Organization',
+  'organization-user': 'Organization User',
+  'udemy-user': 'Udemy User',
+  'dementia-user': 'Dementia User',
+  'caregiver-user': 'Caregiver User',
+};
+
+export const SignUpForm = () => {
   const [show, setShow] = useState<boolean>(false);
   const [isEmailExists, setIsEmailExists] = useState<string>('');
   const handleClick = () => setShow(!show);
@@ -36,19 +46,25 @@ export const LandlordSignUp = () => {
     register,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<LandlordSignUpSchema>({
+  } = useForm<SignUpSchema>({
     mode: 'onChange',
+    defaultValues: {
+      accountType: 'individual',
+    },
   });
   const showToast = CustomToast();
 
-  const onSubmit = async (data: LandlordSignUpSchema) => {
+  const onSubmit = async (data: SignUpSchema) => {
     try {
-      const payload = {
-        ...data,
-        role: 'landlord',
-        permissions: 'administrator',
+      const payload: SignUpRequest = {
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        password: data.password,
+        country: data.country,
+        accountType: data.accountType as typeof AccountTypes[number],
       };
-      const res = await dispatch(registerUser(payload as SignUpRequest));
+      const res = await dispatch(registerUser(payload));
 
       if (res.meta.requestStatus === 'fulfilled') {
         await navigateToDashboard(res.payload as User);
@@ -72,7 +88,29 @@ export const LandlordSignUp = () => {
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
-      <FormControl isInvalid={!!errors.first_name}>
+        <FormControl isInvalid={!!errors.accountType}>
+          <FormLabel>Account Type</FormLabel>
+          <Controller
+            name="accountType"
+            control={control}
+            rules={{ required: 'Account type is required' }}
+            render={({ field }) => (
+              <Select {...field} placeholder="Select account type">
+                  <option  value="dementia-user">
+                    {accountTypeLabels["dementia-user"]}
+                  </option>
+                  <option  value="caregiver-user">
+                    {accountTypeLabels["caregiver-user"]}
+                  </option>
+              </Select>
+            )}
+          />
+          <FormErrorMessage>
+            {errors.accountType && errors.accountType.message}
+          </FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.first_name}>
           <FormLabel>First Name</FormLabel>
           <Input
             type="text"
@@ -85,19 +123,21 @@ export const LandlordSignUp = () => {
             {errors.first_name && errors.first_name.message}
           </FormErrorMessage>
         </FormControl>
+
         <FormControl isInvalid={!!errors.last_name}>
           <FormLabel>Last Name</FormLabel>
           <Input
             type="text"
             {...register('last_name', {
-              required: 'Last Name is required',
+              required: 'Last name is required',
             })}
-            placeholder="Last name"
+            placeholder="Enter your last name"
           />
           <FormErrorMessage>
             {errors.last_name && errors.last_name.message}
           </FormErrorMessage>
         </FormControl>
+
         <FormControl isInvalid={!!errors.email}>
           <FormLabel>Email</FormLabel>
           <Input
@@ -109,7 +149,7 @@ export const LandlordSignUp = () => {
                 message: 'Invalid email address',
               },
             })}
-            placeholder="Email"
+            placeholder="Enter your email"
             onKeyUp={() => setIsEmailExists('')}
           />
           <Text
@@ -136,6 +176,7 @@ export const LandlordSignUp = () => {
                   message: 'Password must be at least 8 characters',
                 },
               })}
+              placeholder="Enter your password"
             />
             <InputRightElement>
               <Icon
@@ -151,12 +192,12 @@ export const LandlordSignUp = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <CountrySelect
+        {/* <CountrySelect
           control={control}
           name="country"
           error={errors.country?.message}
           isRequired
-        />
+        /> */}
 
         <TermsCheckbox 
           register={register} 
@@ -172,9 +213,10 @@ export const LandlordSignUp = () => {
           w="100%"
           mt={4}
         >
-          Create Landlord Account
+          Create Account
         </Button>
       </Stack>
     </Box>
   );
 };
+

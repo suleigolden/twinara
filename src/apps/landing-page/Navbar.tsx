@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { Menu, X, ChevronDown, Sun, Moon, Zap, Users, BookOpen, Sparkles } from "lucide-react";
+import { Menu, X, Sun, Moon, Zap, Users, BookOpen, Sparkles } from "lucide-react";
 import {  useNavigate, useLocation } from "react-router-dom";
 import { Logo } from "../../components/icons/Logo";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -18,6 +18,8 @@ import {
   Flex,
   Text,
   Container,
+  ModalCloseButton,
+  ModalBody,
 } from "@chakra-ui/react";
 
 // Custom hook for smooth scrolling with intersection observer
@@ -282,7 +284,10 @@ export const Navbar: React.FC = () => {
           <Logo size={{ base: 39, lg: 32 }} />
 
           {/* Desktop Navigation */}
-          <Flex className="hidden xl:flex items-center gap-6 xl:gap-8 2xl:gap-10 ml-10">
+          <Flex 
+            display={{ base: 'none', xl: 'flex' }}
+            className="items-center gap-6 xl:gap-8 2xl:gap-10 ml-10"
+          >
             {navLinks.map((link) => (
               <NavLink 
                 key={link.href} 
@@ -393,7 +398,10 @@ export const Navbar: React.FC = () => {
           </Flex>
 
           {/* Desktop CTA + Theme Toggle + User Menu */}
-          <Flex className="hidden xl:flex items-center gap-3 xl:gap-4">
+          <Flex 
+            display={{ base: 'none', xl: 'flex' }}
+            className="items-center gap-3 xl:gap-4"
+          >
             {user ? (
               <AdminNavbarLinks
                 onOpen={() => {}}
@@ -441,14 +449,18 @@ export const Navbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <Button
+            display={{ base: 'flex', xl: 'none' }}
             className={`
-              xl:hidden relative z-[10000] p-3 rounded-xl transition-all duration-300 transform hover:scale-105
+              relative z-[10000] p-3 rounded-xl transition-all duration-300 hover:scale-105
               ${isDarkMode 
                 ? "bg-gray-800/50 hover:bg-gray-700/50 text-white border border-gray-700/50" 
                 : "bg-gray-50/50 hover:bg-gray-100/50 text-gray-700 border border-gray-200/50"
               }
             `}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
             onKeyDown={(e) => handleKeyDown(e, () => setIsMenuOpen(!isMenuOpen))}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
@@ -463,23 +475,29 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       <Box
+        display={{ base: 'block', xl: 'none' }}
         className={`
-          fixed inset-0 bg-black/60 backdrop-blur-sm z-[9990] transition-all duration-500 lg:hidden
-          ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}
+          fixed inset-0 bg-black/60 backdrop-blur-sm z-[9990] transition-all duration-500
+          ${isMenuOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}
         `}
         onClick={() => setIsMenuOpen(false)}
       />
       
       {/* Mobile Menu Sidebar */}
-      <Box className={`
-        fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] z-[9995] border-r shadow-2xl backdrop-blur-xl 
-        overflow-hidden transition-all duration-500 transform lg:hidden
-        ${isDarkMode ? "bg-gray-900/98 border-gray-700/50" : "bg-white/98 border-gray-200/50"}
-        ${isMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}
-      `}>
+      <Box 
+        display={{ base: 'block', xl: 'none' }}
+        className={`
+          fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] z-[9995] border-r shadow-2xl backdrop-blur-xl 
+          overflow-hidden transition-all duration-500
+          ${isDarkMode ? "bg-gray-900/98 border-gray-700/50" : "bg-white/98 border-gray-200/50"}
+          ${isMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"}
+        `}
+      style={{
+        transform: isMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
+      }}
+      >
         {/* Mobile Menu Header */}
         <Flex className="items-center justify-between p-6 border-b border-opacity-50">
-          <Logo size={{ base: 39, lg: 32 }} />
           <Button
             onClick={() => setIsMenuOpen(false)}
             variant="ghost"
@@ -493,7 +511,7 @@ export const Navbar: React.FC = () => {
         </Flex>
 
         {/* Mobile Menu Content */}
-        <Box className="p-6 space-y-2 overflow-y-auto h-full pb-32">
+        <Box className="p-6 space-y-2 overflow-y-auto flex-1" style={{ height: 'calc(100vh - 80px)', paddingBottom: '8rem' }}>
           {navLinks.map((link, index) => (
             <Box
               key={link.href}
@@ -634,10 +652,13 @@ export const Navbar: React.FC = () => {
       `}</style>
 
       {/* SignIn Modal */}
-      <Modal isOpen={isSignInOpen} onClose={onSignInClose} size="xl">
-        <ModalOverlay />
-        <ModalContent>
-          <SignIn onClose={onSignInClose} />
+      <Modal isOpen={isSignInOpen} onClose={onSignInClose} size="xl" >
+        <ModalOverlay backdropFilter="blur(4px)" />
+        <ModalContent p={5}>
+          <ModalCloseButton />
+          <ModalBody>
+            <SignIn onClose={onSignInClose} />
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>

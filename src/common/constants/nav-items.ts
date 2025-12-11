@@ -91,9 +91,9 @@ export const getNavItems = (user: User) => {
     },
   ];
 
-  return user?.role === "landlord"
+  return user?.role === "character"
     ? OWNER_NAV_ITEMS
-    : user?.role === "renter"
+    : user?.role === "system-admin"
     ? RENTER_NAV_ITEMS
     : PUBLIC_NAV_ITEMS;
 };
