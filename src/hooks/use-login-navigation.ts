@@ -5,7 +5,6 @@ import { setUser, setToken } from '../redux-action/slices/auth-slice';
 
 
 export const useLogInNavigation = (type?: 'login' | 'signup') => {
-  console.log(type);
   const dispatch = useDispatch();
   const [isInvalidCredentials, setIsInvalidCredentials] =
     useState<boolean>(false);
@@ -27,12 +26,16 @@ export const useLogInNavigation = (type?: 'login' | 'signup') => {
       setIsInvalidCredentials(false);
       showToast("Login", "Successfully Login", "success");
       
-      switch (user.role) {
-        case 'renter':
-          window.location.href = `/renter/${user.id}/dashboard`;
+      switch (user.accountType) {
+        case 'individual':
+          window.location.href = `/user/dashboard`;
           break;
-        case 'landlord':
-          window.location.href = `/owner/${user.id}/dashboard`;
+        case 'dementia-user':
+          if(type === 'signup'){
+            window.location.href = `/dementia-user/onboarding`;
+          } else {
+            window.location.href = `/user/dashboard`;
+          }
           break;
         default:
           break;

@@ -28,6 +28,15 @@ function App() {
               />
             }
           />
+          <Route
+            path="dementia-user/*"
+            element={
+              <DashboardNavBar
+                theme={currentTheme}
+                setTheme={setCurrentTheme}
+              />
+            }
+          />
         </Routes>
       </Router>
     </ChakraProvider>

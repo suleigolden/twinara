@@ -11,6 +11,9 @@ import {
   Button,
   Text,
   Select,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -38,6 +41,7 @@ const accountTypeLabels: Record<typeof AccountTypes[number], string> = {
 export const SignUpForm = () => {
   const [show, setShow] = useState<boolean>(false);
   const [isEmailExists, setIsEmailExists] = useState<string>('');
+  const [formError, setFormError] = useState<string>('');
   const handleClick = () => setShow(!show);
   const { navigateToDashboard } = useLogInNavigation('signup');
   const dispatch = useDispatch<AppDispatch>();
@@ -55,25 +59,33 @@ export const SignUpForm = () => {
   const showToast = CustomToast();
 
   const onSubmit = async (data: SignUpSchema) => {
+    // Clear any previous errors
+    setFormError('');
+    setIsEmailExists('');
+    
     try {
+      const accountTypeValue = data.accountType as typeof AccountTypes[number];
       const payload: SignUpRequest = {
         email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
         password: data.password,
         country: data.country,
-        accountType: data.accountType as typeof AccountTypes[number],
+        accountType: accountTypeValue as any,
       };
       const res = await dispatch(registerUser(payload));
 
       if (res.meta.requestStatus === 'fulfilled') {
         await navigateToDashboard(res.payload as User);
       } else {
-        const errorMessage = res.payload as string;
+        const errorMessage = res.payload as string || 'Failed to register. Please try again.';
+        setFormError(errorMessage);
         showToast('Sign Up', errorMessage, 'error');
+        // Also set email-specific error if it's an email error
         if (
           typeof errorMessage === 'string' &&
-          errorMessage.includes('Email')
+          (errorMessage.toLowerCase().includes('email') || 
+           errorMessage.toLowerCase().includes('already registered'))
         ) {
           setIsEmailExists(errorMessage);
         }
@@ -81,13 +93,22 @@ export const SignUpForm = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error);
-      showToast('Sign Up', error.message, 'error');
+      const errorMessage = error?.message || 'An unexpected error occurred. Please try again.';
+      setFormError(errorMessage);
+      showToast('Sign Up', errorMessage, 'error');
     }
   };
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
+        {formError && (
+          <Alert status="error" borderRadius="md">
+            <AlertIcon />
+            <AlertDescription>{formError}</AlertDescription>
+          </Alert>
+        )}
+        
         <FormControl isInvalid={!!errors.accountType}>
           <FormLabel>Account Type</FormLabel>
           <Controller
@@ -95,7 +116,7 @@ export const SignUpForm = () => {
             control={control}
             rules={{ required: 'Account type is required' }}
             render={({ field }) => (
-              <Select {...field} placeholder="Select account type">
+              <Select {...field} placeholder="Select account type" required>
                   <option  value="dementia-user">
                     {accountTypeLabels["dementia-user"]}
                   </option>
@@ -118,6 +139,7 @@ export const SignUpForm = () => {
               required: 'First name is required',
             })}
             placeholder="Enter your first name"
+            onChange={() => setFormError('')}
           />
           <FormErrorMessage>
             {errors.first_name && errors.first_name.message}
@@ -132,6 +154,7 @@ export const SignUpForm = () => {
               required: 'Last name is required',
             })}
             placeholder="Enter your last name"
+            onChange={() => setFormError('')}
           />
           <FormErrorMessage>
             {errors.last_name && errors.last_name.message}
@@ -150,7 +173,10 @@ export const SignUpForm = () => {
               },
             })}
             placeholder="Enter your email"
-            onKeyUp={() => setIsEmailExists('')}
+            onKeyUp={() => {
+              setIsEmailExists('');
+              setFormError('');
+            }}
           />
           <Text
             as={'span'}
@@ -177,6 +203,7 @@ export const SignUpForm = () => {
                 },
               })}
               placeholder="Enter your password"
+              onChange={() => setFormError('')}
             />
             <InputRightElement>
               <Icon

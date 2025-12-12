@@ -58,7 +58,7 @@ export const SignIn = ({ onClose }: SignInProps) => {
     try {
       const res = await dispatch(authenticate(data as SignInRequest));
       await navigateToDashboard(res.payload as User);
-      onClose?.();
+      // onClose?.();
     } catch (error) {
       showToast('Login', (error as Error).message, 'error');
       console.error(error);
