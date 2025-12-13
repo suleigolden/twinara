@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { uploadBytesResumable, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { firebaseStorage } from "~/common/utils/firebaseConfig";
-import { api } from "@suleigolden/sulber-api-client";
+import { api } from "@suleigolden/the-last-spelling-bee-api-client";
 import { CustomToast } from "~/hooks/CustomToast";
 import { useUser } from "./use-user";
 
@@ -41,7 +41,7 @@ export const useAvatarUpload = (
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             
             // Update user profile with new avatar URL
-            await api.service("user-profile").update(user.id, {
+            await api.service("dementiaProfiles").updateDementiaProfile(user.id, {
               avatarUrl: downloadURL,
             });
 
