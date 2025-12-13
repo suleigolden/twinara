@@ -16,7 +16,7 @@ import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding"
 import { CustomInputField } from "~/components/fields/CustomInputField";
 import { useAvatarUpload } from "~/hooks/useAvatarUpload";
 import { useDementiaUserProfile } from "~/hooks/use-dementia-user-profile";
-import { DementiaProfile, Gender, User } from "@suleigolden/the-last-spelling-bee-api-client";
+import { DementiaProfile, Gender } from "@suleigolden/the-last-spelling-bee-api-client";
 import { AvatarUploadModal } from "./components/AvatarUploadModal";
 import { OnboardingStepper } from "./OnboardingStepper";
 
@@ -76,7 +76,6 @@ export const DementiaUserInformation = forwardRef<
   const { methods, handleSubmit } = useDementiaUserOnboarding();
   const { dementiaUserProfile } = useDementiaUserProfile();
   const {
-    control,
     setValue,
     watch,
     formState: { errors },
@@ -84,12 +83,16 @@ export const DementiaUserInformation = forwardRef<
 
   // Watch required fields to determine if user info is valid
   const avatarUrl = watch("avatar_url");
+  const firstName = watch("firstName");
+  const lastName = watch("lastName");
   const dateOfBirth = watch("dob");
   const phoneNumber = watch("phoneNumber");
   const gender = watch("gender");
 
   const isUserInfoValid = !!(
     avatarUrl &&
+    firstName &&
+    lastName &&
     dateOfBirth &&
     phoneNumber &&
     gender
@@ -103,15 +106,19 @@ export const DementiaUserInformation = forwardRef<
   // Initialize form with existing user profile data
   useEffect(() => {
     if (dementiaUserProfile) {
+      // Basic Information fields
       setValue("avatar_url", dementiaUserProfile.avatarUrl || "");
+      setValue("nickname", dementiaUserProfile.nickname || "");
+      setValue("firstName", dementiaUserProfile.firstName || "");
+      setValue("lastName", dementiaUserProfile.lastName || "");
       // Format date for input field (YYYY-MM-DD)
       const dateOfBirth = dementiaUserProfile.dob
         ? new Date(dementiaUserProfile.dob).toISOString().split('T')[0]
         : "";
       setValue("dob", dateOfBirth);
-      setValue("phoneNumber", dementiaUserProfile.phoneNumber || "");
       setValue("gender", dementiaUserProfile.gender as "male" | "female" | "other" | undefined);
-      setValue("bio", "");
+      setValue("phoneNumber", dementiaUserProfile.phoneNumber || "");
+      setValue("email", dementiaUserProfile.email || "");
     }
   }, [dementiaUserProfile, setValue]);
 
@@ -127,7 +134,6 @@ export const DementiaUserInformation = forwardRef<
           maxW="720px"
           bg="white"
           borderRadius="2xl"
-          boxShadow="lg"
         >
           {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
           <Box
@@ -139,14 +145,40 @@ export const DementiaUserInformation = forwardRef<
             p={{ base: 6, md: 10 }}
           >
             <Heading size="lg" mb={2}>
-              Hi {dementiaUserProfile?.firstName}! Tell us about yourself
+              Hi{dementiaUserProfile?.firstName ? ` ${dementiaUserProfile.firstName}` : ''}! Tell us about yourself
             </Heading>
             <Text fontSize="md">
               Share some information to help customers get to know you better.
             </Text>
           </Box>
-          <VStack spacing={6} w="full" align="stretch" p={{ base: 6, md: 10 }}>
+          <VStack spacing={6} w="full" align="stretch" p={{ base: 6, md: 10 }} boxShadow="lg">
             <AvatarUploadSection dementiaUserProfile={dementiaUserProfile as DementiaProfile} />
+
+            <CustomInputField
+              type="text"
+              label="Nickname"
+              registerName="nickname"
+              isError={errors?.nickname}
+              placeholder="Enter your nickname"
+            />
+
+            <CustomInputField
+              type="text"
+              label="First Name"
+              registerName="firstName"
+              isError={errors?.firstName}
+              placeholder="Enter your first name"
+              autoComplete="given-name"
+            />
+
+            <CustomInputField
+              type="text"
+              label="Last Name"
+              registerName="lastName"
+              isError={errors?.lastName}
+              placeholder="Enter your last name"
+              autoComplete="family-name"
+            />
 
             <CustomInputField
               type="date"
@@ -154,15 +186,6 @@ export const DementiaUserInformation = forwardRef<
               registerName="dob"
               isError={errors?.dob}
               placeholder="Select your date of birth"
-            />
-
-            <CustomInputField
-              type="text"
-              label="Phone Number"
-              registerName="phoneNumber"
-              isError={errors?.phoneNumber}
-              placeholder="Enter your phone number"
-              autoComplete="tel"
             />
 
             <CustomInputField
@@ -175,12 +198,15 @@ export const DementiaUserInformation = forwardRef<
             />
 
             <CustomInputField
-              type="textarea"
-              label="Bio"
-              registerName="bio"
-              isError={errors?.bio}
-              placeholder="Tell customers about yourself, your experience, and what makes you a great service provider..."
+              type="text"
+              label="Phone Number (Emergency contact)"
+              registerName="phoneNumber"
+              isError={errors?.phoneNumber}
+              placeholder="Enter your phone number (emergency contact)"
+              autoComplete="tel"
+              maxLength={20}
             />
+
           </VStack>
         </Box>
       </VStack>

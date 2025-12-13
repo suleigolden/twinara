@@ -12,18 +12,8 @@ type NavItem = {
 export const getNavItems = (user: User) => {
   const OWNER_NAV_ITEMS: Array<NavItem> = [
     {
-      label: "List your property",
-      href: `/onboard/${user?.id}/property-onboard`,
-      type: "link",
-    },
-    {
-      label: "Listings",
-      href: `/owner/${user?.id}/listings`,
-      type: "link",
-    },
-    {
-      label: "Listing Requests",
-      href: `/owner/${user?.id}/accept-or-reject-listing-requests`,
+      label: "Daily Activities",
+      href: `/dementia-user/${user?.id}/daily-activities`,
       type: "link",
     },
     {

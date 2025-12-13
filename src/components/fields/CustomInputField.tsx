@@ -24,6 +24,7 @@ type CustomInputFieldProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   description?: string;
   isNumeric?: boolean;
+  maxLength?: number;
 };
 
 export const CustomInputField: FC<CustomInputFieldProps> = ({
@@ -39,6 +40,7 @@ export const CustomInputField: FC<CustomInputFieldProps> = ({
   onChange,
   description,
   isNumeric,
+  maxLength,
 }) => {
   const { register, setValue } = useFormContext();
   
@@ -146,6 +148,7 @@ export const CustomInputField: FC<CustomInputFieldProps> = ({
           h="40px"
           {...commonStyles}
           border={"1px solid #000"}
+          maxLength={maxLength}
         />
       )}
 

@@ -44,8 +44,9 @@ export const DementiaUserOnboardingSchema = object().shape({
 
   
   // Additional Information (DementiaProfile)
-  notesFromCaregiver: string().optional(),
-  bio: string().optional(),
+   bio: string().optional(),
+   notesFromCaregiver: string().optional(),
+ 
 });
 
 export type DementiaUserOnboardingSchemaType = InferType<typeof DementiaUserOnboardingSchema>;

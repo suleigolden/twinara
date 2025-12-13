@@ -28,13 +28,13 @@ export const useLogInNavigation = (type?: 'login' | 'signup') => {
       
       switch (user.accountType) {
         case 'individual':
-          window.location.href = `/user/dashboard`;
+          window.location.href = `/user/${user.id}/dashboard`;
           break;
         case 'dementia-user':
           if(type === 'signup'){
-            window.location.href = `/dementia-user/onboarding`;
+            window.location.href = `/user/${user.id}/dementia-user/onboarding`;
           } else {
-            window.location.href = `/user/dashboard`;
+            window.location.href = `/user/${user.id}/dashboard`;
           }
           break;
         default:
