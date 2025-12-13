@@ -91,7 +91,7 @@ export const DementiaUserOnboarding = () => {
         // If it's the last step (Publish button), redirect to dashboard
         if (activeStep === steps.length - 1) {
           if (user?.id) {
-            navigate(`/provider/${user.id}/dashboard`);
+            navigate(`/user/${user.id}/dashboard`);
           } else {
             console.error("User ID not found, cannot redirect to dashboard");
           }
@@ -108,7 +108,7 @@ export const DementiaUserOnboarding = () => {
       // If no form ref, just go to next step (shouldn't happen on last step)
       if (activeStep === steps.length - 1) {
         if (user?.id) {
-          navigate(`/provider/${user.id}/dashboard`);
+          navigate(`/user/${user.id}/dashboard`);
         }
       } else {
         goToNext();

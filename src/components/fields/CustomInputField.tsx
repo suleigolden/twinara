@@ -114,6 +114,7 @@ export const CustomInputField: FC<CustomInputFieldProps> = ({
           required={isRequired}
           onChange={onChange}
           minH="120px"
+          maxLength={maxLength}
           {...commonStyles}
           border={"1px solid #000"}
         />

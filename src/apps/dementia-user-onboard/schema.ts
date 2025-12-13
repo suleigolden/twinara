@@ -2,7 +2,7 @@ import { array, InferType, object, string, number, boolean, date } from "yup";
 
 // Combined schema matching DementiaProfile and DementiaUserActivity entity structures
 export const DementiaUserOnboardingSchema = object().shape({
-  // Basic Information (DementiaProfile)
+  // Basic Information
   nickname: string().max(100).optional(),
   firstName: string().max(150).optional(),
   lastName: string().max(150).optional(),
@@ -39,7 +39,7 @@ export const DementiaUserOnboardingSchema = object().shape({
   ).optional(),
 
 
-  // Address (DementiaProfile) - single line string as per entity
+  // Address - single line string as per entity
   address: object().shape({
     street: string().optional(),
     city: string().optional(),
@@ -49,7 +49,7 @@ export const DementiaUserOnboardingSchema = object().shape({
   }).optional(),
 
   
-  // Additional Information (DementiaProfile)
+  // bio and notes from caregiver Information
    bio: string().optional(),
    notesFromCaregiver: string().optional(),
  
