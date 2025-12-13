@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { api, CreateDementiaProfileRequest } from '@suleigolden/the-last-spelling-bee-api-client';
+import { api, CreateDementiaProfileRequest, CreateDementiaUserActivityRequest } from '@suleigolden/the-last-spelling-bee-api-client';
 import { CustomToast } from './CustomToast';
 import { useEffect, useState } from 'react';
 import { DementiaUserOnboardingSchema, DementiaUserOnboardingSchemaType } from '~/apps/dementia-user-onboard/schema';
@@ -84,7 +84,30 @@ export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
         bio: data.bio || undefined,
         avatarUrl: data.avatar_url || undefined,
       };
-
+      // Create activities individually (API accepts single activity at a time)
+      if (data.activities && data.activities.length > 0) {
+        for (const activity of data.activities) {
+          // Only create activities with a title (required field)
+          if (activity.title && activity.title.trim() !== '') {
+            const activityPayload: CreateDementiaUserActivityRequest = {
+              userId: dementiaUserProfile?.id || '',
+              title: activity.title,
+              description: activity.description || undefined,
+              dayOfWeek: activity.dayOfWeek ?? undefined,
+              timeOfDay: activity.timeOfDay || undefined,
+              startDatetime: activity.startDatetime
+                ? (typeof activity.startDatetime === 'string'
+                    ? activity.startDatetime
+                    : activity.startDatetime.toISOString())
+                : undefined,
+              location: activity.location || undefined,
+              isRecurring: activity.isRecurring ?? false,
+              isActive: activity.isActive !== false,
+            };
+            await api.service('dementiaUserActivities').createDementiaUserActivity(activityPayload);
+          }
+        }
+      }
       if (dementiaUserProfile?.id) {
         // Update existing profile
         await api.service('dementiaProfiles').updateDementiaProfile(

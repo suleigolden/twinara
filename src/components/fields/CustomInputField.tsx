@@ -12,7 +12,7 @@ import { FC } from "react";
 import { FieldError, useFormContext } from "react-hook-form";
 
 type CustomInputFieldProps = {
-  type: "text" | "email" | "password" | "textarea" | "date" | "select" | "hidden";
+  type: "text" | "email" | "password" | "textarea" | "date" | "datetime-local" | "time" | "select" | "hidden";
   label: string;
   registerName: string;
   isReadOnly?: boolean;
