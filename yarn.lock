@@ -1330,10 +1330,10 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
   integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
-"@suleigolden/the-last-spelling-bee-api-client@^0.16.0":
-  version "0.16.0"
-  resolved "https://npm.pkg.github.com/download/@suleigolden/the-last-spelling-bee-api-client/0.16.0/84a83c8dd3a7b257b157c4e89ebf16f6c1332eb2#84a83c8dd3a7b257b157c4e89ebf16f6c1332eb2"
-  integrity sha512-A83hlKMhRcXOeLtAzYweW6Fy7ovr0a+EaNeLsC9h04yXYGd4snZDUWoUa1vOD0XbBUQ3qhe1JGQi8i75HzLjBA==
+"@suleigolden/the-last-spelling-bee-api-client@^0.17.0":
+  version "0.17.0"
+  resolved "https://npm.pkg.github.com/download/@suleigolden/the-last-spelling-bee-api-client/0.17.0/37fdea8dc14163f0be8207258f188f72f3f67b4a#37fdea8dc14163f0be8207258f188f72f3f67b4a"
+  integrity sha512-P+1M7WB/TWwCnG1nZ0t8aHwQidUKlVpDL1KLG0m/bLGW8xLAIJlntzz0OEsvHn8C5yPfL2sB8M63z/RArQRhMw==
   dependencies:
     axios "^0.27.2"
     bignumber.js "^9.0.2"

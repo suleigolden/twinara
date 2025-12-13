@@ -13,8 +13,8 @@ export const DementiaUserOnboardingSchema = object().shape({
   avatar_url: string().optional(),
   
   
-  // Profile Information (DementiaProfile)
-  workHistory: string().optional(),
+  // Profile Information workHistory, hobbies, importantDates
+  workHistory: array().of(string()).optional(),
   hobbies: array().of(string()).optional(),
   importantDates: array().of(
     object().shape({
