@@ -1,9 +1,17 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { api, CreateDementiaProfileRequest, CreateDementiaUserActivityRequest } from '@suleigolden/the-last-spelling-bee-api-client';
+import { 
+      Address, 
+      api, 
+      CreateDementiaProfileRequest, 
+      CreateDementiaUserActivityRequest 
+    } from '@suleigolden/the-last-spelling-bee-api-client';
 import { CustomToast } from './CustomToast';
 import { useEffect, useState } from 'react';
-import { DementiaUserOnboardingSchema, DementiaUserOnboardingSchemaType } from '~/apps/dementia-user-onboard/schema';
+import { 
+        DementiaUserOnboardingSchema, 
+        DementiaUserOnboardingSchemaType 
+      } from '~/apps/dementia-user-onboard/schema';
 import { useUser } from './use-user';
 import { useStepsNotCompleted } from './use-steps-not-completed';
 
@@ -42,7 +50,13 @@ export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
         gender: dementiaUserProfile.gender || undefined,
         phoneNumber: dementiaUserProfile.phoneNumber || undefined,
         email: dementiaUserProfile.email || undefined,
-        addressLine: dementiaUserProfile.addressLine || undefined,
+        address: {
+          street: dementiaUserProfile.address?.street || '',
+          city: dementiaUserProfile.address?.city || '',
+          state: dementiaUserProfile.address?.state || '',
+          country: dementiaUserProfile.address?.country || '',
+          postal_code: dementiaUserProfile.address?.postal_code || '',
+        },
         workHistory: dementiaUserProfile.workHistory || undefined,
         hobbies: dementiaUserProfile.hobbies || undefined,
         importantDates: dementiaUserProfile.importantDates?.map(date => ({
@@ -76,7 +90,7 @@ export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
         gender: data.gender as any,
         phoneNumber: data.phoneNumber || undefined,
         email: data.email || undefined,
-        addressLine: data.addressLine || undefined,
+        address: data.address as Address | undefined,
         workHistory: data.workHistory?.filter((item): item is string => Boolean(item)) || undefined,
         hobbies: data.hobbies?.filter((item): item is string => Boolean(item)) || undefined,
         importantDates: data.importantDates || undefined,

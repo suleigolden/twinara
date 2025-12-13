@@ -40,7 +40,13 @@ export const DementiaUserOnboardingSchema = object().shape({
 
 
   // Address (DementiaProfile) - single line string as per entity
-  addressLine: string().optional(),
+  address: object().shape({
+    street: string().optional(),
+    city: string().optional(),
+    state: string().optional(),
+    country: string().optional(),
+    postal_code: string().optional(),
+  }).optional(),
 
   
   // Additional Information (DementiaProfile)
