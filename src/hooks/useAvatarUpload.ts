@@ -4,19 +4,22 @@ import { firebaseStorage } from "~/common/utils/firebaseConfig";
 import { api } from "@suleigolden/the-last-spelling-bee-api-client";
 import { CustomToast } from "~/hooks/CustomToast";
 import { useUser } from "./use-user";
+import { useDementiaUserProfile } from "./use-dementia-user-profile";
 
 export const useAvatarUpload = (
   onUploadComplete?: (url: string) => void
 ) => {
   const [isUploading, setIsUploading] = useState(false);
   const { user } = useUser();
+  const { dementiaUserProfile, isLoading } = useDementiaUserProfile();
   const showToast = CustomToast();
 
   const uploadAvatar = async (file: File) => {
-    if (!user?.id) {
+    if (!dementiaUserProfile?.id) {
       showToast("Error", "User not found. Please log in again.", "error");
       return;
     }
+
 
     setIsUploading(true);
     const timestamp = Date.now();
@@ -41,7 +44,7 @@ export const useAvatarUpload = (
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             
             // Update user profile with new avatar URL
-            await api.service("dementiaProfiles").updateDementiaProfile(user.id, {
+            await api.service("dementiaProfiles").updateDementiaProfile(dementiaUserProfile.id, {
               avatarUrl: downloadURL,
             });
 
