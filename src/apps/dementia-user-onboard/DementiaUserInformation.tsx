@@ -156,7 +156,7 @@ export const DementiaUserInformation = forwardRef<
 
             <CustomInputField
               type="text"
-              label="Nickname"
+              label="Nickname (Optional)"
               registerName="nickname"
               isError={errors?.nickname}
               placeholder="Enter your nickname"
@@ -169,6 +169,7 @@ export const DementiaUserInformation = forwardRef<
               isError={errors?.firstName}
               placeholder="Enter your first name"
               autoComplete="given-name"
+              isRequired={true}
             />
 
             <CustomInputField
@@ -178,6 +179,7 @@ export const DementiaUserInformation = forwardRef<
               isError={errors?.lastName}
               placeholder="Enter your last name"
               autoComplete="family-name"
+              isRequired={true}
             />
 
             <CustomInputField
@@ -186,6 +188,7 @@ export const DementiaUserInformation = forwardRef<
               registerName="dob"
               isError={errors?.dob}
               placeholder="Select your date of birth"
+              isRequired={true}
             />
 
             <CustomInputField
@@ -195,6 +198,7 @@ export const DementiaUserInformation = forwardRef<
               options={Object.values(Gender).map((gender) => ({ label: gender, value: gender }))}
               isError={errors?.gender}
               placeholder="Select your gender"
+              isRequired={true}
             />
 
             <CustomInputField
@@ -205,6 +209,7 @@ export const DementiaUserInformation = forwardRef<
               placeholder="Enter your phone number (emergency contact)"
               autoComplete="tel"
               maxLength={20}
+              isRequired={true}
             />
 
           </VStack>
