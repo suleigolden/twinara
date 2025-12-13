@@ -8,22 +8,24 @@ import {
   useSteps,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { UserInformation } from "./UserInformation";
-import { ProviderServices } from "./ProviderServices";
-import { ProviderLocation } from "./ProviderLocation";
-import { ProviderVerification } from "./ProviderVerification";
+import { DementiaUserInformation } from "./DementiaUserInformation";
 import { useUser } from "~/hooks/use-user";
+import { DementiaUserActivities } from "./DementiaUserActivities";
+import { DementiaUserAddress } from "./DementiaUserAddress";
+import { DementiaUserBio } from "./DementiaUserBio";
+import { DementiaUserWorkAndHobbies } from "./DementiaUserWorkAndHobbies";
 
 
 
 const steps = [
-  { title: "Location", Component: ProviderLocation },
-  { title: "Services", Component: ProviderServices },
-  { title: "User", Component: UserInformation },
-  { title: "Verification", Component: ProviderVerification },
+  { title: "Profile", Component: DementiaUserInformation }, // Basic Information 
+  { title: "Work", Component: DementiaUserWorkAndHobbies }, //Work and hobbies information
+  { title: "Activities", Component: DementiaUserActivities }, //Activities (DementiaUserActivity)
+  { title: "Address", Component: DementiaUserAddress }, //Address (DementiaProfile)
+  { title: "Bio", Component: DementiaUserBio }, //Bio and notes from caregiver
 ];
 
-export const ProviderOnboarding = () => {
+export const DementiaUserOnboarding = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -115,16 +117,16 @@ export const ProviderOnboarding = () => {
   };
 
   const renderStepComponent = () => {
-    if (activeStep === SERVICES_STEP_INDEX) {
-      return (
-        <ProviderServices
-          ref={formRef}
-          onServicesSelectedChange={setHasSelectedServices}
-          activeStep={activeStep}
-          steps={steps}
-        />
-      );
-    }
+    // if (activeStep === SERVICES_STEP_INDEX) {
+    //   return (
+    //     <ProviderServices
+    //       ref={formRef}
+    //       onServicesSelectedChange={setHasSelectedServices}
+    //       activeStep={activeStep}
+    //       steps={steps}
+    //     />
+    //   );
+    // }
 
     const StepComponent = steps[activeStep].Component;
     return (
@@ -132,9 +134,7 @@ export const ProviderOnboarding = () => {
         ref={formRef}
         activeStep={activeStep}
         steps={steps}
-        onLocationValidChange={activeStep === LOCATION_STEP_INDEX ? setIsLocationValid : undefined}
         onUserInfoValidChange={activeStep === USER_INFO_STEP_INDEX ? setIsUserInfoValid : undefined}
-        onVerificationStatusChange={activeStep === VERIFICATION_STEP_INDEX ? setIsVerified : undefined}
         shouldDisplayStepper={true}
       />
     );

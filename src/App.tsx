@@ -5,7 +5,7 @@ import { theme } from "./theme/theme";
 import { initAxios } from "@suleigolden/the-last-spelling-bee-api-client";
 import { DashboardNavBar } from "./layouts/admin";
 import { useState } from "react";
-import About from "./apps/landing-page/pages/about";
+import About from "./apps/landing-page/pages/About";
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState(theme);

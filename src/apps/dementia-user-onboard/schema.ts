@@ -10,9 +10,8 @@ export const DementiaUserOnboardingSchema = object().shape({
   gender: string().oneOf(['male', 'female', 'other']).optional(),
   phoneNumber: string().optional(),
   email: string().email().optional(),
+  avatar_url: string().optional(),
   
-  // Address (DementiaProfile) - single line string as per entity
-  addressLine: string().optional(),
   
   // Profile Information (DementiaProfile)
   workHistory: string().optional(),
@@ -23,11 +22,7 @@ export const DementiaUserOnboardingSchema = object().shape({
       date: string().required(), // Date string format: YYYY-MM-DD
     })
   ).optional(),
-  notesFromCaregiver: string().optional(),
-  bio: string().optional(),
-  
-  // User entity fields (for avatar)
-  avatar_url: string().optional(),
+
   
   // Activities (DementiaUserActivity) - optional array for initial activities setup
   activities: array().of(
@@ -42,6 +37,15 @@ export const DementiaUserOnboardingSchema = object().shape({
       isActive: boolean().optional().default(true),
     })
   ).optional(),
+
+
+  // Address (DementiaProfile) - single line string as per entity
+  addressLine: string().optional(),
+
+  
+  // Additional Information (DementiaProfile)
+  notesFromCaregiver: string().optional(),
+  bio: string().optional(),
 });
 
 export type DementiaUserOnboardingSchemaType = InferType<typeof DementiaUserOnboardingSchema>;

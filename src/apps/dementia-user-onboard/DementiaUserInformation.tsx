@@ -12,15 +12,15 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useEffect } from "react";
 import { FormProvider, useFormContext } from "react-hook-form";
-import { useProviderOnboarding } from "~/hooks/use-provider-onboarding";
+import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding";
 import { CustomInputField } from "~/components/fields/CustomInputField";
 import { useAvatarUpload } from "~/hooks/useAvatarUpload";
-import { useUserProfile } from "~/hooks/use-user-profile";
-import { Gender, UserProfile } from "@suleigolden/sulber-api-client";
+import { useDementiaUserProfile } from "~/hooks/use-dementia-user-profile";
+import { DementiaProfile, Gender, User } from "@suleigolden/the-last-spelling-bee-api-client";
 import { AvatarUploadModal } from "./components/AvatarUploadModal";
 import { OnboardingStepper } from "./OnboardingStepper";
 
-type UserInformationProps = {
+type DementiaUserInformationProps = {
   onNext?: () => void;
   activeStep: number;
   steps: any;
@@ -29,13 +29,13 @@ type UserInformationProps = {
 };
 
 type AvatarUploadSectionProps = {
-  userProfile: UserProfile;
+  dementiaUserProfile: DementiaProfile;
 };
 
-const AvatarUploadSection = ({ userProfile }: AvatarUploadSectionProps) => {
+const AvatarUploadSection = ({ dementiaUserProfile }: AvatarUploadSectionProps) => {
   const { watch, setValue } = useFormContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const avatarUrl = watch("avatar_url") || userProfile?.avatarUrl || "";
+  const avatarUrl = watch("avatar_url") || dementiaUserProfile?.avatarUrl || "";
   const { uploadAvatar, isUploading } = useAvatarUpload((url) => {
     setValue("avatar_url", url);
   });
@@ -69,12 +69,12 @@ const AvatarUploadSection = ({ userProfile }: AvatarUploadSectionProps) => {
   );
 };
 
-export const UserInformation = forwardRef<
+export const DementiaUserInformation = forwardRef<
   { submitForm: () => Promise<void> },
-  UserInformationProps
+  DementiaUserInformationProps
 >(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
-  const { methods, handleSubmit } = useProviderOnboarding();
-  const { userProfile } = useUserProfile();
+  const { methods, handleSubmit } = useDementiaUserOnboarding();
+  const { dementiaUserProfile } = useDementiaUserProfile();
   const {
     control,
     setValue,
@@ -84,8 +84,8 @@ export const UserInformation = forwardRef<
 
   // Watch required fields to determine if user info is valid
   const avatarUrl = watch("avatar_url");
-  const dateOfBirth = watch("date_of_birth");
-  const phoneNumber = watch("phone_number");
+  const dateOfBirth = watch("dob");
+  const phoneNumber = watch("phoneNumber");
   const gender = watch("gender");
 
   const isUserInfoValid = !!(
@@ -102,18 +102,18 @@ export const UserInformation = forwardRef<
 
   // Initialize form with existing user profile data
   useEffect(() => {
-    if (userProfile) {
-      setValue("avatar_url", userProfile.avatarUrl || "");
+    if (dementiaUserProfile) {
+      setValue("avatar_url", dementiaUserProfile.avatarUrl || "");
       // Format date for input field (YYYY-MM-DD)
-      const dateOfBirth = userProfile.dateOfBirth
-        ? new Date(userProfile.dateOfBirth).toISOString().split('T')[0]
+      const dateOfBirth = dementiaUserProfile.dob
+        ? new Date(dementiaUserProfile.dob).toISOString().split('T')[0]
         : "";
-      setValue("date_of_birth", dateOfBirth);
-      setValue("phone_number", userProfile.phoneNumber || "");
-      setValue("gender", userProfile.gender || "");
+      setValue("dob", dateOfBirth);
+      setValue("phoneNumber", dementiaUserProfile.phoneNumber || "");
+      setValue("gender", dementiaUserProfile.gender as "male" | "female" | "other" | undefined);
       setValue("bio", "");
     }
-  }, [userProfile, setValue]);
+  }, [dementiaUserProfile, setValue]);
 
   useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
@@ -139,28 +139,28 @@ export const UserInformation = forwardRef<
             p={{ base: 6, md: 10 }}
           >
             <Heading size="lg" mb={2}>
-              Hi {userProfile?.firstName}! Tell us about yourself
+              Hi {dementiaUserProfile?.firstName}! Tell us about yourself
             </Heading>
             <Text fontSize="md">
               Share some information to help customers get to know you better.
             </Text>
           </Box>
           <VStack spacing={6} w="full" align="stretch" p={{ base: 6, md: 10 }}>
-            <AvatarUploadSection userProfile={userProfile as UserProfile} />
+            <AvatarUploadSection dementiaUserProfile={dementiaUserProfile as DementiaProfile} />
 
             <CustomInputField
               type="date"
               label="Date of Birth"
-              registerName="date_of_birth"
-              isError={errors?.date_of_birth}
+              registerName="dob"
+              isError={errors?.dob}
               placeholder="Select your date of birth"
             />
 
             <CustomInputField
               type="text"
               label="Phone Number"
-              registerName="phone_number"
-              isError={errors?.phone_number}
+              registerName="phoneNumber"
+              isError={errors?.phoneNumber}
               placeholder="Enter your phone number"
               autoComplete="tel"
             />
@@ -169,7 +169,7 @@ export const UserInformation = forwardRef<
               type="select"
               label="Gender"
               registerName="gender"
-              options={Gender.map((gender) => ({ label: gender, value: gender }))}
+              options={Object.values(Gender).map((gender) => ({ label: gender, value: gender }))}
               isError={errors?.gender}
               placeholder="Select your gender"
             />
