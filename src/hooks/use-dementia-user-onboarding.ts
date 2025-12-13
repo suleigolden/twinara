@@ -1,26 +1,24 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { api, User } from '@suleigolden/the-last-spelling-bee-api-client';
+import { api, CreateDementiaProfileRequest } from '@suleigolden/the-last-spelling-bee-api-client';
 import { CustomToast } from './CustomToast';
 import { useEffect, useState } from 'react';
-import { ProviderOnboardingSchema, ProviderOnboardingSchemaType } from '~/apps/provider-onboard/schema';
+import { DementiaUserOnboardingSchema, DementiaUserOnboardingSchemaType } from '~/apps/dementia-user-onboard/schema';
 import { useUser } from './use-user';
-// import { useStepsNotCompleted } from './use-steps-not-completed';
+import { useStepsNotCompleted } from './use-steps-not-completed';
 
-export const useProviderOnboarding = (isLastStep?: boolean) => {
+export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
   const showToast = CustomToast();
   const { user } = useUser();
-  // const { stepsNotCompleted, isLoading } = useStepsNotCompleted();
-  // const userProfile = stepsNotCompleted?.userProfile;
-  // const providerProfile = stepsNotCompleted?.providerProfile;
-  // // const { identityVerification } = useIdentityVerifications();
-  // const [avatarUrl, setAvatarUrl] = useState<User['avatarUrl']>(
-  //   userProfile?.avatarUrl || ''
-  // );
+  const { stepsNotCompleted, isLoading } = useStepsNotCompleted();
+  const dementiaUserProfile = stepsNotCompleted?.dementiaUserProfile;
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    dementiaUserProfile?.avatarUrl || ''
+  );
 
-  const methods = useForm<ProviderOnboardingSchemaType>({
+  const methods = useForm<DementiaUserOnboardingSchemaType>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: yupResolver<ProviderOnboardingSchemaType, any, any>(ProviderOnboardingSchema),
+    resolver: yupResolver<DementiaUserOnboardingSchemaType, any, any>(DementiaUserOnboardingSchema),
   });
   const {
     reset,
@@ -29,80 +27,93 @@ export const useProviderOnboarding = (isLastStep?: boolean) => {
     formState: { isSubmitting },
   } = methods;
 
-  // useEffect(() => {
-  //   if (stepsNotCompleted) {
-  //     reset({
-  //       avatar_url: userProfile?.avatarUrl || '',
-  //       date_of_birth: userProfile?.dateOfBirth || '',
-  //       phone_number: userProfile?.phoneNumber || '',
-  //       gender: userProfile?.gender || '',
-  //       services: providerProfile?.services || [],
-  //       bio: userProfile?.bio || '',
-  //       address: userProfile?.address
-  //         ? {
-  //             street: userProfile.address.street || '',
-  //             city: userProfile.address.city || '',
-  //             state: userProfile.address.state || '',
-  //             country: userProfile.address.country || '',
-  //             postal_code: userProfile.address.postalCode || '',
-  //           }
-  //         : undefined,
-  //     });
-  //   }
-  // }, [reset, userProfile, providerProfile, stepsNotCompleted]);
+  useEffect(() => {
+    if (dementiaUserProfile) {
+      // Format dob from Date to string (YYYY-MM-DD)
+      const dobString = dementiaUserProfile.dob 
+        ? new Date(dementiaUserProfile.dob).toISOString().split('T')[0]
+        : undefined;
+
+      reset({
+        nickname: dementiaUserProfile.nickname || undefined,
+        firstName: dementiaUserProfile.firstName || undefined,
+        lastName: dementiaUserProfile.lastName || undefined,
+        dob: dobString,
+        gender: dementiaUserProfile.gender || undefined,
+        phoneNumber: dementiaUserProfile.phoneNumber || undefined,
+        email: dementiaUserProfile.email || undefined,
+        addressLine: dementiaUserProfile.addressLine || undefined,
+        workHistory: dementiaUserProfile.workHistory || undefined,
+        hobbies: dementiaUserProfile.hobbies || undefined,
+        importantDates: dementiaUserProfile.importantDates?.map(date => ({
+          label: date.label,
+          date: typeof date.date === 'string' 
+            ? date.date 
+            : new Date(date.date).toISOString().split('T')[0],
+        })) || undefined,
+        notesFromCaregiver: dementiaUserProfile.notesFromCaregiver || undefined,
+        bio: dementiaUserProfile.bio || undefined,
+        avatar_url: dementiaUserProfile.avatarUrl || undefined,
+      });
+      setAvatarUrl(dementiaUserProfile.avatarUrl || '');
+    }
+  }, [reset, dementiaUserProfile]);
   
-  const onSubmit = async (data: ProviderOnboardingSchemaType) => {
-    // try {
-    //   // Validate that we have the required IDs
-    //   if (!userProfile?.id || !user?.id) {
-    //     showToast('Error', 'Missing required user or user profile information', 'error');
-    //     return;
-    //   }
+  const onSubmit = async (data: DementiaUserOnboardingSchemaType) => {
+    try {
+      // Validate that we have the required user ID
+      if (!user?.id) {
+        showToast('Error', 'Missing required user information', 'error');
+        return;
+      }
 
-    //   const userProfilePayload = {
-    //     userId: user.id,
-    //     avatarUrl: data.avatar_url,
-    //     dateOfBirth: data.date_of_birth && data.date_of_birth.trim() !== '' ? data.date_of_birth : null,
-    //     phoneNumber: data.phone_number,
-    //     gender: data.gender,
-    //     bio: data.bio,
-    //     address: {
-    //       street: data.address?.street || '',
-    //       city: data.address?.city || '',
-    //       state: data.address?.state || '',
-    //       country: data.address?.country || '',
-    //       postalCode: data.address?.postal_code || '',
-    //     },
-    //   };
-    //   const providerProfilePayload = {
-    //     userId: user.id,
-    //     services: data.services,
-    //     businessName: data.business_name,
-    //   };
+      // Map schema data to API request format
+      const profilePayload: CreateDementiaProfileRequest = {
+        nickname: data.nickname || undefined,
+        firstName: data.firstName || undefined,
+        lastName: data.lastName || undefined,
+        dob: data.dob && data.dob.trim() !== '' ? data.dob : undefined,
+        gender: data.gender as any,
+        phoneNumber: data.phoneNumber || undefined,
+        email: data.email || undefined,
+        addressLine: data.addressLine || undefined,
+        workHistory: data.workHistory || undefined,
+        hobbies: data.hobbies?.filter((hobby): hobby is string => Boolean(hobby)) || undefined,
+        importantDates: data.importantDates || undefined,
+        notesFromCaregiver: data.notesFromCaregiver || undefined,
+        bio: data.bio || undefined,
+        avatarUrl: data.avatar_url || undefined,
+      };
 
-    //   if (userProfile) {
-    //     await api.service('user-profile').update(userProfile.id as string, userProfilePayload as UserProfile);
-    //   } 
-    //   if (providerProfile) {
-    //     await api.service('provider-profile').update(providerProfile.id as string, providerProfilePayload as ProviderProfile);
-    //   }
+      if (dementiaUserProfile?.id) {
+        // Update existing profile
+        await api.service('dementiaProfiles').updateDementiaProfile(
+          dementiaUserProfile.id,
+          profilePayload
+        );
+        showToast('Success', 'Profile updated successfully', 'success');
+      } else {
+        // Create new profile
+        await api.service('dementiaProfiles').createDementiaProfile(profilePayload);
+        showToast('Success', 'Profile created successfully', 'success');
+      }
       
-    // } catch (error: unknown) {
-    //   const errorMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || 
-    //     'An unexpected error occurred. Please try again.';
-    //   showToast('Error', errorMessage, 'error');
-    //   throw error;
-    // }
+    } catch (error: unknown) {
+      const errorMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || 
+        'An unexpected error occurred. Please try again.';
+      showToast('Error', errorMessage, 'error');
+      throw error;
+    }
   };
 
   return {
     methods,
     handleSubmit: handleSubmit(onSubmit),
     isSubmitting,
-    // isLoading,
+    isLoading,
     setValue,
-    // avatarUrl, 
-    // setAvatarUrl,
-    // stepsNotCompleted
+    avatarUrl, 
+    setAvatarUrl,
+    stepsNotCompleted
   };
-}; 
+};
