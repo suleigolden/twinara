@@ -34,7 +34,6 @@ import {
     FaVolumeUp, 
     FaChevronDown, 
     FaCheck,
-    FaSpinner
 } from "react-icons/fa";
 import { useUser } from "~/hooks/use-user";
 
