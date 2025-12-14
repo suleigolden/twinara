@@ -1,4 +1,4 @@
-import { Address } from '@suleigolden/cosmetic-api-client';
+import { Address } from '@suleigolden/the-last-spelling-bee-api-client';
 
 export const fullAddress = (address: Address): string => {
   if (typeof address === 'string') {

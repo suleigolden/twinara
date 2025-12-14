@@ -125,8 +125,8 @@ export const QuestionCard = ({
                     bg={isDarkMode ? "gray.700" : "gray.100"}
                     color={isDarkMode ? "white" : "gray.600"}
                     display="flex"
-                    align="center"
-                    justify="center"
+                    alignItems="center"
+                    justifyContent="center"
                     fontSize="sm"
                     fontWeight="bold"
                   >

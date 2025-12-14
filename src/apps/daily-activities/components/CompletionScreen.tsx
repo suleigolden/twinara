@@ -36,8 +36,8 @@ export const CompletionScreen = ({
         borderRadius="full"
         bg={isDarkMode ? "green.900" : "green.100"}
         display="flex"
-        align="center"
-        justify="center"
+        alignItems="center"
+        justifyContent="center"
       >
         <Icon as={FaTrophy} boxSize={16} color="green.500" />
       </Box>
