@@ -19,12 +19,13 @@ type DementiaUserAddressProps = {
   steps: any;
   shouldDisplayStepper?: boolean;
   onLocationValidChange?: (isValid: boolean) => void;
+  onUserInfoValidChange?: (isValid: boolean) => void;
 };
 
 export const DementiaUserAddress = forwardRef<
   { submitForm: () => Promise<void> },
   DementiaUserAddressProps
->(({ onNext, activeStep, steps, shouldDisplayStepper = true, onLocationValidChange }, ref) => {
+>(({ onNext, activeStep, steps, shouldDisplayStepper = true, onLocationValidChange, onUserInfoValidChange }, ref) => {
   const { methods, handleSubmit } = useDementiaUserOnboarding();
   const { dementiaUserProfile } = useDementiaUserProfile();
   const { setValue, watch, formState: { errors } } = methods;
@@ -53,23 +54,43 @@ export const DementiaUserAddress = forwardRef<
         .join(', ')
     : '';
 
-  // Watch address fields to determine if location is valid
+  // Watch address fields to determine if location is valid (for LocationSearchInput compatibility)
   const addressStreet = watch('address.street');
   const addressCity = watch('address.city');
   const addressState = watch('address.state');
   const addressCountry = watch('address.country');
+  const addressPostalCode = watch('address.postal_code');
   const hasFormAddress = !!(addressStreet || addressCity || addressState || addressCountry);
   const hasSavedAddress = !!(savedAddress?.street || savedAddress?.city || savedAddress?.state || savedAddress?.country);
   const isLocationValid = hasFormAddress || hasSavedAddress;
+
+  // Validate that all required address fields are filled
+  const isAddressValid = !!(
+    ((addressStreet && typeof addressStreet === 'string' && addressStreet.trim().length > 0) &&
+    (addressCity && typeof addressCity === 'string' && addressCity.trim().length > 0) &&
+    (addressState && typeof addressState === 'string' && addressState.trim().length > 0) &&
+    (addressCountry && typeof addressCountry === 'string' && addressCountry.trim().length > 0) &&
+    (addressPostalCode && typeof addressPostalCode === 'string' && addressPostalCode.trim().length > 0)) ||
+    (savedAddress?.street && savedAddress.street.trim().length > 0 &&
+    savedAddress?.city && savedAddress.city.trim().length > 0 &&
+    savedAddress?.state && savedAddress.state.trim().length > 0 &&
+    savedAddress?.country && savedAddress.country.trim().length > 0 &&
+    savedAddress?.postal_code && savedAddress.postal_code.trim().length > 0)
+  );
 
   useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
   }));
 
-  // Notify parent component about location validity
+  // Notify parent component about location validity (for LocationSearchInput compatibility)
   useEffect(() => {
     onLocationValidChange?.(isLocationValid);
   }, [isLocationValid, onLocationValidChange]);
+
+  // Notify parent component about address validation state
+  useEffect(() => {
+    onUserInfoValidChange?.(isAddressValid);
+  }, [isAddressValid, onUserInfoValidChange]);
 
   // Initialize form with saved address when component mounts
   useEffect(() => {
@@ -158,6 +179,7 @@ export const DementiaUserAddress = forwardRef<
               isError={(errors?.address as any)?.street}
               placeholder="Enter street address"
               autoComplete="street-address"
+              isRequired={true}
             />
 
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
@@ -168,6 +190,7 @@ export const DementiaUserAddress = forwardRef<
                 isError={(errors?.address as any)?.city}
                 placeholder="Enter city"
                 autoComplete="address-level2"
+                isRequired={true}
               />
 
               <CustomInputField
@@ -177,6 +200,7 @@ export const DementiaUserAddress = forwardRef<
                 isError={(errors?.address as any)?.state}
                 placeholder="Enter state or province"
                 autoComplete="address-level1"
+                isRequired={true}
               />
             </SimpleGrid>
 
@@ -188,6 +212,7 @@ export const DementiaUserAddress = forwardRef<
                 isError={(errors?.address as any)?.country}
                 placeholder="Enter country"
                 autoComplete="country"
+                isRequired={true}
               />
 
               <CustomInputField
@@ -197,6 +222,7 @@ export const DementiaUserAddress = forwardRef<
                 isError={(errors?.address as any)?.postal_code}
                 placeholder="Enter postal code"
                 autoComplete="postal-code"
+                isRequired={true}
               />
             </SimpleGrid>
           </VStack>

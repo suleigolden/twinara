@@ -49,6 +49,7 @@ export const DementiaUserOnboarding = () => {
   const [isUserInfoValid, setIsUserInfoValid] = useState<boolean>(false);
   const [isWorkAndHobbiesValid, setIsWorkAndHobbiesValid] = useState<boolean>(false);
   const [isActivitiesValid, setIsActivitiesValid] = useState<boolean>(false);
+  const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const formRef = useRef<{ submitForm: () => Promise<void> }>(null);
   const SERVICES_STEP_INDEX = steps.findIndex((step) => step.title === "Services");
@@ -56,6 +57,7 @@ export const DementiaUserOnboarding = () => {
   const PROFILE_STEP_INDEX = steps.findIndex((step) => step.title === "Profile");
   const WORK_STEP_INDEX = steps.findIndex((step) => step.title === "Work");
   const ACTIVITIES_STEP_INDEX = steps.findIndex((step) => step.title === "Activities");
+  const ADDRESS_STEP_INDEX = steps.findIndex((step) => step.title === "Address");
   const VERIFICATION_STEP_INDEX = steps.findIndex((step) => step.title === "Verification");
 
   // Update URL when step changes
@@ -145,6 +147,8 @@ export const DementiaUserOnboarding = () => {
             ? setIsWorkAndHobbiesValid
             : activeStep === ACTIVITIES_STEP_INDEX
             ? setIsActivitiesValid
+            : activeStep === ADDRESS_STEP_INDEX
+            ? setIsAddressValid
             : undefined
         }
         shouldDisplayStepper={true}
@@ -214,6 +218,8 @@ export const DementiaUserOnboarding = () => {
                 ? !isWorkAndHobbiesValid
                 : activeStep === ACTIVITIES_STEP_INDEX
                 ? !isActivitiesValid
+                : activeStep === ADDRESS_STEP_INDEX
+                ? !isAddressValid
                 : activeStep === VERIFICATION_STEP_INDEX
                 ? !isVerified
                 : false
