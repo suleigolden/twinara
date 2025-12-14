@@ -15,14 +15,12 @@ import { DementiaUserAddress } from "./DementiaUserAddress";
 import { DementiaUserBio } from "./DementiaUserBio";
 import { DementiaUserWorkAndHobbies } from "./DementiaUserWorkAndHobbies";
 
-
-
 const steps = [
-  { title: "Profile", Component: DementiaUserInformation }, // Basic Information 
-  { title: "Work", Component: DementiaUserWorkAndHobbies }, //Work and hobbies information
-  { title: "Activities", Component: DementiaUserActivities }, //Activities (DementiaUserActivity)
-  { title: "Address", Component: DementiaUserAddress }, //Address (DementiaProfile)
-  { title: "Bio", Component: DementiaUserBio }, //Bio and notes from caregiver
+  { title: "Profile", Component: DementiaUserInformation },
+  { title: "Work", Component: DementiaUserWorkAndHobbies },
+  { title: "Activities", Component: DementiaUserActivities },
+  { title: "Address", Component: DementiaUserAddress },
+  { title: "Bio", Component: DementiaUserBio },
 ];
 
 export const DementiaUserOnboarding = () => {
@@ -30,7 +28,6 @@ export const DementiaUserOnboarding = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  // Get initial step from URL or default to 0
   const initialStep = parseInt(searchParams.get("step") || "0");
 
   const {
@@ -44,25 +41,18 @@ export const DementiaUserOnboarding = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [hasSelectedServices, setHasSelectedServices] = useState<boolean>(false);
-  const [isLocationValid, setIsLocationValid] = useState<boolean>(false);
   const [isUserInfoValid, setIsUserInfoValid] = useState<boolean>(false);
   const [isWorkAndHobbiesValid, setIsWorkAndHobbiesValid] = useState<boolean>(false);
   const [isActivitiesValid, setIsActivitiesValid] = useState<boolean>(false);
   const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
   const [isBioValid, setIsBioValid] = useState<boolean>(false);
-  const [isVerified, setIsVerified] = useState<boolean>(false);
   const formRef = useRef<{ submitForm: () => Promise<void> }>(null);
-  const SERVICES_STEP_INDEX = steps.findIndex((step) => step.title === "Services");
-  const LOCATION_STEP_INDEX = steps.findIndex((step) => step.title === "Location");
   const PROFILE_STEP_INDEX = steps.findIndex((step) => step.title === "Profile");
   const WORK_STEP_INDEX = steps.findIndex((step) => step.title === "Work");
   const ACTIVITIES_STEP_INDEX = steps.findIndex((step) => step.title === "Activities");
   const ADDRESS_STEP_INDEX = steps.findIndex((step) => step.title === "Address");
   const BIO_STEP_INDEX = steps.findIndex((step) => step.title === "Bio");
-  const VERIFICATION_STEP_INDEX = steps.findIndex((step) => step.title === "Verification");
 
-  // Update URL when step changes
   const goToNext = () => {
     baseGoToNext();
     setSearchParams({ step: (activeStep + 1).toString() });
@@ -73,18 +63,15 @@ export const DementiaUserOnboarding = () => {
     setSearchParams({ step: (activeStep - 1).toString() });
   };
 
-  // Validate and correct step on page load
   useEffect(() => {
     const currentStep = parseInt(searchParams.get("step") || "0");
 
-    // If step is invalid, reset to 0
     if (isNaN(currentStep) || currentStep < 0 || currentStep >= steps.length) {
       setSearchParams({ step: "0" });
       setActiveStep(0);
       return;
     }
 
-    // Ensure activeStep matches URL
     if (currentStep !== activeStep) {
       setActiveStep(currentStep);
     }
@@ -96,7 +83,6 @@ export const DementiaUserOnboarding = () => {
         setIsSubmitting(true);
         await formRef.current.submitForm();
         
-        // If it's the last step (Publish button), redirect to dashboard
         if (activeStep === steps.length - 1) {
           if (user?.id) {
             navigate(`/user/${user.id}/dashboard`);
@@ -108,12 +94,10 @@ export const DementiaUserOnboarding = () => {
         }
       } catch (error) {
         console.error("Form submission error:", error);
-        // You might want to show an error toast here
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      // If no form ref, just go to next step (shouldn't happen on last step)
       if (activeStep === steps.length - 1) {
         if (user?.id) {
           navigate(`/user/${user.id}/dashboard`);
@@ -125,17 +109,6 @@ export const DementiaUserOnboarding = () => {
   };
 
   const renderStepComponent = () => {
-    // if (activeStep === SERVICES_STEP_INDEX) {
-    //   return (
-    //     <ProviderServices
-    //       ref={formRef}
-    //       onServicesSelectedChange={setHasSelectedServices}
-    //       activeStep={activeStep}
-    //       steps={steps}
-    //     />
-    //   );
-    // }
-
     const StepComponent = steps[activeStep].Component;
     return (
       <StepComponent
@@ -178,13 +151,6 @@ export const DementiaUserOnboarding = () => {
           {renderStepComponent()}
         </Box>
         <VStack spacing={8} align="center" w="full">
-        <Box
-          w="full"
-          maxW="720px"
-          bg="white"
-          borderRadius="2xl"
-        >
-
         <Flex
           w="full"
           maxW={{ base: "100%", sm: "720px" }}
@@ -212,11 +178,7 @@ export const DementiaUserOnboarding = () => {
             colorScheme="brand"
             isLoading={isSubmitting}
             isDisabled={
-              activeStep === SERVICES_STEP_INDEX
-                ? !hasSelectedServices
-                : activeStep === LOCATION_STEP_INDEX
-                ? !isLocationValid
-                : activeStep === PROFILE_STEP_INDEX
+              activeStep === PROFILE_STEP_INDEX
                 ? !isUserInfoValid
                 : activeStep === WORK_STEP_INDEX
                 ? !isWorkAndHobbiesValid
@@ -226,8 +188,6 @@ export const DementiaUserOnboarding = () => {
                 ? !isAddressValid
                 : activeStep === BIO_STEP_INDEX
                 ? !isBioValid
-                : activeStep === VERIFICATION_STEP_INDEX
-                ? !isVerified
                 : false
             }
             w={{ base: "full", sm: "auto" }}
@@ -237,7 +197,6 @@ export const DementiaUserOnboarding = () => {
             {activeStep === steps.length - 1 ? "Publish" : "Next"}
           </Button>
         </Flex>
-        </Box>
         </VStack>
       </VStack>
     </Container>
