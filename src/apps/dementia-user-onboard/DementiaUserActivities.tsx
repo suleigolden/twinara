@@ -154,6 +154,17 @@ export const DementiaUserActivities = forwardRef<
 
   const activities = watch("activities") || [];
 
+  // Validate that at least one activity has a title (required field)
+  const isActivitiesValid = activities.some((activity: { title?: string } | undefined) => {
+    if (!activity) return false;
+    return activity.title && typeof activity.title === 'string' && activity.title.trim().length > 0;
+  });
+
+  // Notify parent component about validation state
+  useEffect(() => {
+    onUserInfoValidChange?.(isActivitiesValid);
+  }, [isActivitiesValid, onUserInfoValidChange]);
+
   const addActivity = () => {
     if (activities.length < MAX_ACTIVITIES) {
       setValue("activities", [
