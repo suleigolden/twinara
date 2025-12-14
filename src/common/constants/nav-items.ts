@@ -13,7 +13,7 @@ export const getNavItems = (user: User) => {
   const OWNER_NAV_ITEMS: Array<NavItem> = [
     {
       label: "Daily Activities",
-      href: `/dementia-user/${user?.id}/daily-activities`,
+      href: `/user/${user?.id}/daily-activities`,
       type: "link",
     },
     {

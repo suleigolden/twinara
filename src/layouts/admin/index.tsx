@@ -9,6 +9,7 @@ import { navBarRoutes } from "../../routes";
 import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "~/apps/dashboard/Dashboard";
 import { DementiaUserOnboarding } from "~/apps/dementia-user-onboard";
+import { DailyActivities } from "~/apps/daily-activities";
 
 // Add type definition at the top
 type RoutesType = {
@@ -99,6 +100,7 @@ export const DashboardNavBar = (props: Record<string, unknown>) => {
             <Routes>
               <Route path={`/${user.id}/dashboard`} element={<Dashboard />} />
               <Route path={`/${user.id}/dementia-user/onboarding`} element={<DementiaUserOnboarding />} />
+              <Route path={`/${user.id}/daily-activities`} element={<DailyActivities />} />
             </Routes>
           </Box>
 
