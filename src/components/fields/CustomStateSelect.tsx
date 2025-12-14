@@ -3,8 +3,8 @@ import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import Select from "react-select";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { customSelectStyles } from "./CustomCountrySelect";
-import { getStateOptions } from "common/utils/helperFuntions";
-import { useSystemColor } from "hooks/use-system-color";
+import { getStateOptions } from "~/common/utils/helperFuntions";
+import { useSystemColor } from "~/hooks/use-system-color";
 
 type CustomStateSelectProps = {
   country: string;
@@ -37,7 +37,7 @@ export const CustomStateSelect: FC<CustomStateSelectProps> = ({
               ? { value: state, label: state }
               : null
           }
-          onChange={(selectedOption) =>
+          onChange={(selectedOption: { value: string; label: string } | null) =>
             setValue(field, selectedOption?.value ?? "")
           }
           options={stateOptions}

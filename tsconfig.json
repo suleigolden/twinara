@@ -20,7 +20,14 @@
     "downlevelIteration": true,
     "incremental": true
   },
-  // "include": ["**/*.ts", "**/*.tsx", "!**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/components/calendar/MiniCalendar.tsx",
+    "src/components/charts/**/*.tsx",
+    "src/components/table/DynamicTable.tsx"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

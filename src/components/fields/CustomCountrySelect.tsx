@@ -2,8 +2,8 @@ import { FC } from "react";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import Select from "react-select";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { allCountries } from "common/utils/countryAndStates";
-import { useSystemColor } from "hooks/use-system-color";
+import { allCountries } from "~/common/utils/countryAndStates";
+import { useSystemColor } from "~/hooks/use-system-color";
 
 export const customSelectStyles = {
   clearIndicator: (provided: any) => ({
@@ -55,7 +55,7 @@ export const CustomCountrySelect: FC<CustomCountrySelectProps> = ({
         placeholder="Select Country"
         {...register(field)}
         value={country ? { value: country, label: country } : null}
-        onChange={(selectedOption) =>
+        onChange={(selectedOption: { value: string; label: string } | null) =>
           setValue(field, selectedOption?.value ?? "")
         }
         options={allCountries.map((country) => ({

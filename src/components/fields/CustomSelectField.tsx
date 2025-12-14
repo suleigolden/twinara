@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { FormControl, FormLabel, Box } from '@chakra-ui/react';
 import Select from 'react-select';
 import { useFormContext, Controller, FieldError } from 'react-hook-form';
-import { useSystemColor } from 'hooks/use-system-color';
+import { useSystemColor } from '~/hooks/use-system-color';
 
 type CustomSelectFieldProps = {
   label: string;

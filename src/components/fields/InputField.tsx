@@ -5,11 +5,12 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { ReactElement } from 'react';
 
 export default function Default(props: {
   id: string;
   label: string;
-  extra: JSX.Element;
+  extra: ReactElement;
   placeholder: string;
   type: string;
   mb: any;

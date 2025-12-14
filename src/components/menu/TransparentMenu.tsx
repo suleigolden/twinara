@@ -14,7 +14,8 @@ import {
 } from '@chakra-ui/react';
 // Assets
 import { MdOutlinePerson, MdOutlineCardTravel, MdOutlineLightbulb, MdOutlineSettings } from 'react-icons/md';
-export default function Banner(props: { icon: JSX.Element | string; [x: string]: any }) {
+import { ReactElement } from 'react';
+export default function Banner(props: { icon: ReactElement | string; [x: string]: any }) {
 	const { icon, ...rest } = props;
 
 	// Ellipsis modals

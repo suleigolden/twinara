@@ -1,5 +1,5 @@
 import { Box, Text, Image, forwardRef, ImageProps } from '@chakra-ui/react';
-import { CustomCardProps } from 'theme/theme';
+import { CustomCardProps } from '~/theme/theme';
 
 // type ImageWatermarkProps = ImageProps & CustomCardProps;
 type ImageWatermarkProps = ImageProps & CustomCardProps & {

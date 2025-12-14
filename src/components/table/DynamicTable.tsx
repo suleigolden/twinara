@@ -73,9 +73,9 @@ export const DynamicTable = <T extends object>({
     <Box overflowX="auto" w="100%">
       <Table variant="simple" color="gray.500" mb="24px" mt="12px">
         <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map((headerGroup: any) => (
             <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
+              {headerGroup.headers.map((header: any) => (
                 <Th
                   key={header.id}
                   borderColor={borderColor}
@@ -115,13 +115,13 @@ export const DynamicTable = <T extends object>({
           ))}
         </Thead>
         <Tbody>
-          {table.getRowModel().rows.map((row) => (
+          {table.getRowModel().rows.map((row: any) => (
             <Tr 
               key={row.id}
               _hover={{ bg: hoverBg }}
               transition="background 0.2s"
             >
-              {row.getVisibleCells().map((cell) => (
+              {row.getVisibleCells().map((cell: any) => (
                 <Td 
                   key={cell.id} 
                   fontSize="sm" 

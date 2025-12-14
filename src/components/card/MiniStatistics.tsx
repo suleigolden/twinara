@@ -1,11 +1,12 @@
 
 import { Flex, Stat, StatLabel, StatNumber, useColorModeValue, Text } from '@chakra-ui/react';
+import { ReactElement } from 'react';
 // Custom components
 import Card from '~/components/card/Card';
 
 export default function Default(props: {
-	startContent?: JSX.Element;
-	endContent?: JSX.Element;
+	startContent?: ReactElement;
+	endContent?: ReactElement;
 	name: string;
 	growth?: string | number;
 	value: string | number;
