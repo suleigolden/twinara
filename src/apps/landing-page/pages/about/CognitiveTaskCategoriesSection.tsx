@@ -44,37 +44,44 @@ export const CognitiveTaskCategoriesSection = () => {
                             }`}
                     >
                         <Flex
-                            className={`w-12 h-12 rounded-full items-center justify-center mb-4
+                            align="center"
+                            gap={3}
+                            mb={4}
+                        >
+                            <Flex
+                                className={`w-12 h-12 rounded-full items-center justify-center
                   ${isDarkMode ? "bg-blue-600/30" : "bg-blue-100"}`}
-                        >
-                            <task.icon
-                                className={`w-6 h-6 ${isDarkMode ? "text-blue-400" : "text-blue-600"
-                                    }`}
-                            />
+                            >
+                                <task.icon
+                                    className={`w-6 h-6 ${isDarkMode ? "text-blue-400" : "text-blue-600"
+                                        }`}
+                                />
+                            </Flex>
+                            <Box>
+                                <Heading
+                                    as="h3"
+                                    size="md"
+                                    className={`font-bold ${isDarkMode ? "text-white" : "text-gray-900"
+                                        }`}
+                                >
+                                    {task.title}
+                                </Heading>
+                                <Text
+                                    className={`text-xs font-medium mb-4 ${isDarkMode ? "text-blue-300" : "text-blue-600"
+                                        }`}
+                                >
+                                    {task.purpose}
+                                </Text>
+                            </Box>
                         </Flex>
-                        <Heading
-                            as="h3"
-                            className={`text-lg md:text-xl font-bold mb-2 ${isDarkMode ? "text-white" : "text-gray-900"
-                                }`}
-                        >
-                            {task.title}
-                        </Heading>
-                        <Text
-                            className={`text-xs font-medium mb-4 ${isDarkMode ? "text-blue-300" : "text-blue-600"
-                                }`}
-                        >
-                            {task.purpose}
-                        </Text>
+
                         <VStack align="start" spacing={2}>
                             {task.examples.map((example, idx) => (
                                 <Flex key={idx} align="start" gap={2}>
-                                    <Text
-                                        as="span"
-                                        className={`text-xs mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-500"
+                                    <Box
+                                        className={`w-2 h-2 rounded-full ${isDarkMode ? "bg-purple-400" : "bg-purple-600"
                                             }`}
-                                    >
-                                        •
-                                    </Text>
+                                    />
                                     <Text
                                         className={`text-xs md:text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"
                                             }`}
