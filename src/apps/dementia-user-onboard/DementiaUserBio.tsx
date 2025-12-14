@@ -38,6 +38,17 @@ export const DementiaUserBio = forwardRef<
   const notesValue = watch("notesFromCaregiver") || "";
   const notesCharacterCount = notesValue.length;
 
+  // Validate that bio field is filled (required field)
+  const isBioValid = !!(
+    (bioValue && typeof bioValue === 'string' && bioValue.trim().length > 0) ||
+    (dementiaUserProfile?.bio && dementiaUserProfile.bio.trim().length > 0)
+  );
+
+  // Notify parent component about validation state
+  useEffect(() => {
+    onUserInfoValidChange?.(isBioValid);
+  }, [isBioValid, onUserInfoValidChange]);
+
   // Handle bio input with max length enforcement
   const handleBioChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const target = e.target as HTMLTextAreaElement;
@@ -125,6 +136,7 @@ export const DementiaUserBio = forwardRef<
                 placeholder="Tell us about yourself, your interests, preferences, daily routines, or anything else that would help us provide better support..."
                 onChange={handleBioChange}
                 maxLength={maxBioLength}
+                isRequired={true}
               />
               <Text 
                 fontSize="xs" 
