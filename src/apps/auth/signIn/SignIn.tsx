@@ -6,6 +6,7 @@ import {
   Checkbox,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Icon,
@@ -13,6 +14,9 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { HSeparator } from '../../../components/separator/Separator';
 import { FcGoogle } from 'react-icons/fc';
@@ -51,16 +55,50 @@ export const SignIn = ({ onClose }: SignInProps) => {
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting },
+    setError,
+    formState: { isSubmitting, errors },
   } = methods;
 
   async function onSubmit(data: LoginSchemaType) {
     try {
       const res = await dispatch(authenticate(data as SignInRequest));
-      await navigateToDashboard(res.payload as User);
-      // onClose?.();
+      
+      // Check if the action was rejected
+      if (authenticate.rejected.match(res)) {
+        const errorMessage = res.payload as string || 'Failed to login. Please try again.';
+        
+        // Try to parse if it's a field-specific error
+        if (errorMessage.toLowerCase().includes('email')) {
+          setError('email', {
+            type: 'server',
+            message: errorMessage,
+          });
+        } else if (errorMessage.toLowerCase().includes('password')) {
+          setError('password', {
+            type: 'server',
+            message: errorMessage,
+          });
+        } else {
+          // Set as root error
+          setError('root', {
+            type: 'server',
+            message: errorMessage,
+          });
+        }
+        return;
+      }
+
+      // If successful, navigate to dashboard
+      if (res.payload) {
+        await navigateToDashboard(res.payload as User);
+        onClose?.();
+      }
     } catch (error) {
-      showToast('Login', (error as Error).message, 'error');
+      const errorMessage = (error as Error).message || 'An unexpected error occurred. Please try again.';
+      setError('root', {
+        type: 'server',
+        message: errorMessage,
+      });
       console.error(error);
     }
   }
@@ -98,7 +136,17 @@ export const SignIn = ({ onClose }: SignInProps) => {
         </Box>
         <FormProvider {...methods}>
           <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <FormControl>
+            {/* General Error Message */}
+            {errors.root && (
+              <Alert status="error" borderRadius="md" mb="24px">
+                <AlertIcon />
+                <AlertDescription fontSize="sm">
+                  {errors.root.message}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <FormControl isInvalid={!!errors.email}>
               <FormLabel
                 display="flex"
                 ms="4px"
@@ -117,11 +165,16 @@ export const SignIn = ({ onClose }: SignInProps) => {
                 ms={{ base: '0px', md: '0px' }}
                 type="email"
                 placeholder="Enter your email"
-                mb="24px"
+                mb={errors.email ? "8px" : "24px"}
                 fontWeight="500"
                 size="lg"
                 {...register('email')}
               />
+              {errors.email && (
+                <FormErrorMessage mb="16px" fontSize="xs">
+                  {errors.email.message}
+                </FormErrorMessage>
+              )}
               <FormLabel
                 ms="4px"
                 fontSize="sm"
@@ -138,7 +191,7 @@ export const SignIn = ({ onClose }: SignInProps) => {
                   isRequired
                   fontSize="sm"
                   placeholder="Min. 8 characters"
-                  mb="24px"
+                  mb={errors.password ? "8px" : "24px"}
                   size="lg"
                   type={show ? 'text' : 'password'}
                   {...register('password')}
@@ -156,6 +209,11 @@ export const SignIn = ({ onClose }: SignInProps) => {
                   />
                 </InputRightElement>
               </InputGroup>
+              {errors.password && (
+                <FormErrorMessage mb="16px" fontSize="xs">
+                  {errors.password.message}
+                </FormErrorMessage>
+              )}
               <Flex justifyContent="space-between" align="center" mb="24px">
                 <FormControl display="flex" alignItems="center">
                   <Checkbox

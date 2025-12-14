@@ -148,7 +148,7 @@ export const AdminNavbarLinks: FC<AdminNavbarLinksProps> = (props: {
           <Avatar
             _hover={{ cursor: 'pointer' }}
             color="white"
-            name={`${user?.first_name} ${user?.last_name}`}
+            name={`${user?.firstName} ${user?.lastName}`}
             bg="#11047A"
             size="sm"
             w="40px"
@@ -175,7 +175,7 @@ export const AdminNavbarLinks: FC<AdminNavbarLinksProps> = (props: {
               fontWeight="700"
               color={textColor}
             >
-              👋&nbsp; {` ${user?.first_name}`}
+              👋&nbsp; {` ${user?.firstName}`}
             </Text>
           </Flex>
           <Flex flexDirection="column" p="10px">
@@ -185,7 +185,7 @@ export const AdminNavbarLinks: FC<AdminNavbarLinksProps> = (props: {
               borderRadius="8px"
               px="14px"
               as={"a"}
-              href={`/owner/${user?.id}/profile-settings`}
+              href={`/user/${user?.id}/profile-settings`}
             >
               <Text fontSize="sm">Profile Settings</Text>
             </MenuItem>
