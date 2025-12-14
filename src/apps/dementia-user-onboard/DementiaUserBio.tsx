@@ -1,29 +1,29 @@
 import {
-  Box,
-  Heading,
+    Box,
+    Heading,
   Text,
-  VStack,
-} from "@chakra-ui/react";
+    VStack,
+  } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useEffect } from "react";
-import { FormProvider } from "react-hook-form";
+  import { FormProvider } from "react-hook-form";
 import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding";
 import { CustomInputField } from "~/components/fields/CustomInputField";
-import { OnboardingStepper } from "./OnboardingStepper";
+  import { OnboardingStepper } from "./OnboardingStepper";
 import { useDementiaUserProfile } from "~/hooks/use-dementia-user-profile";
-
-type DementiaUserBioProps = {
-  onNext?: () => void;
-  activeStep: number;
-  steps: any;
-  shouldDisplayStepper?: boolean;
-  onUserInfoValidChange?: (isValid: boolean) => void;
-};
-
-export const DementiaUserBio = forwardRef<
-  { submitForm: () => Promise<void> },
-  DementiaUserBioProps
->(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
-  const { methods, handleSubmit } = useDementiaUserOnboarding();
+  
+  type DementiaUserBioProps = {
+    onNext?: () => void;
+    activeStep: number;
+    steps: any;
+    shouldDisplayStepper?: boolean;
+    onUserInfoValidChange?: (isValid: boolean) => void;
+  };
+  
+  export const DementiaUserBio = forwardRef<
+    { submitForm: () => Promise<void> },
+    DementiaUserBioProps
+  >(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
+    const { methods, handleSubmit } = useDementiaUserOnboarding();
   const { dementiaUserProfile } = useDementiaUserProfile();
   const { setValue, watch, formState: { errors } } = methods;
 
@@ -96,26 +96,26 @@ export const DementiaUserBio = forwardRef<
   useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
   }));
-
-  return (
-    <FormProvider {...methods}>
-      <VStack spacing={8} align="center" w="full">
-        <Box
-          w="full"
-          maxW="720px"
-          bg="white"
-          borderRadius="2xl"
-        >
-          {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+  
+    return (
+      <FormProvider {...methods}>
+        <VStack spacing={8} align="center" w="full">
           <Box
             w="full"
-            bg="brand.500"
-            color="white"
-            borderRadius="8px 8px 0 0"
-            boxShadow="lg"
-            p={{ base: 6, md: 10 }}
+            maxW="720px"
+            bg="white"
+            borderRadius="2xl"
           >
-            <Heading size="lg" mb={2}>Bio and Notes from Caregiver</Heading>
+            {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+            <Box
+              w="full"
+              bg="brand.500"
+              color="white"
+              borderRadius="8px 8px 0 0"
+              boxShadow="lg"
+              p={{ base: 6, md: 10 }}
+            >
+              <Heading size="lg" mb={2}>Bio and Notes from Caregiver</Heading>
             <Text fontSize="md">
               Share information about yourself to help us provide better support and assistance with daily activities and routines.
             </Text>
@@ -180,8 +180,8 @@ export const DementiaUserBio = forwardRef<
               </VStack>
             </Box>
           </VStack>
-        </Box>
-      </VStack>
-    </FormProvider>
-  );
-});
+          </Box>
+        </VStack>
+      </FormProvider>
+    );
+  });

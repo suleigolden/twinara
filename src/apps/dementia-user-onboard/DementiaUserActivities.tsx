@@ -1,19 +1,19 @@
 import {
-  Box,
-  Heading,
+    Box,
+    Heading,
   Text,
-  VStack,
+    VStack,
   HStack,
   Button,
   IconButton,
   Checkbox,
   SimpleGrid,
-} from "@chakra-ui/react";
+  } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useEffect } from "react";
 import { FormProvider, useFormContext } from "react-hook-form";
 import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding";
 import { CustomInputField } from "~/components/fields/CustomInputField";
-import { OnboardingStepper } from "./OnboardingStepper";
+  import { OnboardingStepper } from "./OnboardingStepper";
 import { useDementiaUserActivities } from "~/hooks/use-dementia-user-activities";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 
@@ -28,14 +28,14 @@ const DAYS_OF_WEEK = [
   { label: "Friday", value: "5" },
   { label: "Saturday", value: "6" },
 ];
-
-type DementiaUserActivitiesProps = {
-  onNext?: () => void;
-  activeStep: number;
-  steps: any;
-  shouldDisplayStepper?: boolean;
-  onUserInfoValidChange?: (isValid: boolean) => void;
-};
+  
+  type DementiaUserActivitiesProps = {
+    onNext?: () => void;
+    activeStep: number;
+    steps: any;
+    shouldDisplayStepper?: boolean;
+    onUserInfoValidChange?: (isValid: boolean) => void;
+  };
 
 // Activity Item Component
 const ActivityItem = ({ index, onRemove }: { index: number; onRemove: () => void }) => {
@@ -143,13 +143,13 @@ const ActivityItem = ({ index, onRemove }: { index: number; onRemove: () => void
     </Box>
   );
 };
-
-export const DementiaUserActivities = forwardRef<
-  { submitForm: () => Promise<void> },
-  DementiaUserActivitiesProps
->(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
-  const { methods, handleSubmit } = useDementiaUserOnboarding();
-  const { dementiaUserActivities } = useDementiaUserActivities();
+  
+  export const DementiaUserActivities = forwardRef<
+    { submitForm: () => Promise<void> },
+    DementiaUserActivitiesProps
+  >(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
+    const { methods, handleSubmit } = useDementiaUserOnboarding();
+    const { dementiaUserActivities } = useDementiaUserActivities();
   const { setValue, watch } = methods;
 
   const activities = watch("activities") || [];
@@ -230,26 +230,26 @@ export const DementiaUserActivities = forwardRef<
   useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
   }));
-
-  return (
-    <FormProvider {...methods}>
-      <VStack spacing={8} align="center" w="full">
-        <Box
-          w="full"
-          maxW="720px"
-          bg="white"
-          borderRadius="2xl"
-        >
-          {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+  
+    return (
+      <FormProvider {...methods}>
+        <VStack spacing={8} align="center" w="full">
           <Box
             w="full"
-            bg="brand.500"
-            color="white"
-            borderRadius="8px 8px 0 0"
-            boxShadow="lg"
-            p={{ base: 6, md: 10 }}
+            maxW="720px"
+            bg="white"
+          borderRadius="2xl"
           >
-            <Heading size="lg" mb={2}>Activities</Heading>
+            {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+            <Box
+              w="full"
+              bg="brand.500"
+              color="white"
+              borderRadius="8px 8px 0 0"
+              boxShadow="lg"
+              p={{ base: 6, md: 10 }}
+            >
+              <Heading size="lg" mb={2}>Activities</Heading>
             <Text fontSize="md">
               Add activities to help structure daily routines and schedules (up to {MAX_ACTIVITIES} activities).
             </Text>
@@ -290,8 +290,8 @@ export const DementiaUserActivities = forwardRef<
               </Button>
             </HStack>
           </VStack>
-        </Box>
-      </VStack>
-    </FormProvider>
-  );
-});
+          </Box>
+        </VStack>
+      </FormProvider>
+    );
+  });

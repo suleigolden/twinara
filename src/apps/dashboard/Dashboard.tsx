@@ -19,19 +19,19 @@ import { TwinaraAI } from "../twinara-ai/TwinaraAI";
     const { user } = useUser();
     const navigate = useNavigate();
   
-  const isProfileComplete = () => {
-    if (!dementiaUserProfile) return false;
-
+    const isProfileComplete = () => {
+      if (!dementiaUserProfile) return false;
+  
     const hasBasicInfo =
       dementiaUserProfile.avatarUrl &&
-      dementiaUserProfile.firstName &&
-      dementiaUserProfile.lastName &&
-      dementiaUserProfile.phoneNumber &&
-      dementiaUserProfile.dob &&
-      dementiaUserProfile.gender;
-
+        dementiaUserProfile.firstName &&
+        dementiaUserProfile.lastName &&
+        dementiaUserProfile.phoneNumber &&
+        dementiaUserProfile.dob &&
+        dementiaUserProfile.gender;
+  
     const hasCompleteAddress =
-      dementiaUserProfile.address &&
+        dementiaUserProfile.address &&
       dementiaUserProfile.address.street &&
       dementiaUserProfile.address.city &&
       dementiaUserProfile.address.state &&
@@ -39,9 +39,9 @@ import { TwinaraAI } from "../twinara-ai/TwinaraAI";
       dementiaUserProfile.address.postal_code;
 
     const hasBio = dementiaUserProfile.bio && dementiaUserProfile.bio.trim().length > 0;
-
+  
     return !!(hasBasicInfo && hasCompleteAddress && hasBio);
-  };
+    };
   
     const handleGoToProfileSettings = () => {
       if (user?.id) {
@@ -87,11 +87,11 @@ import { TwinaraAI } from "../twinara-ai/TwinaraAI";
                     Complete Your Profile
                   </Heading>
                 </HStack>
-
+  
                 <Text fontSize="md" color="gray.600" lineHeight="tall">
                   To get the best support and assistance from Twinara, please complete your profile. The more information you provide, the better we can help guide and support you with your daily activities and routines.
                 </Text>
-
+  
                 <Box
                   bg="blue.50"
                   borderLeft="4px solid"

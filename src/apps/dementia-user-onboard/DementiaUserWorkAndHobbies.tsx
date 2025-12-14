@@ -1,30 +1,30 @@
 import {
-  Box,
-  Heading,
+    Box,
+    Heading,
   Text,
-  VStack,
+    VStack,
   HStack,
   Button,
   IconButton,
   Divider,
-} from "@chakra-ui/react";
+  } from "@chakra-ui/react";
 import { forwardRef, useImperativeHandle, useEffect } from "react";
 import { FormProvider, useFormContext } from "react-hook-form";
 import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding";
 import { CustomInputField } from "~/components/fields/CustomInputField";
-import { OnboardingStepper } from "./OnboardingStepper";
+  import { OnboardingStepper } from "./OnboardingStepper";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useDementiaUserProfile } from "~/hooks/use-dementia-user-profile";
 
 const MAX_ITEMS = 10;
-
-type DementiaUserWorkAndHobbiesProps = {
-  onNext?: () => void;
-  activeStep: number;
-  steps: any;
-  shouldDisplayStepper?: boolean;
-  onUserInfoValidChange?: (isValid: boolean) => void;
-};
+  
+  type DementiaUserWorkAndHobbiesProps = {
+    onNext?: () => void;
+    activeStep: number;
+    steps: any;
+    shouldDisplayStepper?: boolean;
+    onUserInfoValidChange?: (isValid: boolean) => void;
+  };
 
 // Work History Section
 const WorkHistorySection = () => {
@@ -248,12 +248,12 @@ const ImportantDatesSection = () => {
     </Box>
   );
 };
-
-export const DementiaUserWorkAndHobbies = forwardRef<
-  { submitForm: () => Promise<void> },
-  DementiaUserWorkAndHobbiesProps
->(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
-  const { methods, handleSubmit } = useDementiaUserOnboarding();
+  
+  export const DementiaUserWorkAndHobbies = forwardRef<
+    { submitForm: () => Promise<void> },
+    DementiaUserWorkAndHobbiesProps
+  >(({ onNext, activeStep, steps, shouldDisplayStepper = true, onUserInfoValidChange }, ref) => {
+    const { methods, handleSubmit } = useDementiaUserOnboarding();
   const { dementiaUserProfile } = useDementiaUserProfile();
   const { setValue, watch } = methods;
 
@@ -301,25 +301,25 @@ export const DementiaUserWorkAndHobbies = forwardRef<
   useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
   }));
-
-  return (
-    <FormProvider {...methods}>
-      <VStack spacing={8} align="center" w="full">
-        <Box
-          w="full"
-          maxW="720px"
-          bg="white"
-        >
-          {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+  
+    return (
+      <FormProvider {...methods}>
+        <VStack spacing={8} align="center" w="full">
           <Box
             w="full"
-            bg="brand.500"
-            color="white"
-            borderRadius="8px 8px 0 0"
-            boxShadow="lg"
-            p={{ base: 6, md: 10 }}
+            maxW="720px"
+            bg="white"
           >
-            <Heading size="lg" mb={2}>Work and Hobbies</Heading>
+            {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+            <Box
+              w="full"
+              bg="brand.500"
+              color="white"
+              borderRadius="8px 8px 0 0"
+              boxShadow="lg"
+              p={{ base: 6, md: 10 }}
+            >
+              <Heading size="lg" mb={2}>Work and Hobbies</Heading>
             <Text fontSize="md">
               Share your work history, hobbies, and important dates to help us know you better.
             </Text>
@@ -331,8 +331,8 @@ export const DementiaUserWorkAndHobbies = forwardRef<
             <Divider />
             <ImportantDatesSection />
           </VStack>
-        </Box>
-      </VStack>
-    </FormProvider>
-  );
-});
+          </Box>
+        </VStack>
+      </FormProvider>
+    );
+  });

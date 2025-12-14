@@ -350,18 +350,16 @@ export const TwinaraAI = () => {
 
         try {
             setIsLoading(true);
-
-            // Send message to Memory AI Agent
-            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL || ""}/memory-ai-agent/chat`, {
+            const response = await api.service("memoryAiAgent").chat({
                 userId,
                 message: userMessage,
             });
 
             // Add assistant response to UI
             const assistantMessage: ChatMessage = {
-                id: response.data.messageId,
+                id: response.messageId,
                 role: "assistant",
-                content: response.data.message,
+                content: response.message,
                 createdAt: new Date().toISOString(),
             };
 
@@ -373,7 +371,7 @@ export const TwinaraAI = () => {
 
             // Speak the AI response
             if (voiceEnabled) {
-                speakText(response.data.message);
+                speakText(response.message);
             }
         } catch (error: any) {
             console.error("Error sending message:", error);

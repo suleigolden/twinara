@@ -27,23 +27,23 @@ export const DementiaUserAddress = forwardRef<
   DementiaUserAddressProps
 >(({ onNext, activeStep, steps, shouldDisplayStepper = true, onLocationValidChange, onUserInfoValidChange }, ref) => {
   const { methods, handleSubmit } = useDementiaUserOnboarding();
-  const { dementiaUserProfile } = useDementiaUserProfile();
+    const { dementiaUserProfile } = useDementiaUserProfile();
   const { setValue, watch, formState: { errors } } = methods;
 
   const [selectedLocation, setSelectedLocation] = React.useState<{
-    lat: number;
-    lng: number;
-    address: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    postalCode?: string;
-  } | null>(null);
+      lat: number;
+      lng: number;
+      address: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      postalCode?: string;
+    } | null>(null);
 
   // Build address string from saved address for LocationSearchInput
-  const savedAddress = dementiaUserProfile?.address;
-  const addressString = savedAddress
-    ? [
+    const savedAddress = dementiaUserProfile?.address;
+    const addressString = savedAddress
+      ? [
         savedAddress.street,
         savedAddress.city,
         savedAddress.state,
@@ -52,17 +52,17 @@ export const DementiaUserAddress = forwardRef<
       ]
         .filter(Boolean)
         .join(', ')
-    : '';
+      : '';
 
   // Watch address fields to determine if location is valid (for LocationSearchInput compatibility)
   const addressStreet = watch('address.street');
-  const addressCity = watch('address.city');
-  const addressState = watch('address.state');
-  const addressCountry = watch('address.country');
+    const addressCity = watch('address.city');
+    const addressState = watch('address.state');
+    const addressCountry = watch('address.country');
   const addressPostalCode = watch('address.postal_code');
   const hasFormAddress = !!(addressStreet || addressCity || addressState || addressCountry);
   const hasSavedAddress = !!(savedAddress?.street || savedAddress?.city || savedAddress?.state || savedAddress?.country);
-  const isLocationValid = hasFormAddress || hasSavedAddress;
+    const isLocationValid = hasFormAddress || hasSavedAddress;
 
   // Validate that all required address fields are filled
   const isAddressValid = !!(
@@ -78,9 +78,9 @@ export const DementiaUserAddress = forwardRef<
     savedAddress?.postal_code && savedAddress.postal_code.trim().length > 0)
   );
 
-  useImperativeHandle(ref, () => ({
+    useImperativeHandle(ref, () => ({
     submitForm: handleSubmit,
-  }));
+    }));
 
   // Notify parent component about location validity (for LocationSearchInput compatibility)
   useEffect(() => {
@@ -92,81 +92,81 @@ export const DementiaUserAddress = forwardRef<
     onUserInfoValidChange?.(isAddressValid);
   }, [isAddressValid, onUserInfoValidChange]);
 
-  // Initialize form with saved address when component mounts
+    // Initialize form with saved address when component mounts
   useEffect(() => {
-    if (savedAddress) {
-      if (savedAddress.street) {
-        setValue('address.street', savedAddress.street);
+      if (savedAddress) {
+        if (savedAddress.street) {
+          setValue('address.street', savedAddress.street);
+        }
+        if (savedAddress.city) {
+          setValue('address.city', savedAddress.city);
+        }
+        if (savedAddress.state) {
+          setValue('address.state', savedAddress.state);
+        }
+        if (savedAddress.country) {
+          setValue('address.country', savedAddress.country);
+        }
+        if (savedAddress.postal_code) {
+          setValue('address.postal_code', savedAddress.postal_code);
+        }
       }
-      if (savedAddress.city) {
-        setValue('address.city', savedAddress.city);
-      }
-      if (savedAddress.state) {
-        setValue('address.state', savedAddress.state);
-      }
-      if (savedAddress.country) {
-        setValue('address.country', savedAddress.country);
-      }
-      if (savedAddress.postal_code) {
-        setValue('address.postal_code', savedAddress.postal_code);
-      }
-    }
-  }, [savedAddress, setValue]);
+    }, [savedAddress, setValue]);
 
   // Update form values when location is selected from LocationSearchInput
   useEffect(() => {
-    if (selectedLocation) {
+      if (selectedLocation) {
       // LocationSearchInput provides the full address string, we can parse or use individual fields
       if (selectedLocation.address) {
         setValue('address.street', selectedLocation.address);
       }
-      if (selectedLocation.city) {
-        setValue('address.city', selectedLocation.city);
+        if (selectedLocation.city) {
+          setValue('address.city', selectedLocation.city);
+        }
+        if (selectedLocation.state) {
+          setValue('address.state', selectedLocation.state);
+        }
+        if (selectedLocation.country) {
+          setValue('address.country', selectedLocation.country);
+        }
+        if (selectedLocation.postalCode) {
+          setValue('address.postal_code', selectedLocation.postalCode);
+        }
       }
-      if (selectedLocation.state) {
-        setValue('address.state', selectedLocation.state);
-      }
-      if (selectedLocation.country) {
-        setValue('address.country', selectedLocation.country);
-      }
-      if (selectedLocation.postalCode) {
-        setValue('address.postal_code', selectedLocation.postalCode);
-      }
-    }
-  }, [selectedLocation, setValue]);
+    }, [selectedLocation, setValue]);
 
-  return (
-    <FormProvider {...methods}>
-      <VStack spacing={8} align="center" w="full">
-        <Box
-          w="full"
-          maxW="720px"
-          bg="white"
-          borderRadius="2xl"
-        >
-          {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+    return (
+      <FormProvider {...methods}>
+        <VStack spacing={8} align="center" w="full">
           <Box
             w="full"
-            bg="brand.500"
-            color="white"
-            borderRadius="8px 8px 0 0"
-            boxShadow="lg"
-            p={{ base: 6, md: 10 }}
+            maxW="720px"
+            bg="white"
+            borderRadius="2xl"
           >
+          {shouldDisplayStepper && <OnboardingStepper activeStep={activeStep} steps={steps} />}
+            <Box
+              w="full"
+              bg="brand.500"
+              color="white"
+              borderRadius="8px 8px 0 0"
+              boxShadow="lg"
+              p={{ base: 6, md: 10 }}
+            >
             <Heading size="lg" mb={2}>Address Information</Heading>
             <Text fontSize="md">
               Please provide your address information to help us serve you better.
             </Text>
-          </Box>
+            </Box>
           <VStack spacing={6} w="full" align="stretch" p={{ base: 6, md: 10 }} boxShadow="lg">
             <Box>
               <Text fontSize="sm" fontWeight="500" mb={2} color="gray.700">
                 Search for your address
               </Text>
-              <LocationSearchInput
-                onLocationSelect={(location) => setSelectedLocation(location)}
-                initialValue={addressString}
-              />
+                <LocationSearchInput
+                  onLocationSelect={(location) => setSelectedLocation(location)}
+                  initialValue={addressString}
+                />
               <Text fontSize="xs" color="gray.500" mt={2}>
                 Or fill in the address fields below manually
               </Text>
@@ -225,9 +225,9 @@ export const DementiaUserAddress = forwardRef<
                 isRequired={true}
               />
             </SimpleGrid>
-          </VStack>
-        </Box>
-      </VStack>
-    </FormProvider>
-  );
+            </VStack>
+          </Box>
+        </VStack>
+      </FormProvider>
+    );
 });
