@@ -23,7 +23,6 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { api } from "@suleigolden/the-last-spelling-bee-api-client";
-import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { 
     FaPaperPlane, 
@@ -564,8 +563,8 @@ export const TwinaraAI = () => {
                                                     variant="ghost"
                                                     colorScheme="brand"
                                                     position="absolute"
-                                                    top={2}
-                                                    right={2}
+                                                    top={0}
+                                                    right={0}
                                                     onClick={() => speakText(msg.content)}
                                                     isDisabled={isSpeaking}
                                                     opacity={0.7}
