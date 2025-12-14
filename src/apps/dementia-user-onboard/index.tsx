@@ -47,11 +47,13 @@ export const DementiaUserOnboarding = () => {
   const [hasSelectedServices, setHasSelectedServices] = useState<boolean>(false);
   const [isLocationValid, setIsLocationValid] = useState<boolean>(false);
   const [isUserInfoValid, setIsUserInfoValid] = useState<boolean>(false);
+  const [isWorkAndHobbiesValid, setIsWorkAndHobbiesValid] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const formRef = useRef<{ submitForm: () => Promise<void> }>(null);
   const SERVICES_STEP_INDEX = steps.findIndex((step) => step.title === "Services");
   const LOCATION_STEP_INDEX = steps.findIndex((step) => step.title === "Location");
   const PROFILE_STEP_INDEX = steps.findIndex((step) => step.title === "Profile");
+  const WORK_STEP_INDEX = steps.findIndex((step) => step.title === "Work");
   const VERIFICATION_STEP_INDEX = steps.findIndex((step) => step.title === "Verification");
 
   // Update URL when step changes
@@ -134,7 +136,13 @@ export const DementiaUserOnboarding = () => {
         ref={formRef}
         activeStep={activeStep}
         steps={steps}
-        onUserInfoValidChange={activeStep === PROFILE_STEP_INDEX ? setIsUserInfoValid : undefined}
+        onUserInfoValidChange={
+          activeStep === PROFILE_STEP_INDEX 
+            ? setIsUserInfoValid 
+            : activeStep === WORK_STEP_INDEX
+            ? setIsWorkAndHobbiesValid
+            : undefined
+        }
         shouldDisplayStepper={true}
       />
     );
@@ -198,6 +206,8 @@ export const DementiaUserOnboarding = () => {
                 ? !isLocationValid
                 : activeStep === PROFILE_STEP_INDEX
                 ? !isUserInfoValid
+                : activeStep === WORK_STEP_INDEX
+                ? !isWorkAndHobbiesValid
                 : activeStep === VERIFICATION_STEP_INDEX
                 ? !isVerified
                 : false

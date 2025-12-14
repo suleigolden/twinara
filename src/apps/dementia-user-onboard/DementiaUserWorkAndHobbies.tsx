@@ -257,6 +257,32 @@ export const DementiaUserWorkAndHobbies = forwardRef<
   const { dementiaUserProfile } = useDementiaUserProfile();
   const { setValue, watch } = methods;
 
+  // Watch arrays for validation
+  const workHistory = watch("workHistory") || [];
+  const hobbies = watch("hobbies") || [];
+  const importantDates = watch("importantDates") || [];
+
+  // Check if at least one item is filled in any of the sections
+  const hasValidWorkHistory = workHistory.some((item: string | undefined) => {
+    if (!item || typeof item !== 'string') return false;
+    return item.trim().length > 0;
+  });
+  const hasValidHobbies = hobbies.some((item: string | undefined) => {
+    if (!item || typeof item !== 'string') return false;
+    return item.trim().length > 0;
+  });
+  const hasValidImportantDates = importantDates.some((item: { label?: string; date?: string } | undefined) => {
+    if (!item) return false;
+    return (item.label?.trim().length ?? 0) > 0 || (item.date?.trim().length ?? 0) > 0;
+  });
+
+  const isWorkAndHobbiesValid = hasValidWorkHistory || hasValidHobbies || hasValidImportantDates;
+
+  // Notify parent component about validation state
+  useEffect(() => {
+    onUserInfoValidChange?.(isWorkAndHobbiesValid);
+  }, [isWorkAndHobbiesValid, onUserInfoValidChange]);
+
   // Initialize form with existing data
   useEffect(() => {
     if (dementiaUserProfile) {
