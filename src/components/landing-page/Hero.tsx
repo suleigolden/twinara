@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
-import heroImage from "../../assets/landing-page/hero-image.png";
 import { useTheme } from "../../contexts/ThemeContext";
 import { 
   Box, 
   Heading, 
-  Text, 
-  Image
+  Text
 } from "@chakra-ui/react";
-import { ImageSlideShow } from "./ImageSlideShow";
 
 type TypingAnimationProps = {
   phrases: string[];
@@ -147,13 +144,67 @@ const Hero: React.FC = () => {
       <Box
         as="section"
         id="home"
-        className="relative flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-44 pb-16 container mx-auto overflow-hidden bg-transparent"
+        className="relative flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-44 pb-16  mx-auto overflow-hidden"
+        position="relative"
+        w="100%"
+        h="100vh"
       >
+        {/* Video Background */}
+        <Box
+          as="video"
+          position="absolute"
+          top={0}
+          left={0}
+          width="100%"
+          height="100%"
+          zIndex={0}
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore - video attributes need to be passed as props
+          {...{
+            autoPlay: true,
+            loop: true,
+            muted: true,
+            playsInline: true,
+          }}
+        >
+          <source
+            src="https://firebasestorage.googleapis.com/v0/b/imageuploads-33589.appspot.com/o/twinara%2FPink%20Bold%20Modern%20Creative%20Portfolio%20Presentation.mp4?alt=media&token=3d48c55e-5258-479a-a313-f5ae8cbba740"
+            type="video/mp4"
+          />
+        </Box>
+
+        {/* Overlay for better text readability */}
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          width="100%"
+          height="100%"
+          // bgGradient={
+          //   isDarkMode
+          //     ? "linear(to-r, rgba(0,0,0,0.7), rgba(0,0,0,0.5), rgba(0,0,0,0.7))"
+          //     : "linear(to-r, rgba(255,255,255,0.85), rgba(255,255,255,0.7), rgba(255,255,255,0.85))"
+          // }
+          zIndex={1}
+        />
+
+        {/* Content */}
         <Box
           as={motion.div}
           initial="hidden"
           animate="visible"
-          className="w-full md:w-1/2 space-y-6 sm:space-y-8 md:space-y-12 relative z-10"
+          className="w-full md:w-1/2 space-y-6 sm:space-y-8 md:space-y-12 relative"
+          zIndex={2}
         >
           <Box
             as={motion.div}
@@ -184,9 +235,7 @@ const Hero: React.FC = () => {
               <Text
                 as="span"
                 onClick={handleJumpClick}
-                className={`cursor-pointer text-xs font-semibold relative z-10 ${
-                  isDarkMode ? "text-gray-200" : "text-gray-700"
-                }`}
+                color={"white"}
               >
                 Personalized Cognitive Companion
               </Text>
@@ -196,32 +245,26 @@ const Hero: React.FC = () => {
           <Box as={motion.div} variants={itemVariants}>
             <Heading
               as="h1"
-              className={`text-4xl lg:text-5xl font-black leading-tight ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
+              color={"white"}
             >
               A Personalized{" "}
-              <motion.span className="inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+              <motion.span color={"white"}>
                 Cognitive Companion
               </motion.span>{" "}
               for <br />
               <TypingAnimation
                 phrases={phrasesForTyping}
-                className={`font-bold typing-animation ${
-                  isDarkMode ? "text-purple-400" : "text-purple-600"
-                }`}
+                className="text-white"
               />
             </Heading>
           </Box>
 
           <Box as={motion.div} variants={itemVariants}>
             <Text
-              className={`text-base max-w-xl ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
+              color={"white"}
             >
               Twinara gently supports individuals living with dementia through{" "}
-              <Text as="span" className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <Text as="span" color={"white"}>
                 personalized memory exercises
               </Text>{" "}
               and cognitive tasks based on their own life stories, family, and daily routines.
@@ -229,76 +272,6 @@ const Hero: React.FC = () => {
           </Box>
 
         </Box>
-
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{
-            delay: 0.3,
-            duration: 0.8,
-            type: "spring",
-            damping: 20,
-          }}
-          className="w-full md:w-1/2 mt-8 md:mt-0 pl-0 md:pl-12 relative"
-          style={{
-            transform: `translate(${-mousePosition.x * 0.5}px, ${
-              -mousePosition.y * 0.5
-            }px)`,
-          }}
-        >
-          <Box className="relative">
-            <motion.div
-              className={`absolute top-4 right-5/12 w-20 h-20 rounded-2xl backdrop-blur-sm border ${
-                isDarkMode
-                  ? "bg-gradient-to-br from-blue-500 to-cyan-400 border-blue-300/30"
-                  : "bg-gradient-to-br from-blue-400 to-cyan-300 border-blue-200/50"
-              }`}
-              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 0.6, duration: 0.6, type: "spring" }}
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              style={{
-                transform: `translate(${mousePosition.x * 0.3}px, ${
-                  mousePosition.y * 0.3
-                }px)`,
-              }}
-            />
-
-            <motion.div
-              className={`absolute -bottom-3 -left-3 w-20 h-20 rounded-2xl backdrop-blur-sm border ${
-                isDarkMode
-                  ? "bg-gradient-to-tr from-green-500 to-emerald-400 border-green-300/30"
-                  : "bg-gradient-to-tr from-green-400 to-emerald-300 border-green-200/50"
-              }`}
-              initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 0.8, duration: 0.6, type: "spring" }}
-              whileHover={{ scale: 1.05, rotate: -5 }}
-              style={{
-                transform: `translate(${-mousePosition.x * 0.2}px, ${
-                  -mousePosition.y * 0.2
-                }px)`,
-              }}
-            />
-
-            <Box
-              as={motion.div}
-              whileHover={{ scale: 1.02 }}
-            >
-              {/* <Image
-                src={heroImage}
-                alt="Twinara Cognitive Companion"
-                className="rounded-2xl shadow-2xl border border-white/20 relative z-10 backdrop-blur-3xl"
-              /> */}
-              <ImageSlideShow
-                position="relative"
-                zIndex={1}
-                rounded="lg"
-                shadow="2xl"
-              />
-            </Box>
-          </Box>
-        </motion.div>
       </Box>
     </>
   );
