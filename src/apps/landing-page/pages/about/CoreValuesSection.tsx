@@ -1,105 +1,13 @@
 import { motion } from "framer-motion";
 import { fadeIn } from "../../../../utils/motion";
 import { useTheme } from "../../../../contexts/ThemeContext";
-import { Box, Heading, Text, Flex, Grid, Icon, useColorModeValue, VStack } from "@chakra-ui/react";
-import { coreValues } from "./constants";
+import { Box, Heading, Text, Flex, Grid, Icon, Image } from "@chakra-ui/react";
+import { FiUsers, FiHeart } from "react-icons/fi";
+import heroImage1 from "../../../../assets/landing-page/hero-image-1.png";
+import heroImage2 from "../../../../assets/landing-page/hero-image-2.png";
+import heroImage3 from "../../../../assets/landing-page/hero-image-3.png";
 
-const featureColors = [
-    {
-        bg: 'blue.50',
-        hover: 'blue.100',
-        icon: 'blue.500',
-        border: 'blue.200',
-    },
-    {
-        bg: 'purple.50',
-        hover: 'purple.100',
-        icon: 'purple.500',
-        border: 'purple.200',
-    },
-    {
-        bg: 'teal.50',
-        hover: 'teal.100',
-        icon: 'teal.500',
-        border: 'teal.200',
-    },
-    {
-        bg: 'pink.50',
-        hover: 'pink.100',
-        icon: 'pink.500',
-        border: 'pink.200',
-    },
-    {
-        bg: 'green.50',
-        hover: 'green.100',
-        icon: 'green.500',
-        border: 'green.200',
-    },
-    {
-        bg: 'orange.50',
-        hover: 'orange.100',
-        icon: 'orange.500',
-        border: 'orange.200',
-    },
-];
 
-type FeatureProps = {
-    title: string;
-    text: string;
-    icon: React.ElementType;
-    colorScheme: (typeof featureColors)[0];
-};
-
-const Feature = ({ title, text, icon, colorScheme }: FeatureProps) => {
-    const { isDarkMode } = useTheme();
-    return (
-        <Box
-            as={motion.div}
-            variants={fadeIn("up", 0.2 * 9)}
-            className={`p-6 md:p-8 rounded-2xl transition-all duration-500 hover:scale-[1.02]
-        ${isDarkMode
-                    ? "bg-gray-800/40 backdrop-blur-md border border-gray-700/50"
-                    : "bg-white shadow-lg border border-gray-200"
-                }`}
-            borderTopLeftRadius={{ lg: '100px', xl: '100px' }}
-            borderBottomRightRadius={{ lg: '100px', xl: '100px' }}
-            bg={!isDarkMode ? useColorModeValue(colorScheme.bg, 'gray.800') : ''}
-            borderColor={useColorModeValue(colorScheme.border, 'gray.700')}
-            _hover={{
-                transform: 'translateY(-5px)',
-                shadow: 'lg',
-                bg: useColorModeValue(colorScheme.hover, 'gray.700'),
-            }}
-        >
-            <Flex
-                w={12}
-                h={12}
-                align="center"
-                justify="center"
-                rounded="full"
-                bg={useColorModeValue('white', 'gray.900')}
-                color={useColorModeValue(colorScheme.icon, 'white')}
-                shadow="md"
-                mt={4}
-            >
-                <Icon as={icon} w={6} h={6} />
-            </Flex>
-            <Heading 
-                mt={4}
-                size="md" 
-                className={`text-sm md:text-base leading-relaxed ${isDarkMode ? "text-gray-300" : "text-gray-700"
-                }`}>
-                {title}
-            </Heading>
-            <Text
-                className={`text-sm md:text-base leading-relaxed ${isDarkMode ? "text-gray-300" : "text-gray-700"
-                    }`}
-            >
-                {text}
-            </Text>
-        </Box>
-    );
-};
 
 export const CoreValuesSection = () => {
     const { isDarkMode } = useTheme();
@@ -111,34 +19,206 @@ export const CoreValuesSection = () => {
             initial="hidden"
             animate="show"
             mt={20}
+            w="100%"
+            px={{ base: 4, md: 6, lg: 8 }}
         >
-            <Heading
-                as="h2"
-                className={`text-4xl md:text-5xl font-bold text-center mb-4 ${isDarkMode ? "text-white" : "text-gray-900"
-                    }`}
+            <Grid
+                templateColumns={{ 
+                    base: "1fr", 
+                    md: "repeat(12, 1fr)" 
+                }}
+                templateRows={{ 
+                    base: "auto auto auto auto auto auto", 
+                    md: "auto auto auto" 
+                }}
+                gap={6}
+                maxW="container.xl"
+                mx="auto"
             >
-                Our Core Principles
-            </Heading>
-            <Text
-                className={` ${isDarkMode ? "text-gray-400" : "text-gray-600"
-                    }`}
-                align="center"
-                mb={12}
-                mt={4}
-            >
-                Twinara is built on four core principles that guide every interaction
-            </Text>
-
-            <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
-                {coreValues.map((feature, index) => (
-                    <Feature
-                        key={index}
-                        title={feature.title}
-                        text={feature.description}
-                        icon={feature.icon}
-                        colorScheme={featureColors[index]}
+                {/* Top Left - Large Image */}
+                <Box
+                    as={motion.div}
+                    gridColumn={{ base: "1", md: "1 / 5" }}
+                    gridRow={{ base: "1", md: "1 / 3" }}
+                    variants={fadeIn("left", 0.2)}
+                >
+                    <Image
+                        src={heroImage1}
+                        alt="Healthcare professionals"
+                        borderRadius="xl"
+                        objectFit="cover"
+                        w="100%"
+                        h={{ base: "250px", md: "100%" }}
+                        minH={{ md: "400px" }}
                     />
-                ))}
+                </Box>
+
+                {/* Bottom Left - Green Text Box */}
+                <Box
+                    as={motion.div}
+                    gridColumn={{ base: "1", md: "1 / 5" }}
+                    gridRow={{ base: "2", md: "3" }}
+                    variants={fadeIn("left", 0.4)}
+                    p={6}
+                    borderRadius="xl"
+                    bg="green.50"
+                    borderWidth="1px"
+                    borderColor="green.200"
+                    _dark={{
+                        bg: "green.900",
+                        borderColor: "green.700",
+                    }}
+                >
+                    <Text
+                        fontSize={{ base: "sm", md: "md" }}
+                        lineHeight="tall"
+                        color={isDarkMode ? "gray.200" : "gray.700"}
+                        mb={4}
+                    >
+                        We strive to build technology that supports families and caregivers - easing their burdens, 
+                        providing insights into cognitive patterns, and enabling them to better support their loved ones. 
+                        Given today's challenges with dementia care, caregiver burnout, and the need for personalized 
+                        approaches, we work to help families not just manage, but thrive by delivering compassionate 
+                        support that preserves dignity and strengthens connections.
+                    </Text>
+                    <Flex align="center" gap={3}>
+                        <Flex
+                            w={10}
+                            h={10}
+                            align="center"
+                            justify="center"
+                            rounded="full"
+                            bg="white"
+                            color="green.600"
+                            shadow="sm"
+                            _dark={{
+                                bg: "gray.800",
+                                color: "green.400",
+                            }}
+                        >
+                            <Icon as={FiUsers} w={5} h={5} />
+                        </Flex>
+                        <Text
+                            fontSize="sm"
+                            fontWeight="semibold"
+                            color={isDarkMode ? "gray.300" : "gray.700"}
+                        >
+                            To families & caregivers
+                        </Text>
+                    </Flex>
+                </Box>
+
+                {/* Center Top - Heading */}
+                <Box
+                    gridColumn={{ base: "1", md: "5 / 9" }}
+                    gridRow={{ base: "3", md: "1" }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    px={{ base: 0, md: 4 }}
+                    py={{ base: 4, md: 0 }}
+                >
+                    <Heading
+                        as="h2"
+                        fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+                        fontWeight="bold"
+                        color={isDarkMode ? "white" : "gray.900"}
+                        textAlign="center"
+                    >
+                        Our Commitment
+                    </Heading>
+                </Box>
+
+                {/* Top Right - Purple Text Box */}
+                <Box
+                    as={motion.div}
+                    gridColumn={{ base: "1", md: "9 / 13" }}
+                    gridRow={{ base: "4", md: "1" }}
+                    variants={fadeIn("right", 0.2)}
+                    p={6}
+                    borderRadius="xl"
+                    bg="purple.50"
+                    borderWidth="1px"
+                    borderColor="purple.200"
+                    _dark={{
+                        bg: "purple.900",
+                        borderColor: "purple.700",
+                    }}
+                >
+                    <Text
+                        fontSize={{ base: "sm", md: "md" }}
+                        lineHeight="tall"
+                        color={isDarkMode ? "gray.200" : "gray.700"}
+                        mb={4}
+                    >
+                        We strive to build technology first and foremost for individuals living with dementia, 
+                        with uncompromising compassion, dignity, and safety. Every person will have a trusted 
+                        cognitive companion that safeguards their identity during their most vulnerable moments, 
+                        preserves their memories, and keeps them connected to their personal stories, family, 
+                        and daily routines at all times.
+                    </Text>
+                    <Flex align="center" gap={3}>
+                        <Flex
+                            w={10}
+                            h={10}
+                            align="center"
+                            justify="center"
+                            rounded="full"
+                            bg="white"
+                            color="purple.600"
+                            shadow="sm"
+                            _dark={{
+                                bg: "gray.800",
+                                color: "purple.400",
+                            }}
+                        >
+                            <Icon as={FiHeart} w={5} h={5} />
+                        </Flex>
+                        <Text
+                            fontSize="sm"
+                            fontWeight="semibold"
+                            color={isDarkMode ? "gray.300" : "gray.700"}
+                        >
+                            To individuals with dementia
+                        </Text>
+                    </Flex>
+                </Box>
+
+                {/* Bottom Center - Image */}
+                <Box
+                    as={motion.div}
+                    gridColumn={{ base: "1", md: "5 / 9" }}
+                    gridRow={{ base: "5", md: "2 / 4" }}
+                    variants={fadeIn("up", 0.4)}
+                >
+                    <Image
+                        src={heroImage3}
+                        alt="Elderly person using technology"
+                        borderRadius="xl"
+                        objectFit="cover"
+                        w="100%"
+                        h={{ base: "250px", md: "100%" }}
+                        minH={{ md: "300px" }}
+                    />
+                </Box>
+
+                {/* Bottom Right - Image */}
+                <Box
+                    as={motion.div}
+                    gridColumn={{ base: "1", md: "9 / 13" }}
+                    gridRow={{ base: "6", md: "2 / 4" }}
+                    variants={fadeIn("right", 0.4)}
+                >
+                    <Image
+                        src={heroImage2}
+                        alt="Elderly couple"
+                        borderRadius="xl"
+                        objectFit="cover"
+                        w="100%"
+                        h={{ base: "250px", md: "100%" }}
+                        minH={{ md: "300px" }}
+                    />
+                </Box>
             </Grid>
         </Box>
     );

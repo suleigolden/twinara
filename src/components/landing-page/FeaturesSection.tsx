@@ -9,7 +9,7 @@ import {
   TrendingUp,
   CheckCircle2,
 } from "lucide-react";
-import heroImage from "../../assets/landing-page/hero-image.png";
+import heroImage1 from "../../assets/landing-page/hero-image-1.png";
 
 const FeaturesSection: React.FC = () => {
   const { isDarkMode } = useTheme();
@@ -87,7 +87,7 @@ const FeaturesSection: React.FC = () => {
                 Why Families Choose Twinara
               </Heading>
               <Image
-                src={heroImage}
+                src={heroImage1}
                 alt="Twinara cognitive companion supporting individuals with dementia"
                 borderRadius="lg"
                 objectFit="cover"
