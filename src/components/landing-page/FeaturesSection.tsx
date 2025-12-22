@@ -1,200 +1,169 @@
-import { Link } from "react-router-dom";
 import { useTheme } from "../../contexts/ThemeContext";
 import { motion } from "framer-motion";
-import { Box, Heading, Text, Flex, Grid } from "@chakra-ui/react";
+import { Box, Heading, Text, Flex, Grid, Image } from "@chakra-ui/react";
 import {
-  Brain,
-  Heart,
-  ShieldCheck,
+  Zap,
+  Gauge,
   Users,
-  Clock,
-  CheckCircle,
-  BookOpen,
-  MessageCircle,
-  Cpu,
+  Calendar,
+  TrendingUp,
+  CheckCircle2,
 } from "lucide-react";
+import heroImage from "../../assets/landing-page/hero-image.png";
 
 const FeaturesSection: React.FC = () => {
   const { isDarkMode } = useTheme();
 
   const features = [
     {
-      icon: <Brain size={32} />,
-      title: "Personalized Memory Tasks",
-      description:
-        "Cognitive exercises generated from your own life stories, family relationships, and personal history—not generic puzzles.",
-      bg: "from-indigo-500 to-purple-500",
+      icon: <Zap size={24} strokeWidth={1.5} />,
+      label: "Enhance",
+      title: "Memory Recall",
     },
     {
-      icon: <Heart size={32} />,
-      title: "Person-Centered Approach",
-      description:
-        "Reinforces memory using real-life context. Remembering your daughter's name matters more than random numbers.",
-      bg: "from-pink-500 to-rose-500",
+      icon: <Gauge size={24} strokeWidth={1.5} />,
+      label: "Improve",
+      title: "Cognitive Function",
     },
     {
-      icon: <Cpu size={32} />,
-      title: "Adaptive Difficulty",
-      description:
-        "Automatically adjusts question type, difficulty level, and language simplicity based on your responses over time.",
-      bg: "from-orange-500 to-amber-500",
+      icon: <Users size={24} strokeWidth={1.5} />,
+      label: "Strengthen",
+      title: "Family Connections",
     },
     {
-      icon: <ShieldCheck size={32} />,
-      title: "Dignity & Emotional Safety",
-      description:
-        "Never says 'wrong', never highlights failure. Always reassures and supports with gentle, encouraging interactions.",
-      bg: "from-emerald-500 to-teal-500",
+      icon: <Calendar size={24} strokeWidth={1.5} />,
+      label: "Support",
+      title: "Daily Routines",
     },
     {
-      icon: <Users size={32} />,
-      title: "Family & Relationships",
-      description:
-        "Reinforces bonds with loved ones through personalized questions about family members and social connections.",
-      bg: "from-fuchsia-500 to-purple-600",
+      icon: <TrendingUp size={24} strokeWidth={1.5} />,
+      label: "Maintain",
+      title: "Identity & Dignity",
     },
     {
-      icon: <Clock size={32} />,
-      title: "Routine Awareness",
-      description:
-        "Helps maintain awareness of daily activities and time, reducing confusion about schedules and plans.",
-      bg: "from-sky-500 to-cyan-500",
-    },
-    {
-      icon: <CheckCircle size={32} />,
-      title: "Recognition-Based Tasks",
-      description:
-        "Low-stress interactions with multiple choice questions and yes/no confirmations to increase success rates.",
-      bg: "from-violet-500 to-indigo-500",
-    },
-    {
-      icon: <BookOpen size={32} />,
-      title: "Story Reinforcement",
-      description:
-        "Strengthens narrative memory by engaging with personal stories, hobbies, and meaningful life experiences.",
-      bg: "from-yellow-500 to-orange-500",
-    },
-    {
-      icon: <MessageCircle size={32} />,
-      title: "Gentle Behavioral Prompts",
-      description:
-        "Encourages healthy habits with supportive reminders for walks, hydration, and other wellness activities.",
-      bg: "from-red-500 to-rose-500",
+      icon: <CheckCircle2 size={24} strokeWidth={1.5} />,
+      label: "Provide",
+      title: "Personalized Care",
     },
   ];
 
   return (
     <Box
       as="section"
-      className={`relative w-full px-6 py-20 overflow-hidden transition-colors duration-500 ${
-        isDarkMode ? "text-gray-100" : "text-gray-900"
-      }`}
+      w="100%"
+      py={{ base: 12, md: 20 }}
+      px={{ base: 4, md: 6, lg: 8 }}
+      bg={isDarkMode ? "gray.900" : "gray.50"}
     >
-      {/* Header */}
-      <motion.div
-        className="text-center mb-16 relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
+      <Flex
+        direction={{ base: "column", lg: "row" }}
+        gap={{ base: 8, lg: 12 }}
+        maxW="container.xl"
+        mx="auto"
       >
-        <Heading as="h2" className="text-4xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-blue-400 to-indigo-600">
-          How Twinara Supports You
-        </Heading>
-
-        <Text
-          className={`mt-8 text-lg ${
-            isDarkMode ? "text-gray-300/80" : "text-gray-600"
-          }`}
+        {/* Left Side - Large Card with Image */}
+        <motion.div
+          style={{ flex: "1" }}
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
         >
-          "Supporting individuals with dementia through personalized cognitive care, dignity, and compassion."
-        </Text>
-      </motion.div>
-
-      {/* Features */}
-      <Grid className="grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
-        {features.map((feature, index) => (
-          <motion.div
-            key={index}
-            className={`relative group flex flex-col items-center text-center p-8 rounded-2xl shadow-lg border overflow-hidden backdrop-blur-xl transition-all duration-300 ${
-              isDarkMode
-                ? "bg-slate-900/60 border-slate-700 hover:shadow-purple-500/30"
-                : "bg-white/70 border-gray-200 hover:shadow-purple-300"
-            }`}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2, duration: 0.8 }}
-            viewport={{ once: true }}
+          <Box
+            borderRadius="xl"
+            overflow="hidden"
+            bg={isDarkMode ? "gray.800" : "white"}
+            boxShadow="xl"
+            h="100%"
           >
-            {/* Icon Circle */}
-            <Flex
-              className={`mb-6 w-20 h-20 items-center justify-center rounded-2xl bg-gradient-to-r ${feature.bg} text-white shadow-md group-hover:scale-110 transition-transform duration-300`}
-            >
-              {feature.icon}
-            </Flex>
-
-            {/* Title */}
-            <Heading as="h3" size="md" className="text-2xl font-semibold mb-3">{feature.title}</Heading>
-
-            {/* Description */}
-            <Text
-              className={`leading-relaxed ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              {feature.description}
-            </Text>
-          </motion.div>
-        ))}
-      </Grid>
-
-      {/* Call to Action */}
-      <motion.div
-        className="text-center mt-16 relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <Link
-          to="/"
-          className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-white 
-             bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 
-             shadow-lg hover:shadow-2xl hover:scale-105 
-             transition-all duration-300 ease-out overflow-hidden"
-        >
-          {/* Glow background on hover */}
-          <Text as="span" className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
-
-          {/* Icon */}
-          <Box as="svg"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 relative z-10 group-hover:rotate-6 group-hover:scale-110 transition-transform duration-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3v18m9-9H3"
-            />
+            <Box p={8}>
+              <Heading
+                as="h2"
+                fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                mb={6}
+                color={isDarkMode ? "white" : "gray.900"}
+              >
+                Why Families Choose Twinara
+              </Heading>
+              <Image
+                src={heroImage}
+                alt="Twinara cognitive companion supporting individuals with dementia"
+                borderRadius="lg"
+                objectFit="cover"
+                w="100%"
+                h={{ base: "300px", md: "400px", lg: "500px" }}
+              />
+            </Box>
           </Box>
+        </motion.div>
 
-          {/* Text */}
-          <Text as="span" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
-            Get Started with Twinara
-          </Text>
-
-          {/* Shiny reflection */}
-          <Text as="span"
-            className="absolute top-0 left-[-50%] w-[200%] h-full 
-                   bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                   transform -skew-x-12 group-hover:animate-[shine_1.2s_ease-in-out]"
-          />
-        </Link>
-      </motion.div>
+        {/* Right Side - Feature Cards Grid */}
+        <motion.div
+          style={{ flex: "1" }}
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
+          <Grid
+            templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+            gap={4}
+            h="100%"
+          >
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <Box
+                  p={6}
+                  borderRadius="xl"
+                  bg={isDarkMode ? "gray.800" : "white"}
+                  boxShadow="lg"
+                  h="100%"
+                  display="flex"
+                  flexDirection="column"
+                  _hover={{
+                    boxShadow: "md",
+                    transform: "translateY(-2px)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <Box
+                    mb={4}
+                    color={isDarkMode ? "gray.300" : "gray.700"}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    {feature.icon}
+                  </Box>
+                  <Text
+                    fontSize="sm"
+                    color={isDarkMode ? "gray.400" : "gray.600"}
+                    mb={1}
+                    fontWeight="medium"
+                  >
+                    {feature.label}
+                  </Text>
+                  <Heading
+                    as="h3"
+                    fontSize={{ base: "lg", md: "xl" }}
+                    fontWeight="bold"
+                    color={isDarkMode ? "white" : "gray.900"}
+                  >
+                    {feature.title}
+                  </Heading>
+                </Box>
+              </motion.div>
+            ))}
+          </Grid>
+        </motion.div>
+      </Flex>
     </Box>
   );
 };

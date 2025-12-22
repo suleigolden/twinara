@@ -22,12 +22,12 @@ export const LandingPage = () => {
       </section>
       <section id="about">
         {/* <CompanyLogo /> */}
-        <PurposeSection />
+        {/* <PurposeSection /> */}
         <FeaturesSection />
       </section>
       <section id="use-cases">
         <UseCasesSection />
-        <MonitorSection />
+        {/* <MonitorSection /> */}
         <PricingSection />
       </section>
       <section id="testimonials">
