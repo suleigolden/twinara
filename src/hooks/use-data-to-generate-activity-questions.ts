@@ -65,14 +65,14 @@ export const useDataToGenerateActivityQuestions = () => {
         ],
       
         notesFromCaregiver: `
-      - Margaret becomes anxious when her routine is disrupted.
-      - She often asks about her husband Robert in the evenings; reassurance works best.
-      - Responds positively to being addressed by her first name.
-      - Needs reminders to drink water and eat meals.
-      - Occasionally forgets that she no longer drives.
-      - Best cognitive clarity occurs between 9:00 AM and 1:00 PM.
-      - Avoid correcting her harshly; redirection works better.
-      - Enjoys being given “small responsibilities” like folding towels.
+        - Margaret becomes anxious when her routine is disrupted.
+        - She often asks about her husband Robert in the evenings; reassurance works best.
+        - Responds positively to being addressed by her first name.
+        - Needs reminders to drink water and eat meals.
+        - Occasionally forgets that she no longer drives.
+        - Best cognitive clarity occurs between 9:00 AM and 1:00 PM.
+        - Avoid correcting her harshly; redirection works better.
+        - Enjoys being given “small responsibilities” like folding towels.
         `,
       
         createdAt: new Date("2024-01-12T10:15:00"),
