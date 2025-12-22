@@ -47,7 +47,7 @@ const testimonials = [
   }
 ];
 
-interface TestimonialCardProps {
+type TestimonialCardProps = {
   text: string;
   name: string;
   image: string;
@@ -158,7 +158,7 @@ const TestimonialSection: React.FC = () => {
           <Text className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto ${
             isDarkMode ? 'text-gray-400' : 'text-gray-600'
           }`}>
-            Trusted by developers and teams worldwide who love our platform
+           Coming Soon!
           </Text>
         </Box>
         
@@ -186,13 +186,13 @@ const TestimonialSection: React.FC = () => {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {duplicatedTestimonials.map((testimonial, index) => (
+              {/* {duplicatedTestimonials.map((testimonial, index) => (
                 <TestimonialCard
                   key={`${testimonial.id}-${index}`}
                   {...testimonial}
                   isDarkMode={isDarkMode}
                 />
-              ))}
+              ))} */}
             </Flex>
           </Box>
         </Box>
@@ -201,14 +201,14 @@ const TestimonialSection: React.FC = () => {
           <Flex className={`gap-2 px-4 py-2 rounded-full ${
             isDarkMode ? 'bg-gray-800' : 'bg-gray-100'
           }`}>
-            {testimonials.slice(0, 3).map((_, index) => (
+            {/* {testimonials.slice(0, 3).map((_, index) => (
               <Box
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   isDarkMode ? 'bg-gray-600' : 'bg-gray-400'
                 }`}
               />
-            ))}
+            ))} */}
           </Flex>
         </Flex>
       </Container>

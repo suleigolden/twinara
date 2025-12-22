@@ -21,7 +21,7 @@ export const LandingPage = () => {
         <Hero />
       </section>
       <section id="about">
-        <CompanyLogo />
+        {/* <CompanyLogo /> */}
         <PurposeSection />
         <FeaturesSection />
       </section>
