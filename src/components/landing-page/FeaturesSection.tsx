@@ -12,8 +12,8 @@ import {
 import heroImage1 from "../../assets/landing-page/hero-image-1.png";
 
 const FeaturesSection: React.FC = () => {
-  const { isDarkMode } = useTheme();
-
+  // const { isDarkMode } = useTheme();
+  const isDarkMode = false;
   const features = [
     {
       icon: <Zap size={24} strokeWidth={1.5} />,
