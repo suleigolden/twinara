@@ -95,10 +95,10 @@ export const CategorySelection = ({ onSelectCategory, disabled = false }: Catego
             p={6}
             borderRadius="xl"
             bg={isDarkMode ? "gray.800" : "white"}
-            borderWidth="2px"
             borderColor={isDarkMode ? "gray.700" : "gray.200"}
             _hover={{
               borderColor: colorMap[category.color],
+              borderWidth: "2px",
               transform: "translateY(-4px)",
               boxShadow: "lg",
             }}
