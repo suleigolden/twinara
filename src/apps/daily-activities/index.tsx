@@ -15,22 +15,58 @@ import {
   AlertIcon,
   AlertDescription,
   useColorModeValue,
+  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { FaHeart, FaTimes} from "react-icons/fa";
 import { useTheme } from "~/contexts/ThemeContext";
 import { Question, GameState, QuestionCategory } from "./types";
-import { dummyQuestions } from "./data";
 import { CategorySelection } from "./components/CategorySelection";
 import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
+import { api, ActivityQuestionType, GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
+import { useUser } from "~/hooks/use-user";
 
 type GameScreen = "category-selection" | "playing" | "completed" | "game-over";
 
+// Map frontend QuestionCategory to backend ActivityQuestionType
+const mapCategoryToActivityQuestionType = (category: QuestionCategory): ActivityQuestionType => {
+  const mapping: Record<QuestionCategory, ActivityQuestionType> = {
+    "identity-self-recall": "IDENTITY_SELF_RECALL",
+    "people-relationships": "PEOPLE_RELATIONSHIPS",
+    "routine-daily-awareness": "ROUTINE_DAILY_AWARENESS",
+    "recognition-based": "RECOGNITION_TASKS",
+    "story-memory": "STORY_AND_MEMORY",
+    "behavioral-prompts": "WELLNESS_PROMPTS",
+  };
+  return mapping[category];
+};
+
+// Transform GeneratedQuestion from API to Question type used in frontend
+const transformGeneratedQuestion = (generatedQuestion: GeneratedQuestion, index: number, category: QuestionCategory): Question => {
+  return {
+    id: `q-${index}`,
+    category,
+    type: generatedQuestion.answerType === "yes-no" ? "yes-no" : "multiple-choice",
+    question: generatedQuestion.question,
+    options: generatedQuestion.options?.map((opt) => opt.label) || undefined,
+    correctAnswer: generatedQuestion.correctAnswer === "Yes" 
+      ? true 
+      : generatedQuestion.correctAnswer === "No" 
+      ? false 
+      : generatedQuestion.correctAnswer,
+    explanation: undefined,
+  };
+};
+
 export const DailyActivities = () => {
   const { isDarkMode } = useTheme();
+  const { user } = useUser();
+  const toast = useToast();
   const [currentScreen, setCurrentScreen] = useState<GameScreen>("category-selection");
   const [selectedCategory, setSelectedCategory] = useState<QuestionCategory | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const [gameState, setGameState] = useState<GameState>({
     currentQuestionIndex: 0,
     score: 0,
@@ -46,23 +82,63 @@ export const DailyActivities = () => {
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const cardBg = useColorModeValue("white", "gray.800");
 
-  const startGame = (category: QuestionCategory) => {
+  const startGame = async (category: QuestionCategory) => {
+    if (!user?.id) {
+      toast({
+        title: "Error",
+        description: "User ID is required. Please sign in.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
     setSelectedCategory(category);
-    // Filter questions by category, shuffle and take 5 questions
-    const filteredQuestions = dummyQuestions.filter((q) => q.category === category);
-    const shuffled = [...filteredQuestions].sort(() => Math.random() - 0.5);
-    const gameQuestions = shuffled.slice(0, 5);
-    setQuestions(gameQuestions);
-    setGameState({
-      currentQuestionIndex: 0,
-      score: 0,
-      lives: 5,
-      totalXP: 0,
-      accuracy: 0,
-      answeredQuestions: 0,
-      correctAnswers: 0,
-    });
-    setCurrentScreen("playing");
+    setIsLoadingQuestions(true);
+
+    try {
+      const activityQuestionType = mapCategoryToActivityQuestionType(category);
+      
+      const response = await api.service("twinaraActivityGame").generateQuestions({
+        userId: user.id,
+        questionType: activityQuestionType,
+        numberOfQuestions: 10, // Generate 10 questions, we'll use 5
+      });
+      console.log(response);
+
+      // Transform API questions to frontend Question format
+      const transformedQuestions = response.questions
+        .slice(0, 5) // Take first 5 questions
+        .map((q, index) => transformGeneratedQuestion(q, index, category));
+
+      // Shuffle the questions
+      const shuffled = [...transformedQuestions].sort(() => Math.random() - 0.5);
+      
+      setQuestions(shuffled);
+      setGameState({
+        currentQuestionIndex: 0,
+        score: 0,
+        lives: 5,
+        totalXP: 0,
+        accuracy: 0,
+        answeredQuestions: 0,
+        correctAnswers: 0,
+      });
+      setCurrentScreen("playing");
+    } catch (error: any) {
+      console.error("Error generating questions:", error);
+      toast({
+        title: "Error",
+        description: error?.response?.data?.message || "Failed to generate questions. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setCurrentScreen("category-selection");
+    } finally {
+      setIsLoadingQuestions(false);
+    }
   };
 
   const handleAnswer = (answer: string | boolean) => {
@@ -129,7 +205,35 @@ export const DailyActivities = () => {
     <Box minH="100vh" bg={bgColor} py={8}>
       <Container maxW="container.md">
         {currentScreen === "category-selection" && (
-          <CategorySelection onSelectCategory={startGame} />
+          <Box position="relative">
+            {isLoadingQuestions && (
+              <Box
+                position="absolute"
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                bg={isDarkMode ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.9)"}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                zIndex={10}
+                borderRadius="xl"
+              >
+                <VStack spacing={4}>
+                  <Spinner size="xl" color="green.500" />
+                  <Text
+                    fontSize="lg"
+                    fontWeight="semibold"
+                    color={isDarkMode ? "white" : "gray.800"}
+                  >
+                    Generating questions...
+                  </Text>
+                </VStack>
+              </Box>
+            )}
+            <CategorySelection onSelectCategory={startGame} disabled={isLoadingQuestions} />
+          </Box>
         )}
 
         {currentScreen === "playing" && currentQuestion && (

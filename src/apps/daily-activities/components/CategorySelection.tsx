@@ -5,9 +5,10 @@ import { categories } from "../data";
 
 type CategorySelectionProps = {
   onSelectCategory: (category: QuestionCategory) => void;
+  disabled?: boolean;
 };
 
-export const CategorySelection = ({ onSelectCategory }: CategorySelectionProps) => {
+export const CategorySelection = ({ onSelectCategory, disabled = false }: CategorySelectionProps) => {
   const { isDarkMode } = useTheme();
 
   const colorMap: Record<string, string> = {
@@ -56,9 +57,10 @@ export const CategorySelection = ({ onSelectCategory }: CategorySelectionProps) 
               transform: "translateY(-4px)",
               boxShadow: "lg",
             }}
-            cursor="pointer"
+            cursor={disabled ? "not-allowed" : "pointer"}
+            opacity={disabled ? 0.6 : 1}
             transition="all 0.2s"
-            onClick={() => onSelectCategory(category.id)}
+            onClick={() => !disabled && onSelectCategory(category.id)}
             boxShadow="md"
           >
             <VStack spacing={4} align="start">
