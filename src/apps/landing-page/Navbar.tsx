@@ -142,7 +142,8 @@ export const Navbar: React.FC = () => {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   
   // Hooks
-  const { isDarkMode, toggleTheme } = useTheme();
+  // const { isDarkMode, toggleTheme } = useTheme();
+  const isDarkMode = false;
   const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
