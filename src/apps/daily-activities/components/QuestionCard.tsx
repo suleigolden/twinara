@@ -2,6 +2,7 @@ import { VStack, Text, Button, Box, Flex, HStack } from "@chakra-ui/react";
 import { FaCheck } from "react-icons/fa";
 import { useTheme } from "~/contexts/ThemeContext";
 import { Question } from "../types";
+import { useMemo } from "react";
 
 type QuestionCardProps = {
   question: Question;
@@ -32,6 +33,14 @@ export const QuestionCard = ({
     return selectedAnswer === answer;
   };
 
+  // Shuffle options once per question to ensure correct answer isn't always first
+  const shuffledOptions = useMemo(() => {
+    if (question.type === "multiple-choice" && question.options) {
+      return [...question.options].sort(() => Math.random() - 0.5);
+    }
+    return question.options;
+  }, [question.id, question.options]);
+
   return (
     <VStack spacing={6} align="stretch">
 
@@ -48,8 +57,8 @@ export const QuestionCard = ({
 
       {/* Answer Options */}
       <VStack spacing={4} w="full">
-        {question.type === "multiple-choice" && question.options ? (
-          question.options.map((option, index) => {
+        {question.type === "multiple-choice" && shuffledOptions ? (
+          shuffledOptions.map((option, index) => {
             const selected = isSelected(option);
             const correct = isCorrect(option);
             const showResult = selectedAnswer !== null;

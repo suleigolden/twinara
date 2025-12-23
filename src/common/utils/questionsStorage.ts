@@ -1,4 +1,4 @@
-import { QuestionCategory } from "../types";
+import { QuestionCategory } from "../../apps/daily-activities/types";
 import { GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
 
 const STORAGE_KEY = "twinara_questions";

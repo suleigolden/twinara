@@ -26,7 +26,7 @@ import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
 import { api, ActivityQuestionType, GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
-import { getQuestionsFromStorage, storeQuestionsInStorage } from "./utils/questionsStorage";
+import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
 
 type GameScreen = "category-selection" | "playing" | "completed" | "game-over";
 
