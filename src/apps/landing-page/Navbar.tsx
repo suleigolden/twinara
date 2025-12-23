@@ -427,7 +427,8 @@ export const Navbar: React.FC = () => {
               </Button>
             )}
 
-            <Button
+            {/* Theme Toggle Button - Commented out */}
+            {/* <Button
               onClick={toggleTheme}
               variant="ghost"
               className={`
@@ -444,7 +445,7 @@ export const Navbar: React.FC = () => {
                 {isDarkMode ? <Sun className="h-4 w-4 xl:h-5 xl:w-5" /> : <Moon className="h-4 w-4 xl:h-5 xl:w-5" />}
               </Box>
               <Box className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-            </Button>
+            </Button> */}
           </Flex>
 
           {/* Mobile Menu Button */}
@@ -606,8 +607,8 @@ export const Navbar: React.FC = () => {
             </Box>
           )}
 
-          {/* Theme Toggle */}
-          <Box
+          {/* Theme Toggle - Commented out */}
+          {/* <Box
             className="pt-4"
             style={{ 
               animationDelay: `${(navLinks.length + dropdownItems.length + 2) * 100}ms`,
@@ -633,7 +634,7 @@ export const Navbar: React.FC = () => {
                 {isDarkMode ? "Light Mode" : "Dark Mode"}
               </Text>
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
 
