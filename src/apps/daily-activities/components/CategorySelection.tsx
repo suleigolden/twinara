@@ -1,7 +1,52 @@
 import { VStack, Heading, Text, Grid, Box, Flex } from "@chakra-ui/react";
 import { useTheme } from "~/contexts/ThemeContext";
 import { QuestionCategory, CategoryInfo } from "../types";
-import { categories } from "../data";
+
+
+export const categories: CategoryInfo[] = [
+  {
+    id: "identity-self-recall",
+    title: "Identity & Self Recall",
+    icon: "👤",
+    description: "Reinforce sense of self",
+    color: "purple",
+  },
+  {
+    id: "people-relationships",
+    title: "People & Relationships",
+    icon: "❤️",
+    description: "Reinforce family and social bonds",
+    color: "pink",
+  },
+  {
+    id: "routine-daily-awareness",
+    title: "Routine & Daily Awareness",
+    icon: "⏰",
+    description: "Reduce confusion about time and plans",
+    color: "blue",
+  },
+  {
+    id: "recognition-based",
+    title: "Recognition Tasks",
+    icon: "✅",
+    description: "Easy recognition questions",
+    color: "green",
+  },
+  {
+    id: "story-memory",
+    title: "Story & Memory",
+    icon: "📖",
+    description: "Strengthen narrative memory",
+    color: "orange",
+  },
+  {
+    id: "behavioral-prompts",
+    title: "Wellness Prompts",
+    icon: "💬",
+    description: "Encourage healthy habits",
+    color: "teal",
+  },
+];
 
 type CategorySelectionProps = {
   onSelectCategory: (category: QuestionCategory) => void;

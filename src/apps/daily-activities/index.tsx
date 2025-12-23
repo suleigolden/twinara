@@ -26,6 +26,7 @@ import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
 import { api, ActivityQuestionType, GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
+import { getQuestionsFromStorage, storeQuestionsInStorage } from "./utils/questionsStorage";
 
 type GameScreen = "category-selection" | "playing" | "completed" | "game-over";
 
@@ -99,16 +100,27 @@ export const DailyActivities = () => {
     setIsLoadingQuestions(true);
 
     try {
-      const activityQuestionType = mapCategoryToActivityQuestionType(category);
+      // Check if questions exist in local storage
+      let generatedQuestions: GeneratedQuestion[] | null = getQuestionsFromStorage(category);
       
-      const response = await api.service("twinaraActivityGame").generateQuestions({
-        userId: user.id,
-        questionType: activityQuestionType,
-        numberOfQuestions: NUMBER_OF_QUESTIONS, // Generate 10 questions
-      });
+      if (!generatedQuestions) {
+        // Generate new questions from server
+        const activityQuestionType = mapCategoryToActivityQuestionType(category);
+        
+        const response = await api.service("twinaraActivityGame").generateQuestions({
+          userId: user.id,
+          questionType: activityQuestionType,
+          numberOfQuestions: NUMBER_OF_QUESTIONS, // Generate 10 questions
+        });
 
-      // Transform API questions to frontend Question format (use all 10 questions)
-      const transformedQuestions = response.questions
+        generatedQuestions = response.questions;
+        
+        // Store questions in local storage
+        storeQuestionsInStorage(category, generatedQuestions);
+      }
+
+      // Transform API questions to frontend Question format (use all questions)
+      const transformedQuestions = generatedQuestions
         .map((q, index) => transformGeneratedQuestion(q, index, category));
 
       // Shuffle the questions
@@ -226,7 +238,7 @@ export const DailyActivities = () => {
                     fontWeight="semibold"
                     color={isDarkMode ? "white" : "gray.800"}
                   >
-                    Generating questions...
+                    Loading questions...
                   </Text>
                 </VStack>
               </Box>

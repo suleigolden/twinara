@@ -34,19 +34,6 @@ export const QuestionCard = ({
 
   return (
     <VStack spacing={6} align="stretch">
-      {/* NEW WORD/QUESTION Banner */}
-      <Box
-        bg={isDarkMode ? "purple.700" : "purple.100"}
-        color={isDarkMode ? "purple.200" : "purple.700"}
-        px={4}
-        py={2}
-        borderRadius="md"
-        w="fit-content"
-        fontSize="sm"
-        fontWeight="bold"
-      >
-        NEW QUESTION
-      </Box>
 
       {/* Question Text */}
       <Text
@@ -75,7 +62,6 @@ export const QuestionCard = ({
                 variant="outline"
                 fontSize="lg"
                 py={8}
-                borderRadius="xl"
                 bg={
                   showResult && correct && selected
                     ? "green.500"
@@ -92,7 +78,7 @@ export const QuestionCard = ({
                     ? "white"
                     : "gray.800"
                 }
-                borderWidth="2px"
+                boxShadow="0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1)"
                 borderColor={
                   showResult && correct && selected
                     ? "green.500"
@@ -111,27 +97,26 @@ export const QuestionCard = ({
                 position="relative"
                 transition="all 0.2s"
               >
-                <HStack spacing={3} w="full" justify="center">
-                  {showResult && correct && selected && (
-                    <FaCheck />
-                  )}
-                  <Text fontWeight="semibold">{option}</Text>
+                <HStack spacing={3} w="full" justify="flex-start" pl={4}>
                   <Box
-                    position="absolute"
-                    right={4}
-                    w={8}
-                    h={8}
+                    w={10}
+                    h={10}
                     borderRadius="full"
-                    bg={isDarkMode ? "gray.700" : "gray.100"}
-                    color={isDarkMode ? "white" : "gray.600"}
+                    bg={isDarkMode ? "gray.700" : "blue.50"}
+                    color={isDarkMode ? "white" : "gray.900"}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                     fontSize="sm"
                     fontWeight="bold"
+                    flexShrink={0}
                   >
-                    {index + 1}
+                    {String.fromCharCode(65 + index)}
                   </Box>
+                  {showResult && correct && selected && (
+                    <FaCheck />
+                  )}
+                  <Text fontWeight="semibold" ml={4}>{option}</Text>
                 </HStack>
               </Button>
             );
