@@ -81,6 +81,7 @@ export const DailyActivities = () => {
 
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const cardBg = useColorModeValue("white", "gray.800");
+  const NUMBER_OF_QUESTIONS = 10;
 
   const startGame = async (category: QuestionCategory) => {
     if (!user?.id) {
@@ -103,13 +104,11 @@ export const DailyActivities = () => {
       const response = await api.service("twinaraActivityGame").generateQuestions({
         userId: user.id,
         questionType: activityQuestionType,
-        numberOfQuestions: 10, // Generate 10 questions, we'll use 5
+        numberOfQuestions: NUMBER_OF_QUESTIONS, // Generate 10 questions
       });
-      console.log(response);
 
-      // Transform API questions to frontend Question format
+      // Transform API questions to frontend Question format (use all 10 questions)
       const transformedQuestions = response.questions
-        .slice(0, 5) // Take first 5 questions
         .map((q, index) => transformGeneratedQuestion(q, index, category));
 
       // Shuffle the questions
