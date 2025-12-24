@@ -1,5 +1,5 @@
-import { VStack, HStack, Text, Button, Box, Heading, Icon, Flex } from "@chakra-ui/react";
-import { FaFire, FaTrophy, FaCheckCircle } from "react-icons/fa";
+import { VStack, HStack, Text, Button, Box, Heading, Icon, Flex, Spinner } from "@chakra-ui/react";
+import { FaFire, FaTrophy, FaCheckCircle, FaCheck } from "react-icons/fa";
 import { useTheme } from "~/contexts/ThemeContext";
 import { GameState } from "../types";
 
@@ -7,12 +7,16 @@ type CompletionScreenProps = {
   gameState: GameState;
   onContinue: () => void;
   onReview: () => void;
+  isSaving?: boolean;
+  gameSaved?: boolean;
 };
 
 export const CompletionScreen = ({
   gameState,
   onContinue,
   onReview,
+  isSaving = false,
+  gameSaved = false,
 }: CompletionScreenProps) => {
   const { isDarkMode } = useTheme();
 
@@ -113,6 +117,35 @@ export const CompletionScreen = ({
         </Box>
       </HStack>
 
+      {/* Save Status */}
+      {(isSaving || gameSaved) && (
+        <Box
+          p={4}
+          borderRadius="lg"
+          bg={isDarkMode ? "blue.900" : "blue.50"}
+          border="1px solid"
+          borderColor={isDarkMode ? "blue.700" : "blue.200"}
+        >
+          <HStack spacing={3} justify="center">
+            {isSaving ? (
+              <>
+                <Spinner size="sm" color="blue.500" />
+                <Text fontSize="sm" color={isDarkMode ? "blue.200" : "blue.700"}>
+                  Saving your progress...
+                </Text>
+              </>
+            ) : gameSaved ? (
+              <>
+                <Icon as={FaCheck} color="green.500" />
+                <Text fontSize="sm" color={isDarkMode ? "green.200" : "green.700"} fontWeight="semibold">
+                  Progress saved successfully!
+                </Text>
+              </>
+            ) : null}
+          </HStack>
+        </Box>
+      )}
+
       {/* Action Buttons */}
       <VStack spacing={4} w="full" maxW="400px" pt={4}>
         <Button
@@ -123,6 +156,8 @@ export const CompletionScreen = ({
           fontSize="md"
           py={6}
           borderRadius="xl"
+          isLoading={isSaving}
+          loadingText="Saving..."
         >
           Continue
         </Button>

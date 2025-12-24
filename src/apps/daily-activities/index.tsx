@@ -31,7 +31,7 @@ import { Question, GameState, QuestionCategory } from "./types";
 import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
 import { ChooseYourActivityModal } from "./ChooseYourActivityModal";
-import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame } from "@suleigolden/the-last-spelling-bee-api-client";
+import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame, CreateTwinaraActivityGameRequest } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
 import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
 import { formatDateToString } from "~/common/utils/date-time";
@@ -91,6 +91,8 @@ export const DailyActivities = () => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const [activities, setActivities] = useState<TwinaraActivityGame[]>([]);
   const [isLoadingActivities, setIsLoadingActivities] = useState(false);
+  const [isSavingGame, setIsSavingGame] = useState(false);
+  const [gameSaved, setGameSaved] = useState(false);
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
   const [gameState, setGameState] = useState<GameState>({
     currentQuestionIndex: 0,
@@ -188,6 +190,7 @@ export const DailyActivities = () => {
         answeredQuestions: 0,
         correctAnswers: 0,
       });
+      setGameSaved(false);
       setCurrentScreen("playing");
     } catch (error: any) {
       console.error("Error generating questions:", error);
@@ -201,6 +204,36 @@ export const DailyActivities = () => {
       setCurrentScreen("activities-list");
     } finally {
       setIsLoadingQuestions(false);
+    }
+  };
+
+  const saveGameCompletion = async (finalGameState: GameState, category: QuestionCategory) => {
+    if (!user?.id || gameSaved) return; // Don't save twice
+
+    setIsSavingGame(true);
+    try {
+      const activityQuestionType = mapCategoryToActivityQuestionType(category);
+      
+      const gameData: CreateTwinaraActivityGameRequest = {
+        userId: user.id,
+        questionType: activityQuestionType,
+        numberOfQuestions: questions.length,
+        points: finalGameState.totalXP,
+      };
+
+      await api.service("twinaraActivityGame").createTwinaraActivityGame(gameData);
+      setGameSaved(true);
+    } catch (error: any) {
+      console.error("Error saving game completion:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save game results. Your progress is still recorded.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSavingGame(false);
     }
   };
 
@@ -235,9 +268,17 @@ export const DailyActivities = () => {
       if (newGameState.lives <= 0) {
         setGameState(newGameState);
         setCurrentScreen("game-over");
+        // Save game even if game-over (with points earned)
+        if (selectedCategory && newGameState.totalXP > 0) {
+          saveGameCompletion(newGameState, selectedCategory);
+        }
       } else if (newGameState.currentQuestionIndex >= questions.length - 1) {
         setGameState(newGameState);
         setCurrentScreen("completed");
+        // Save game completion
+        if (selectedCategory) {
+          saveGameCompletion(newGameState, selectedCategory);
+        }
       } else {
         setGameState({
           ...newGameState,
@@ -247,14 +288,20 @@ export const DailyActivities = () => {
     }, 2000);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (currentScreen === "completed" || currentScreen === "game-over") {
       setCurrentScreen("activities-list");
       setSelectedCategory(null);
       setQuestions([]);
+      setGameSaved(false);
       // Refresh activities list
       if (user?.id) {
-        api.service("twinaraActivityGame").findByUserId(user.id).then(setActivities).catch(console.error);
+        try {
+          const userActivities = await api.service("twinaraActivityGame").findByUserId(user.id);
+          setActivities(userActivities);
+        } catch (error) {
+          console.error("Error refreshing activities:", error);
+        }
       }
     }
   };
@@ -401,6 +448,8 @@ export const DailyActivities = () => {
             gameState={gameState}
             onContinue={handleContinue}
             onReview={handleExit}
+            isSaving={isSavingGame}
+            gameSaved={gameSaved}
           />
         )}
 
