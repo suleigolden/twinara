@@ -496,6 +496,7 @@ export const DailyActivities = () => {
           onClose={onModalClose}
           onSelectCategory={startGame}
           disabled={isLoadingQuestions}
+          isLoadingQuestions={isLoadingQuestions}
         />
       </Container>
     </Box>
