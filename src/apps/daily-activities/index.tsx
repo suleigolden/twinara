@@ -25,7 +25,7 @@ import {
   Td,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaHeart, FaTimes, FaPlus } from "react-icons/fa";
+import { FaHeart, FaTimes, FaPlus, FaTrophy, FaQuestionCircle, FaCalendarAlt } from "react-icons/fa";
 import { useTheme } from "~/contexts/ThemeContext";
 import { Question, GameState, QuestionCategory } from "./types";
 import { QuestionCard } from "./components/QuestionCard";
@@ -34,7 +34,7 @@ import { ChooseYourActivityModal } from "./ChooseYourActivityModal";
 import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame, CreateTwinaraActivityGameRequest } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
 import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
-import { formatDateToString } from "~/common/utils/date-time";
+import { formatDateToString, formatDateToStringWithoutTime } from "~/common/utils/date-time";
 
 type GameScreen = "activities-list" | "playing" | "completed" | "game-over";
 
@@ -336,52 +336,189 @@ export const DailyActivities = () => {
 
             <Box
               bg={tableBg}
-              borderRadius="xl"
-              boxShadow="md"
+              borderRadius="2xl"
+              boxShadow={isDarkMode ? "2xl" : "lg"}
               overflow="hidden"
               border="1px"
               borderColor={borderColor}
             >
               {isLoadingActivities ? (
-                <Flex justify="center" align="center" py={12}>
-                  <Spinner size="xl" color="blue.500" />
+                <Flex justify="center" align="center" py={16}>
+                  <VStack spacing={4}>
+                    <Spinner size="xl" color="blue.500" thickness="4px" />
+                    <Text fontSize="md" color={isDarkMode ? "gray.400" : "gray.600"}>
+                      Loading activities...
+                    </Text>
+                  </VStack>
                 </Flex>
               ) : activities.length === 0 ? (
-                <Box py={12} textAlign="center">
-                  <Text fontSize="lg" color={isDarkMode ? "gray.400" : "gray.600"} mb={4}>
-                    No activities yet. Start a new activity to begin!
-                  </Text>
+                <Box py={16} textAlign="center">
+                  <VStack spacing={4}>
+                    <Box
+                      p={6}
+                      borderRadius="full"
+                      bg={isDarkMode ? "gray.700" : "gray.100"}
+                      display="inline-flex"
+                    >
+                      <Icon as={FaTrophy} boxSize={8} color={isDarkMode ? "gray.400" : "gray.500"} />
+                    </Box>
+                    <Text fontSize="lg" fontWeight="semibold" color={isDarkMode ? "gray.300" : "gray.700"}>
+                      No activities yet
+                    </Text>
+                    <Text fontSize="sm" color={isDarkMode ? "gray.500" : "gray.600"}>
+                      Start a new activity to begin your learning journey!
+                    </Text>
+                  </VStack>
                 </Box>
               ) : (
-                <Table variant="simple">
-                  <Thead bg={isDarkMode ? "gray.700" : "gray.50"}>
-                    <Tr>
-                      <Th color={isDarkMode ? "white" : "gray.800"}>Activity Type</Th>
-                      <Th color={isDarkMode ? "white" : "gray.800"}>Questions</Th>
-                      <Th color={isDarkMode ? "white" : "gray.800"}>Points</Th>
-                      <Th color={isDarkMode ? "white" : "gray.800"}>Date</Th>
+                <Table variant="simple" size="md">
+                  <Thead>
+                    <Tr bg={isDarkMode ? "gray.800" : "gray.100"}>
+                      <Th 
+                        color={isDarkMode ? "white" : "gray.800"} 
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                        fontSize="xs"
+                        letterSpacing="wide"
+                        py={4}
+                        px={6}
+                        borderBottom="2px solid"
+                        borderColor={isDarkMode ? "gray.600" : "gray.300"}
+                      >
+                        Activity Type
+                      </Th>
+                      <Th 
+                        color={isDarkMode ? "white" : "gray.800"} 
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                        fontSize="xs"
+                        letterSpacing="wide"
+                        py={4}
+                        px={6}
+                        borderBottom="2px solid"
+                        borderColor={isDarkMode ? "gray.600" : "gray.300"}
+                        textAlign="center"
+                      >
+                        Questions
+                      </Th>
+                      <Th 
+                        color={isDarkMode ? "white" : "gray.800"} 
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                        fontSize="xs"
+                        letterSpacing="wide"
+                        py={4}
+                        px={6}
+                        borderBottom="2px solid"
+                        borderColor={isDarkMode ? "gray.600" : "gray.300"}
+                        textAlign="center"
+                      >
+                        Points
+                      </Th>
+                      <Th 
+                        color={isDarkMode ? "white" : "gray.800"} 
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                        fontSize="xs"
+                        letterSpacing="wide"
+                        py={4}
+                        px={6}
+                        borderBottom="2px solid"
+                        borderColor={isDarkMode ? "gray.600" : "gray.300"}
+                      >
+                        Date
+                      </Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {activities.map((activity) => (
+                    {activities.map((activity, index) => (
                       <Tr
                         key={activity.id}
+                        bg={isDarkMode 
+                          ? (index % 2 === 0 ? "gray.800" : "gray.750") 
+                          : (index % 2 === 0 ? "white" : "gray.50")
+                        }
                         _hover={{
-                          bg: isDarkMode ? "gray.700" : "gray.50",
+                          bg: isDarkMode ? "gray.700" : "blue.50",
+                          transform: "scale(1.01)",
+                          boxShadow: isDarkMode 
+                            ? "0 4px 12px rgba(0,0,0,0.3)" 
+                            : "0 4px 12px rgba(0,0,0,0.1)",
                         }}
-                        transition="background 0.2s"
+                        transition="all 0.2s ease"
+                        cursor="pointer"
+                        borderBottom="1px solid"
+                        borderColor={isDarkMode ? "gray.700" : "gray.200"}
                       >
-                        <Td color={isDarkMode ? "white" : "gray.800"} fontWeight="medium">
-                          {mapActivityQuestionTypeToDisplayName(activity.questionType)}
+                        <Td 
+                          color={isDarkMode ? "white" : "gray.800"} 
+                          fontWeight="semibold"
+                          py={5}
+                          px={6}
+                        >
+                          <HStack spacing={3}>
+                            <Box
+                              p={2}
+                              borderRadius="lg"
+                              bg={isDarkMode ? "blue.900" : "blue.100"}
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              <Icon 
+                                as={FaTrophy} 
+                                boxSize={4} 
+                                color={isDarkMode ? "blue.300" : "blue.600"} 
+                              />
+                            </Box>
+                            <Text>{mapActivityQuestionTypeToDisplayName(activity.questionType)}</Text>
+                          </HStack>
                         </Td>
-                        <Td color={isDarkMode ? "gray.300" : "gray.600"}>
-                          {activity.numberOfQuestions}
+                        <Td 
+                          color={isDarkMode ? "gray.300" : "gray.700"} 
+                          py={5}
+                          px={6}
+                          textAlign="center"
+                        >
+                          <HStack spacing={2} justify="center">
+                            <Icon 
+                              as={FaQuestionCircle} 
+                              boxSize={3} 
+                              color={isDarkMode ? "gray.500" : "gray.400"} 
+                            />
+                            <Text fontWeight="medium" color={"gray.900"}>{activity.numberOfQuestions} Questions</Text>
+                          </HStack>
                         </Td>
-                        <Td color={isDarkMode ? "gray.300" : "gray.600"} fontWeight="semibold">
-                          {activity.points}
+                        <Td 
+                          color={isDarkMode ? "yellow.300" : "yellow.600"} 
+                          fontWeight="bold"
+                          fontSize="lg"
+                          py={5}
+                          px={6}
+                          textAlign="center"
+                        >
+                          <HStack spacing={2} justify="center">
+                            <Icon 
+                              as={FaTrophy} 
+                              boxSize={4} 
+                              color={isDarkMode ? "yellow.400" : "yellow.500"} 
+                            />
+                            <Text>{activity.points}</Text>
+                          </HStack>
                         </Td>
-                        <Td color={isDarkMode ? "gray.300" : "gray.600"}>
-                          {formatDateToString(activity.createdAt)}
+                        <Td 
+                          color={isDarkMode ? "gray.300" : "gray.600"} 
+                          py={5}
+                          px={6}
+                        >
+                          <HStack spacing={2}>
+                            <Icon 
+                              as={FaCalendarAlt} 
+                              boxSize={3} 
+                              color={"gray.900"} 
+                            />
+                            <Text fontSize="sm" color={"gray.900"}>{formatDateToStringWithoutTime(activity.createdAt.toLocaleString())}</Text>
+                          </HStack>
                         </Td>
                       </Tr>
                     ))}
