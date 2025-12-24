@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -17,18 +17,26 @@ import {
   useColorModeValue,
   Spinner,
   useToast,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { FaHeart, FaTimes} from "react-icons/fa";
+import { FaHeart, FaTimes, FaPlus } from "react-icons/fa";
 import { useTheme } from "~/contexts/ThemeContext";
 import { Question, GameState, QuestionCategory } from "./types";
-import { CategorySelection } from "./components/CategorySelection";
 import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
-import { api, ActivityQuestionType, GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
+import { ChooseYourActivityModal } from "./ChooseYourActivityModal";
+import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
 import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
+import { formatDateToString } from "~/common/utils/date-time";
 
-type GameScreen = "category-selection" | "playing" | "completed" | "game-over";
+type GameScreen = "activities-list" | "playing" | "completed" | "game-over";
 
 // Map frontend QuestionCategory to backend ActivityQuestionType
 const mapCategoryToActivityQuestionType = (category: QuestionCategory): ActivityQuestionType => {
@@ -41,6 +49,19 @@ const mapCategoryToActivityQuestionType = (category: QuestionCategory): Activity
     "behavioral-prompts": "WELLNESS_PROMPTS",
   };
   return mapping[category];
+};
+
+// Map backend ActivityQuestionType to display name
+const mapActivityQuestionTypeToDisplayName = (questionType: ActivityQuestionType): string => {
+  const mapping: Record<ActivityQuestionType, string> = {
+    "IDENTITY_SELF_RECALL": "Identity & Self Recall",
+    "PEOPLE_RELATIONSHIPS": "People & Relationships",
+    "ROUTINE_DAILY_AWARENESS": "Routine & Daily Awareness",
+    "RECOGNITION_TASKS": "Recognition Tasks",
+    "STORY_AND_MEMORY": "Story & Memory",
+    "WELLNESS_PROMPTS": "Wellness Prompts",
+  };
+  return mapping[questionType];
 };
 
 // Transform GeneratedQuestion from API to Question type used in frontend
@@ -64,10 +85,13 @@ export const DailyActivities = () => {
   const { isDarkMode } = useTheme();
   const { user } = useUser();
   const toast = useToast();
-  const [currentScreen, setCurrentScreen] = useState<GameScreen>("category-selection");
+  const [currentScreen, setCurrentScreen] = useState<GameScreen>("activities-list");
   const [selectedCategory, setSelectedCategory] = useState<QuestionCategory | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
+  const [activities, setActivities] = useState<TwinaraActivityGame[]>([]);
+  const [isLoadingActivities, setIsLoadingActivities] = useState(false);
+  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
   const [gameState, setGameState] = useState<GameState>({
     currentQuestionIndex: 0,
     score: 0,
@@ -82,7 +106,35 @@ export const DailyActivities = () => {
 
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const cardBg = useColorModeValue("white", "gray.800");
+  const tableBg = useColorModeValue("white", "gray.800");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
   const NUMBER_OF_QUESTIONS = 10;
+
+  // Fetch activities on component mount
+  useEffect(() => {
+    const fetchActivities = async () => {
+      if (!user?.id) return;
+      
+      setIsLoadingActivities(true);
+      try {
+        const userActivities = await api.service("twinaraActivityGame").findByUserId(user.id);
+        setActivities(userActivities);
+      } catch (error: any) {
+        console.error("Error fetching activities:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load activity history.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setIsLoadingActivities(false);
+      }
+    };
+
+    fetchActivities();
+  }, [user?.id, toast]);
 
   const startGame = async (category: QuestionCategory) => {
     if (!user?.id) {
@@ -146,7 +198,7 @@ export const DailyActivities = () => {
         duration: 5000,
         isClosable: true,
       });
-      setCurrentScreen("category-selection");
+      setCurrentScreen("activities-list");
     } finally {
       setIsLoadingQuestions(false);
     }
@@ -197,14 +249,18 @@ export const DailyActivities = () => {
 
   const handleContinue = () => {
     if (currentScreen === "completed" || currentScreen === "game-over") {
-      setCurrentScreen("category-selection");
+      setCurrentScreen("activities-list");
       setSelectedCategory(null);
       setQuestions([]);
+      // Refresh activities list
+      if (user?.id) {
+        api.service("twinaraActivityGame").findByUserId(user.id).then(setActivities).catch(console.error);
+      }
     }
   };
 
   const handleExit = () => {
-    setCurrentScreen("category-selection");
+    setCurrentScreen("activities-list");
     setSelectedCategory(null);
     setQuestions([]);
   };
@@ -214,37 +270,79 @@ export const DailyActivities = () => {
 
   return (
     <Box minH="100vh" bg={bgColor} py={8}>
-      <Container maxW="container.md">
-        {currentScreen === "category-selection" && (
-          <Box position="relative">
-            {isLoadingQuestions && (
-              <Box
-                position="absolute"
-                top={0}
-                left={0}
-                right={0}
-                bottom={0}
-                bg={isDarkMode ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.9)"}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                zIndex={10}
-                borderRadius="xl"
+      <Container maxW="container.xl" mt={10}>
+        {currentScreen === "activities-list" && (
+          <VStack spacing={6} align="stretch">
+            <Flex justify="space-between" align="center">
+              <Heading size="xl" color={isDarkMode ? "white" : "gray.800"}>
+                Daily Activities
+              </Heading>
+              <Button
+                leftIcon={<FaPlus />}
+                colorScheme="brand"
+                size="lg"
+                onClick={onModalOpen}
               >
-                <VStack spacing={4}>
-                  <Spinner size="xl" color="green.500" />
-                  <Text
-                    fontSize="lg"
-                    fontWeight="semibold"
-                    color={isDarkMode ? "white" : "gray.800"}
-                  >
-                    Loading questions...
+                Start Learning
+              </Button>
+            </Flex>
+
+            <Box
+              bg={tableBg}
+              borderRadius="xl"
+              boxShadow="md"
+              overflow="hidden"
+              border="1px"
+              borderColor={borderColor}
+            >
+              {isLoadingActivities ? (
+                <Flex justify="center" align="center" py={12}>
+                  <Spinner size="xl" color="blue.500" />
+                </Flex>
+              ) : activities.length === 0 ? (
+                <Box py={12} textAlign="center">
+                  <Text fontSize="lg" color={isDarkMode ? "gray.400" : "gray.600"} mb={4}>
+                    No activities yet. Start a new activity to begin!
                   </Text>
-                </VStack>
-              </Box>
-            )}
-            <CategorySelection onSelectCategory={startGame} disabled={isLoadingQuestions} />
-          </Box>
+                </Box>
+              ) : (
+                <Table variant="simple">
+                  <Thead bg={isDarkMode ? "gray.700" : "gray.50"}>
+                    <Tr>
+                      <Th color={isDarkMode ? "white" : "gray.800"}>Activity Type</Th>
+                      <Th color={isDarkMode ? "white" : "gray.800"}>Questions</Th>
+                      <Th color={isDarkMode ? "white" : "gray.800"}>Points</Th>
+                      <Th color={isDarkMode ? "white" : "gray.800"}>Date</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {activities.map((activity) => (
+                      <Tr
+                        key={activity.id}
+                        _hover={{
+                          bg: isDarkMode ? "gray.700" : "gray.50",
+                        }}
+                        transition="background 0.2s"
+                      >
+                        <Td color={isDarkMode ? "white" : "gray.800"} fontWeight="medium">
+                          {mapActivityQuestionTypeToDisplayName(activity.questionType)}
+                        </Td>
+                        <Td color={isDarkMode ? "gray.300" : "gray.600"}>
+                          {activity.numberOfQuestions}
+                        </Td>
+                        <Td color={isDarkMode ? "gray.300" : "gray.600"} fontWeight="semibold">
+                          {activity.points}
+                        </Td>
+                        <Td color={isDarkMode ? "gray.300" : "gray.600"}>
+                          {formatDateToString(activity.createdAt)}
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              )}
+            </Box>
+          </VStack>
         )}
 
         {currentScreen === "playing" && currentQuestion && (
@@ -342,6 +440,14 @@ export const DailyActivities = () => {
             </VStack>
           </VStack>
         )}
+
+        {/* Choose Activity Modal */}
+        <ChooseYourActivityModal
+          isOpen={isModalOpen}
+          onClose={onModalClose}
+          onSelectCategory={startGame}
+          disabled={isLoadingQuestions}
+        />
       </Container>
     </Box>
   );
