@@ -34,7 +34,7 @@ import { ChooseYourActivityModal } from "./ChooseYourActivityModal";
 import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame, CreateTwinaraActivityGameRequest } from "@suleigolden/the-last-spelling-bee-api-client";
 import { useUser } from "~/hooks/use-user";
 import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
-import { formatDateToString, formatDateToStringWithoutTime } from "~/common/utils/date-time";
+import { formatDateToStringWithoutTime } from "~/common/utils/date-time";
 
 type GameScreen = "activities-list" | "playing" | "completed" | "game-over";
 
