@@ -141,5 +141,6 @@ export const { setUser,
   updateUserCredits,  } =
   authSlice.actions;
 export const selectUser = ({ auth }: RootState) => auth?.user;
+export const selectToken = ({ auth }: RootState) => auth?.token;
 export const selectCredits = ({ auth }: RootState) => auth?.credits;
 export default authSlice.reducer;

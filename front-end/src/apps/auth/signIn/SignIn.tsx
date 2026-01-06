@@ -27,7 +27,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-action/store';
 import { CustomToast } from '../../../hooks/CustomToast';
-import { SignInRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
+// Define types locally since we're no longer using the external API client
+type SignInRequest = {
+  email: string;
+  password: string;
+};
+
+type User = {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  [key: string]: any;
+};
 import { useLogInNavigation } from '../../../hooks/use-login-navigation';
 import { authenticate } from '../../../redux-action/slices/auth-slice';
 import { LoginSchema, LoginSchemaType } from './schema';

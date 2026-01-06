@@ -16,7 +16,35 @@ import { useDementiaUserOnboarding } from "~/hooks/use-dementia-user-onboarding"
 import { CustomInputField } from "~/components/fields/CustomInputField";
 import { useAvatarUpload } from "~/hooks/useAvatarUpload";
 import { useDementiaUserProfile } from "~/hooks/use-dementia-user-profile";
-import { DementiaProfile, Gender } from "@suleigolden/the-last-spelling-bee-api-client";
+// Define types locally since we're no longer using the external API client
+type Gender = "male" | "female" | "other";
+
+type DementiaProfile = {
+  id: string;
+  userId: string;
+  nickname?: string;
+  firstName?: string;
+  lastName?: string;
+  dob?: string | Date;
+  gender?: string;
+  phoneNumber?: string;
+  email?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postal_code?: string;
+  };
+  workHistory?: string[];
+  hobbies?: string[];
+  importantDates?: Array<{ label: string; date: string | Date }>;
+  notesFromCaregiver?: string;
+  bio?: string;
+  avatarUrl?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+};
 import { AvatarUploadModal } from "./components/AvatarUploadModal";
 import { OnboardingStepper } from "./OnboardingStepper";
 

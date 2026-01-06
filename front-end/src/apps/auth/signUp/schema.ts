@@ -1,5 +1,7 @@
 import { InferType, object, string } from "yup";
-import { AccountTypes } from "@suleigolden/the-last-spelling-bee-api-client";
+
+// Define AccountTypes locally since we're no longer using the external API client
+const AccountTypes = ['individual', 'organization', 'organization-user', 'udemy-user', 'dementia-user', 'caregiver-user'] as const;
 
 export const SignUpSchema = object({
   first_name: string().required().label("First Name"),

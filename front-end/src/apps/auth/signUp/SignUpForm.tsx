@@ -21,8 +21,27 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { SignUpSchema } from './schema';
 import { CountrySelect } from '../../../components/fields/CountrySelect';
-import { SignUpRequest, User, AccountTypes } from '@suleigolden/the-last-spelling-bee-api-client';
-import { registerUser } from '../../../redux-action/slices/auth-slice';
+// Define types locally since we're no longer using the external API client
+type AccountTypes = readonly ['individual', 'organization', 'organization-user', 'udemy-user', 'dementia-user', 'caregiver-user'];
+const AccountTypes = ['individual', 'organization', 'organization-user', 'udemy-user', 'dementia-user', 'caregiver-user'] as const;
+
+type SignUpRequest = {
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  country: string;
+  accountType: string;
+};
+
+type User = {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  [key: string]: any;
+};
+import { signUpUser } from '../../../redux-action/slices/auth-slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux-action/store';
 import { useLogInNavigation } from '../../../hooks/use-login-navigation';
@@ -73,7 +92,7 @@ export const SignUpForm = () => {
         country: data.country,
         accountType: accountTypeValue as any,
       };
-      const res = await dispatch(registerUser(payload));
+      const res = await dispatch(signUpUser(payload));
 
       if (res.meta.requestStatus === 'fulfilled') {
         await navigateToDashboard(res.payload as User);
