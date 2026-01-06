@@ -1,7 +1,6 @@
 📘 Twinara Documentation
 
 A Personalized Cognitive Companion for Dementia Support
-Part of TheLastSpellingBee – Memory Twin Platform
 
 1. Overview
 What is Twinara?
@@ -426,7 +425,6 @@ Clinical research partnerships
 
 ✅ Final Summary
 
-Twinara is the heart of TheLastSpellingBee’s dementia support vision.
 
 It combines:
 
