@@ -1,142 +1,113 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { api, SignInRequest, SignUpRequest, User } from '@suleigolden/the-last-spelling-bee-api-client';
-import { RootState } from '~/redux-action/store';
-
-type ApiError = {
-  response?: {
-    data?: {
-      message?: string;
-    };
-  };
-}
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "../../redux-action/store";
+import { api } from "../api.service";
+import { User } from "~/types/user-types";
+import { clearStorage } from "~/common/utils/helperFuntions";
+import { GoogleAuth } from "~/types/google-auth.types";
 
 type AuthState = {
   user: User | null;
   token: string | null;
   isLoading: boolean;
   error: string | null;
+  isAuthenticated: boolean;
   credits: number;
 };
 
-
 const initialState: AuthState = {
-  user:  null,
-  token:  null,
+  user: null,
+  token: null,
   isLoading: false,
   error: null,
+  isAuthenticated: false,
   credits: 0,
 };
 
-// Async Thunks
+export const signUpUser = createAsyncThunk(
+  "auth/signUp",
+  async (data: User, { rejectWithValue }) => {
+    try {
+      const response = await api.service("users").create(data);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed",
+      );
+    }
+  },
+);
+
 export const authenticate = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (
     credentials: { email: string; password: string },
     { rejectWithValue },
   ) => {
     try {
-      const response = await api.service('auth').create(credentials);
+      const response = await api.service("auth/login").create(credentials);
       return response;
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      return rejectWithValue(
-        apiError.response?.data?.message || 'Failed to login',
-      );
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
     }
   },
 );
-export const googleSignIn = createAsyncThunk(
-  'auth/googleSignIn',
-  async (data: SignInRequest, { rejectWithValue }) => {
+
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, { dispatch }) => {
     try {
-      const response = await api.service('auth').signIn(data);
-      return response;
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      return rejectWithValue(apiError.response?.data?.message || 'Failed to sign in with Google');
+      dispatch(clearAuth());
+      clearStorage();
+      return { success: true };
+    } catch (error: any) {
+      throw error;
     }
   }
 );
-export const registerUser = createAsyncThunk(
-  'auth/register',
-  async (credentials: SignUpRequest, { rejectWithValue }) => {
+
+export const authenticateWithGoogle = createAsyncThunk(
+  "auth/googleAuth",
+  async (googleData: GoogleAuth, { rejectWithValue }) => {
     try {
-      const response = await api.service('auth').register(credentials);
+      const response = await api.service("users/google-auth").create(googleData);
       return response;
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      return rejectWithValue(
-        apiError.response?.data?.message || 'Failed to register',
-      );
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Google auth failed");
     }
-  },
-);
-
-export const logout = createAsyncThunk(
-  'auth/logout',
-  async (_, { rejectWithValue, getState, dispatch }) => {
-    try {
-      const state = getState() as RootState;
-      // const token = state.auth.user?.accessToken;
-
-      // if (!token) {
-      //   throw new Error('No token found');
-      // }
-      await dispatch(clearAuth());
-      // await api.service('auth').signOut(token);
-
-      return { success: true };
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      return rejectWithValue(
-        apiError.response?.data?.message || 'Failed to logout',
-      );
-    }
-  },
+  }
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<{ id: string; email: string }>) {
-      const userData = action.payload as unknown as User;
-      state.user = {
-        ...userData,
-      };
+    setUser: (state, action: PayloadAction<User | null>) => {
+      state.user = action.payload;
+      state.credits = action.payload?.credit ?? 0;
+      state.isAuthenticated = !!action.payload;
     },
     setToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
     },
-    clearAuth(state) {
-      state.user = null;
-      state.token = null;
-      state.isLoading = false;
-      state.error = null;
-      state.credits = 0;
+    clearAuth: (state) => {
+      return initialState;
     },
     updateUserCredits: (state, action: PayloadAction<number>) => {
-      if (state.user) {
-        // state.user = {
-        //   ...state.user,
-        //   credits: action.payload
-        // };
-        state.credits = action.payload;
-      }
+      state.credits = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(signUpUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, { payload }) => {
+      .addCase(signUpUser.fulfilled, (state, { payload }) => {
         if (payload) {
-          state.user = payload as unknown as User;
+          state.user = payload as User;
         }
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(signUpUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
@@ -153,35 +124,22 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      .addCase(googleSignIn.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(logoutUser.fulfilled, (state) => {
+        return initialState;
       })
-      .addCase(googleSignIn.fulfilled, (state, { payload }) => {
+      .addCase(authenticateWithGoogle.fulfilled, (state, { payload }) => {
         if (payload) {
-          state.user = payload as unknown as User;
+          state.user = payload as User;
         }
-      })
-      .addCase(googleSignIn.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null;
-        state.token = null;
-        state.isLoading = false;
-        state.error = null;
       });
   },
 });
 
-export const { setUser, setToken, clearAuth, updateUserCredits } = authSlice.actions;
-
-export const selectUser = ({ auth }: RootState) => auth.user;
-export const selectToken = ({ auth }: RootState) => auth.token;
-export const selectCredits = ({ auth }: RootState) => auth.credits;
-export const selectIsAuthLoading = ({ auth }: RootState) => auth.loading;
-export const selectIsAdminRole = ({ auth }: RootState) =>
-  auth.user.roles && auth.user.roles[0] === 'admin';
-
+export const { setUser, 
+  setToken, 
+  clearAuth, 
+  updateUserCredits,  } =
+  authSlice.actions;
+export const selectUser = ({ auth }: RootState) => auth?.user;
+export const selectCredits = ({ auth }: RootState) => auth?.credits;
 export default authSlice.reducer;

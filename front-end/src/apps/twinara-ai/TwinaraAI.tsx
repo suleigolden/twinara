@@ -22,7 +22,7 @@ import {
     Divider,
     useColorModeValue,
 } from "@chakra-ui/react";
-import { api } from "@suleigolden/the-last-spelling-bee-api-client";
+import { api } from "~/redux-action/api.service";
 import { useState, useEffect, useRef } from "react";
 import { 
     FaPaperPlane, 
@@ -208,7 +208,7 @@ export const TwinaraAI = () => {
         const fetchChatHistory = async () => {
             try {
                 setIsLoadingHistory(true);
-                const chatMessages = await api.service("dementiaUserChatMessages").findByUserId(userId);
+                const chatMessages = await api.service("dementia-user-chat-messages").findByUserId(userId);
 
                 // Transform the API response to ChatMessage format
                 const transformedMessages: ChatMessage[] = chatMessages
@@ -349,7 +349,7 @@ export const TwinaraAI = () => {
 
         try {
             setIsLoading(true);
-            const response = await api.service("memoryAiAgent").chat({
+            const response = await api.service("memory-ai-agent").chat({
                 userId,
                 message: userMessage,
             });

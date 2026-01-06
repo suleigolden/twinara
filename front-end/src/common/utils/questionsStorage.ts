@@ -1,5 +1,12 @@
 import { QuestionCategory } from "../../apps/daily-activities/types";
-import { GeneratedQuestion } from "@suleigolden/the-last-spelling-bee-api-client";
+
+// Define the type locally since we're no longer using the external API client
+export type GeneratedQuestion = {
+  question: string;
+  answerType: "yes-no" | "multiple-choice";
+  options?: Array<{ label: string }>;
+  correctAnswer: string | boolean;
+};
 
 const STORAGE_KEY = "twinara_questions";
 const EXPIRY_HOURS = 24;

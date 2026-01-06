@@ -1,11 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { 
-      Address, 
-      api, 
-      CreateDementiaProfileRequest, 
-      CreateDementiaUserActivityRequest 
-    } from '@suleigolden/the-last-spelling-bee-api-client';
+import { api } from '~/redux-action/api.service';
 import { CustomToast } from './CustomToast';
 import { useEffect, useState } from 'react';
 import { 
@@ -14,6 +9,44 @@ import {
       } from '~/apps/dementia-user-onboard/schema';
 import { useUser } from './use-user';
 import { useStepsNotCompleted } from './use-steps-not-completed';
+
+// Define types locally since we're no longer using the external API client
+type Address = {
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postal_code?: string;
+};
+
+type CreateDementiaProfileRequest = {
+  nickname?: string;
+  firstName?: string;
+  lastName?: string;
+  dob?: string;
+  gender?: string;
+  phoneNumber?: string;
+  email?: string;
+  address?: Address;
+  workHistory?: string[];
+  hobbies?: string[];
+  importantDates?: Array<{ label: string; date: string }>;
+  notesFromCaregiver?: string;
+  bio?: string;
+  avatarUrl?: string;
+};
+
+type CreateDementiaUserActivityRequest = {
+  userId: string;
+  title: string;
+  description?: string;
+  dayOfWeek?: string;
+  timeOfDay?: string;
+  startDatetime?: string;
+  location?: string;
+  isRecurring?: boolean;
+  isActive?: boolean;
+};
 
 export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
   const showToast = CustomToast();
@@ -107,7 +140,7 @@ export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
               userId: dementiaUserProfile?.id || '',
               title: activity.title,
               description: activity.description || undefined,
-              dayOfWeek: activity.dayOfWeek ?? undefined,
+              dayOfWeek: activity.dayOfWeek !== undefined && activity.dayOfWeek !== null ? String(activity.dayOfWeek) : undefined,
               timeOfDay: activity.timeOfDay || undefined,
               startDatetime: activity.startDatetime
                 ? (typeof activity.startDatetime === 'string'
@@ -118,20 +151,20 @@ export const useDementiaUserOnboarding = (isLastStep?: boolean) => {
               isRecurring: activity.isRecurring ?? false,
               isActive: activity.isActive !== false,
             };
-            await api.service('dementiaUserActivities').createDementiaUserActivity(activityPayload);
+            await api.service('dementia-user-activities').createDementiaUserActivity(activityPayload);
           }
         }
       }
       if (dementiaUserProfile?.id) {
         // Update existing profile
-        await api.service('dementiaProfiles').updateDementiaProfile(
+        await api.service('dementia-profiles').updateDementiaProfile(
           dementiaUserProfile.id,
           profilePayload
         );
         showToast('Success', 'Profile updated successfully', 'success');
       } else {
         // Create new profile
-        await api.service('dementiaProfiles').createDementiaProfile(profilePayload);
+        await api.service('dementia-profiles').createDementiaProfile(profilePayload);
         showToast('Success', 'Profile created successfully', 'success');
       }
       

@@ -31,12 +31,38 @@ import { Question, GameState, QuestionCategory } from "./types";
 import { QuestionCard } from "./components/QuestionCard";
 import { CompletionScreen } from "./components/CompletionScreen";
 import { ChooseYourActivityModal } from "./ChooseYourActivityModal";
-import { api, ActivityQuestionType, GeneratedQuestion, TwinaraActivityGame, CreateTwinaraActivityGameRequest } from "@suleigolden/the-last-spelling-bee-api-client";
+import { api } from "~/redux-action/api.service";
 import { useUser } from "~/hooks/use-user";
-import { getQuestionsFromStorage, storeQuestionsInStorage } from "../../common/utils/questionsStorage";
+import { getQuestionsFromStorage, storeQuestionsInStorage, GeneratedQuestion } from "../../common/utils/questionsStorage";
 import { formatDateToStringWithoutTime } from "~/common/utils/date-time";
 
 type GameScreen = "activities-list" | "playing" | "completed" | "game-over";
+
+// Define types locally since we're no longer using the external API client
+type ActivityQuestionType = 
+  | "IDENTITY_SELF_RECALL"
+  | "PEOPLE_RELATIONSHIPS"
+  | "ROUTINE_DAILY_AWARENESS"
+  | "RECOGNITION_TASKS"
+  | "STORY_AND_MEMORY"
+  | "WELLNESS_PROMPTS";
+
+type TwinaraActivityGame = {
+  id: string;
+  userId: string;
+  questionType: ActivityQuestionType;
+  numberOfQuestions: number;
+  points: number;
+  createdAt: Date | string;
+  updatedAt?: Date | string;
+};
+
+type CreateTwinaraActivityGameRequest = {
+  userId: string;
+  questionType: ActivityQuestionType;
+  numberOfQuestions: number;
+  points: number;
+};
 
 // Map frontend QuestionCategory to backend ActivityQuestionType
 const mapCategoryToActivityQuestionType = (category: QuestionCategory): ActivityQuestionType => {
@@ -119,7 +145,7 @@ export const DailyActivities = () => {
       
       setIsLoadingActivities(true);
       try {
-        const userActivities = await api.service("twinaraActivityGame").findByUserId(user.id);
+        const userActivities = await api.service("twinara-activity-games").findByUserId(user.id);
         setActivities(userActivities);
       } catch (error: any) {
         console.error("Error fetching activities:", error);
@@ -161,7 +187,7 @@ export const DailyActivities = () => {
         // Generate new questions from server
         const activityQuestionType = mapCategoryToActivityQuestionType(category);
         
-        const response = await api.service("twinaraActivityGame").generateQuestions({
+        const response = await api.service("twinara-activity-games").generateQuestions({
           userId: user.id,
           questionType: activityQuestionType,
           numberOfQuestions: NUMBER_OF_QUESTIONS, // Generate 10 questions
@@ -170,10 +196,16 @@ export const DailyActivities = () => {
         generatedQuestions = response.questions;
         
         // Store questions in local storage
-        storeQuestionsInStorage(category, generatedQuestions);
+        if (generatedQuestions) {
+          storeQuestionsInStorage(category, generatedQuestions);
+        }
       }
 
       // Transform API questions to frontend Question format (use all questions)
+      if (!generatedQuestions) {
+        throw new Error("Failed to generate questions");
+      }
+      
       const transformedQuestions = generatedQuestions
         .map((q, index) => transformGeneratedQuestion(q, index, category));
 
@@ -221,7 +253,7 @@ export const DailyActivities = () => {
         points: finalGameState.totalXP,
       };
 
-      await api.service("twinaraActivityGame").createTwinaraActivityGame(gameData);
+      await api.service("twinara-activity-games").createTwinaraActivityGame(gameData);
       setGameSaved(true);
     } catch (error: any) {
       console.error("Error saving game completion:", error);
@@ -297,7 +329,7 @@ export const DailyActivities = () => {
       // Refresh activities list
       if (user?.id) {
         try {
-          const userActivities = await api.service("twinaraActivityGame").findByUserId(user.id);
+          const userActivities = await api.service("twinara-activity-games").findByUserId(user.id);
           setActivities(userActivities);
         } catch (error) {
           console.error("Error refreshing activities:", error);

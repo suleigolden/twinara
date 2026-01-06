@@ -1,8 +1,35 @@
-import { DementiaProfile, api } from "@suleigolden/the-last-spelling-bee-api-client";
+import { api } from "~/redux-action/api.service";
 import { useState, useEffect } from "react";
 import { useSignOut } from "./use-sign-out";
 import { useUser } from "./use-user";
 
+// Define the type locally since we're no longer using the external API client
+type DementiaProfile = {
+    id: string;
+    userId: string;
+    nickname?: string;
+    firstName?: string;
+    lastName?: string;
+    dob?: string | Date;
+    gender?: string;
+    phoneNumber?: string;
+    email?: string;
+    address?: {
+        street?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        postal_code?: string;
+    };
+    workHistory?: string[];
+    hobbies?: string[];
+    importantDates?: Array<{ label: string; date: string | Date }>;
+    notesFromCaregiver?: string;
+    bio?: string;
+    avatarUrl?: string;
+    createdAt?: string | Date;
+    updatedAt?: string | Date;
+};
 
 export const useDementiaUserProfile = () => {
     const { user } = useUser();
@@ -21,9 +48,7 @@ export const useDementiaUserProfile = () => {
         setIsLoading(true);
         try {
        
-          const result = await api.service("dementiaProfiles").findByUserId(user.id);
-          console.log("dementiaUserProfile hook", result);
-          console.log("dementiaUserProfile hook", isLoading);
+          const result = await api.service("dementia-profiles").findByUserId(user.id);
           setDementiaUserProfile(result);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {

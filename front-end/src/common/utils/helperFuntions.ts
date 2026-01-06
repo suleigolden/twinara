@@ -21,3 +21,7 @@ export const getStateOptions = (country: string) => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+  export const clearStorage = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+  }
